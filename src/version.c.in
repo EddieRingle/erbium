@@ -1,0 +1,13 @@
+#define er_VERSION_FULL "@er_VERSION_FULL@"
+#define er_VERSION_MAJOR @er_VERSION_MAJOR@
+#define er_VERSION_MINOR @er_VERSION_MINOR@
+#define er_VERSION_PATCH @er_VERSION_PATCH@
+#define er_VERSION_EXTRA "@er_VERSION_EXTRA@"
+
+const char er_version_full[] = er_VERSION_FULL;
+
+const int er_version_major = er_VERSION_MAJOR;
+const int er_version_minor = er_VERSION_MINOR;
+const int er_version_patch = er_VERSION_PATCH;
+
+const char er_version_extra[] = er_VERSION_EXTRA;
