@@ -1,6 +1,6 @@
 project(erbium C)
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.8)
 
 set(ER_ROOT_DIR "${CMAKE_SOURCE_DIR}")
 set(ER_SCRIPTS_DIR "${ER_ROOT_DIR}/scripts")
