@@ -2,6 +2,10 @@ project(erbium C)
 
 cmake_minimum_required(VERSION 2.8.8)
 
+#
+# Set up some variables
+#
+
 set(ER_ROOT_DIR "${CMAKE_SOURCE_DIR}")
 set(ER_CONTRIB_DIR "${ER_ROOT_DIR}/contrib")
 set(ER_SCRIPTS_DIR "${ER_ROOT_DIR}/scripts")
@@ -15,10 +19,18 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH "${ER_SCRIPTS_DIR}/cmake/modules")
 
+#
+# Modules/macros
+#
+
 include(GetGitRevisionDescription)
 include(GroupByFolder)
 include(MergeStaticLibs)
 include(TargetArch)
+
+#
+# Target Arch/OS detection
+#
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	set(ER_TARGET_OS "darwin")
@@ -37,6 +49,10 @@ set(ER_TARGET_CONTRIB_OUT_DIR "${ER_TARGET_OUT_DIR}/contrib")
 
 set(CMAKE_INSTALL_PREFIX ${ER_TARGET_OUT_DIR})
 
+#
+# Generate version information from git-describe
+#
+
 git_describe(gitdesc)
 
 if("${gitdesc}" EQUAL "GIT-NOTFOUND")
@@ -54,7 +70,15 @@ endif()
 message(STATUS "Building version: ${er_VERSION_FULL}")
 configure_file("${ER_SOURCE_DIR}/version.c.in" "${ER_SOURCE_DIR}/version.c")
 
+#
+# Dependencies
+#
+
 include("${ER_CONTRIB_DIR}/CMakeLists.txt")
+
+#
+# Erbium
+#
 
 set(erbium_SOURCES
 	${ER_SOURCE_DIR}/version.c
