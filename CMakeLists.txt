@@ -86,6 +86,7 @@ set(erbium_SOURCES
 
 set(erbium_INCLUDES
 	${ER_INCLUDE_DIR}/erbium_version.h
+	${ER_INCLUDE_DIR}/platform_detect.h
 )
 
 include_directories(${ER_INCLUDE_DIR})
