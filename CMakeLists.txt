@@ -3,9 +3,11 @@ project(erbium C)
 cmake_minimum_required(VERSION 2.8.8)
 
 set(ER_ROOT_DIR "${CMAKE_SOURCE_DIR}")
+set(ER_CONTRIB_DIR "${ER_ROOT_DIR}/contrib")
 set(ER_SCRIPTS_DIR "${ER_ROOT_DIR}/scripts")
 set(ER_SOURCE_DIR "${ER_ROOT_DIR}/src")
 set(ER_INCLUDE_DIR "${ER_ROOT_DIR}/include")
+set(ER_OUT_DIR "${ER_ROOT_DIR}/out")
 
 list(APPEND CMAKE_MODULE_PATH "${ER_SCRIPTS_DIR}/cmake/modules")
 
