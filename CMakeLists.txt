@@ -20,6 +20,23 @@ include(GroupByFolder)
 include(MergeStaticLibs)
 include(TargetArch)
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+	set(ER_TARGET_OS "darwin")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+	set(ER_TARGET_OS "linux")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+	set(ER_TARGET_OS "windows")
+else()
+	set(ER_TARGET_OS "${CMAKE_SYSTEM_NAME}")
+endif()
+
+target_architecture(ER_TARGET_ARCH)
+
+set(ER_TARGET_OUT_DIR "${ER_OUT_DIR}/${ER_TARGET_OS}_${ER_TARGET_ARCH}")
+set(ER_TARGET_CONTRIB_OUT_DIR "${ER_TARGET_OUT_DIR}/contrib")
+
+set(CMAKE_INSTALL_PREFIX ${ER_TARGET_OUT_DIR})
+
 git_describe(gitdesc)
 
 if("${gitdesc}" EQUAL "GIT-NOTFOUND")
