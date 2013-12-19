@@ -54,7 +54,4 @@ endif()
 message(STATUS "Building version: ${er_VERSION_FULL}")
 configure_file("${ER_SOURCE_DIR}/version.c.in" "${ER_SOURCE_DIR}/version.c")
 
-aux_source_directory(. SOURCES)
-list(APPEND SOURCES "${ER_SOURCE_DIR}/version.c" "${ER_INCLUDE_DIR}/erbium_version.h")
 
-add_executable(${PROJECT_NAME} ${SOURCES})
