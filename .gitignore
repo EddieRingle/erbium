@@ -3,5 +3,7 @@ build/
 
 contrib/downloads/
 
+out/
+
 # I hate you, OS X
 .DS_Store
