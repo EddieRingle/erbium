@@ -68,7 +68,7 @@ if(er_VERSION_FULL MATCHES "([0-9]+)\\.([0-9]+)\\.([0-9]+)-?([0-9]+-g[0-9a-f]+)?
 endif()
 
 message(STATUS "Building version: ${er_VERSION_FULL}")
-configure_file("${ER_SOURCE_DIR}/version.c.in" "${ER_SOURCE_DIR}/version.c")
+configure_file("${ER_SOURCE_DIR}/version.c.in" "${CMAKE_CURRENT_BINARY_DIR}/version.c")
 
 #
 # Dependencies
@@ -81,7 +81,7 @@ include("${ER_CONTRIB_DIR}/CMakeLists.txt")
 #
 
 set(erbium_SOURCES
-	${ER_SOURCE_DIR}/version.c
+	${CMAKE_CURRENT_BINARY_DIR}/version.c
 )
 
 set(erbium_INCLUDES
