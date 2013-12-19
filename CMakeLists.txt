@@ -54,6 +54,7 @@ endif()
 message(STATUS "Building version: ${er_VERSION_FULL}")
 configure_file("${ER_SOURCE_DIR}/version.c.in" "${ER_SOURCE_DIR}/version.c")
 
+include("${ER_CONTRIB_DIR}/CMakeLists.txt")
 
 set(erbium_SOURCES
 	${ER_SOURCE_DIR}/version.c
@@ -71,6 +72,9 @@ link_directories("${ER_TARGET_CONTRIB_OUT_DIR}/lib")
 link_directories("${ER_TARGET_OUT_DIR}/lib")
 
 add_library(erbium STATIC ${erbium_SOURCES} ${erbium_INCLUDES})
+add_dependencies(erbium
+	lua51
+)
 set_target_properties(erbium PROPERTIES
 	OUTPUT_NAME erbium_nodeps
 )
