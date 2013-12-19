@@ -55,3 +55,22 @@ message(STATUS "Building version: ${er_VERSION_FULL}")
 configure_file("${ER_SOURCE_DIR}/version.c.in" "${ER_SOURCE_DIR}/version.c")
 
 
+set(erbium_SOURCES
+	${ER_SOURCE_DIR}/version.c
+)
+
+set(erbium_INCLUDES
+	${ER_INCLUDE_DIR}/erbium_version.h
+)
+
+include_directories(${ER_INCLUDE_DIR})
+include_directories(SYSTEM "${ER_TARGET_CONTRIB_OUT_DIR}/include")
+include_directories(SYSTEM "${ER_TARGET_OUT_DIR}/include")
+
+link_directories("${ER_TARGET_CONTRIB_OUT_DIR}/lib")
+link_directories("${ER_TARGET_OUT_DIR}/lib")
+
+add_library(erbium STATIC ${erbium_SOURCES} ${erbium_INCLUDES})
+set_target_properties(erbium PROPERTIES
+	OUTPUT_NAME erbium_nodeps
+)
