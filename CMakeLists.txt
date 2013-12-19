@@ -74,3 +74,6 @@ add_library(erbium STATIC ${erbium_SOURCES} ${erbium_INCLUDES})
 set_target_properties(erbium PROPERTIES
 	OUTPUT_NAME erbium_nodeps
 )
+
+group_by_folder(${ER_ROOT_DIR} "${erbium_SOURCES}")
+group_by_folder(${ER_ROOT_DIR} "${erbium_INCLUDES}")
