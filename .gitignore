@@ -1,2 +1,5 @@
 CMakeLists.txt.user
 build/
+
+# I hate you, OS X
+.DS_Store
