@@ -9,6 +9,10 @@ set(ER_SOURCE_DIR "${ER_ROOT_DIR}/src")
 set(ER_INCLUDE_DIR "${ER_ROOT_DIR}/include")
 set(ER_OUT_DIR "${ER_ROOT_DIR}/out")
 
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE "Debug")
+endif()
+
 list(APPEND CMAKE_MODULE_PATH "${ER_SCRIPTS_DIR}/cmake/modules")
 
 include(GetGitRevisionDescription)
