@@ -1,5 +1,7 @@
 CMakeLists.txt.user
 build/
 
+contrib/downloads/
+
 # I hate you, OS X
 .DS_Store
