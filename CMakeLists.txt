@@ -16,6 +16,10 @@ endif()
 list(APPEND CMAKE_MODULE_PATH "${ER_SCRIPTS_DIR}/cmake/modules")
 
 include(GetGitRevisionDescription)
+include(GroupByFolder)
+include(MergeStaticLibs)
+include(TargetArch)
+
 git_describe(gitdesc)
 
 if("${gitdesc}" EQUAL "GIT-NOTFOUND")
