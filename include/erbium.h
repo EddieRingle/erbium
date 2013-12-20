@@ -37,4 +37,7 @@
 
 #include "erbium_version.h"
 
+#define LOGI(...) (fprintf(stdout, __VA_ARGS__))
+#define LOGE(...) (fprintf(stderr, __VA_ARGS__))
+
 #endif /* __included_erbium_h */
