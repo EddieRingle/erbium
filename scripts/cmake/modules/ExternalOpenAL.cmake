@@ -12,6 +12,7 @@ set(openal_CMAKE_ARGS
 	-DALSOFT_NO_CONFIG_UTIL=ON
 	-DALSOFT_UTILS=OFF
 	-DLIBTYPE=STATIC
+	-Wno-dev
 )
 
 ExternalProject_Add(openal_build
