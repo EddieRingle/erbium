@@ -27,6 +27,14 @@
 #   include <signal.h>
 #endif
 
+/*
+ * Lua
+ */
+#include <lua5.1/lua.h>
+#include <lua5.1/luaconf.h>
+#include <lua5.1/lualib.h>
+#include <lua5.1/lauxlib.h>
+
 #include "erbium_version.h"
 
 #endif /* __included_erbium_h */
