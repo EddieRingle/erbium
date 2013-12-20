@@ -63,8 +63,6 @@ macro(MERGE_STATIC_LIBS)
   FOREACH(LIB ${LIBS})
 	GET_TARGET_PROPERTY(LIB_LOCATION ${LIB} LOCATION)
 	GET_TARGET_PROPERTY(LIB_TYPE ${LIB} TYPE)
-	message(STATUS "LIB:      ${LIB}")
-	message(STATUS "LIB_TYPE: ${LIB_TYPE}")
 	IF(NOT LIB_LOCATION)
 	   # 3rd party library like libz.so. Make sure that everything
 	   # that links to our library links to this one as well.
