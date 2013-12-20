@@ -28,6 +28,11 @@
 #endif
 
 /*
+ * GLFW
+ */
+#include <GLFW/glfw3.h>
+
+/*
  * Lua
  */
 #include <lua5.1/lua.h>

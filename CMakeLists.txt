@@ -99,6 +99,7 @@ link_directories("${ER_TARGET_OUT_DIR}/lib")
 
 add_library(erbium STATIC ${erbium_SOURCES} ${erbium_INCLUDES})
 add_dependencies(erbium
+	glfw
 	lua51
 )
 set_target_properties(erbium PROPERTIES
@@ -107,6 +108,7 @@ set_target_properties(erbium PROPERTIES
 
 merge_static_libs(erbium_combined OUTPUT_NAME erbium
 	erbium
+	glfw
 	lua51
 )
 
