@@ -52,6 +52,12 @@
 #include <lua5.1/lualib.h>
 #include <lua5.1/lauxlib.h>
 
+/*
+ * OpenAL Soft
+ */
+#include <AL/al.h>
+#include <AL/alc.h>
+
 #include "erbium_version.h"
 
 #define LOGI(...) (fprintf(stdout, __VA_ARGS__))

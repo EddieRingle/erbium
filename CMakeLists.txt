@@ -104,6 +104,7 @@ add_dependencies(erbium
 	glew
 	glfw
 	lua51
+	openal
 )
 set_target_properties(erbium PROPERTIES
 	OUTPUT_NAME erbium_nodeps
@@ -115,6 +116,7 @@ merge_static_libs(erbium_combined OUTPUT_NAME erbium
 	glew
 	glfw
 	lua51
+	openal
 )
 
 group_by_folder(${ER_ROOT_DIR} "${erbium_SOURCES}")
