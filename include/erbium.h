@@ -45,6 +45,12 @@
 #include <GLFW/glfw3.h>
 
 /*
+ * zlib & libpng
+ */
+#include <zlib.h>
+#include <png.h>
+
+/*
  * Lua
  */
 #include <lua5.1/lua.h>
