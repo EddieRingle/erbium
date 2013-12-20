@@ -92,6 +92,7 @@ set(erbium_INCLUDES
 
 include_directories(${ER_INCLUDE_DIR})
 include_directories(SYSTEM "${ER_TARGET_CONTRIB_OUT_DIR}/include")
+include_directories(SYSTEM "${ER_TARGET_CONTRIB_OUT_DIR}/include/freetype2")
 include_directories(SYSTEM "${ER_TARGET_OUT_DIR}/include")
 
 link_directories("${ER_TARGET_CONTRIB_OUT_DIR}/lib")
@@ -99,6 +100,7 @@ link_directories("${ER_TARGET_OUT_DIR}/lib")
 
 add_library(erbium STATIC ${erbium_SOURCES} ${erbium_INCLUDES})
 add_dependencies(erbium
+	freetype
 	glew
 	glfw
 	lua51
@@ -109,6 +111,7 @@ set_target_properties(erbium PROPERTIES
 
 merge_static_libs(erbium_combined OUTPUT_NAME erbium
 	erbium
+	freetype
 	glew
 	glfw
 	lua51

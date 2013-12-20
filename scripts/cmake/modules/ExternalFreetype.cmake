@@ -1,0 +1,28 @@
+include(ExternalProject)
+
+set(freetype_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/freetype)
+
+set(freetype_CMAKE_ARGS
+	-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+	-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+	-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+	-DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
+)
+
+ExternalProject_Add(freetype_build
+	PREFIX ${freetype_PREFIX}
+
+	DOWNLOAD_DIR ${ER_CONTRIB_DOWNLOAD_DIR}
+
+	GIT_REPOSITORY git://git.sv.gnu.org/freetype/freetype2.git
+	GIT_TAG VER-2-5-2
+
+	INSTALL_DIR ${ER_TARGET_CONTRIB_OUT_DIR}
+	CMAKE_ARGS ${freetype_CMAKE_ARGS}
+)
+
+add_library(freetype STATIC IMPORTED)
+set_target_properties(freetype PROPERTIES
+	IMPORTED_LOCATION ${ER_TARGET_CONTRIB_OUT_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}freetype${CMAKE_STATIC_LIBRARY_SUFFIX}
+)
+add_dependencies(freetype freetype_build)
