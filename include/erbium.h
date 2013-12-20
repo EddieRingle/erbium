@@ -64,6 +64,23 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
+/*
+ * Ogg
+ */
+#if defined(TARGET_LITTLE_ENDIAN)
+#   define OGG_ENDIAN 0
+#elif defined(TARGET_BIG_ENDIAN)
+#   define OGG_ENDIAN 1
+#endif
+#include <ogg/ogg.h>
+
+/*
+ * Vorbis
+ */
+#include <vorbis/codec.h>
+#include <vorbis/vorbisenc.h>
+#include <vorbis/vorbisfile.h>
+
 #include "erbium_version.h"
 
 #define LOGI(...) (fprintf(stdout, __VA_ARGS__))

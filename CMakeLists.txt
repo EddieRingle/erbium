@@ -106,6 +106,8 @@ add_dependencies(erbium
 	libpng
 	lua51
 	openal
+	ogg
+	vorbis
 	zlib
 )
 set_target_properties(erbium PROPERTIES
@@ -120,6 +122,8 @@ merge_static_libs(erbium_combined OUTPUT_NAME erbium
 	libpng
 	lua51
 	openal
+	ogg
+	vorbis
 	zlib
 )
 
