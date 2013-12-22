@@ -3,6 +3,12 @@ project(erbium C)
 cmake_minimum_required(VERSION 2.8.8)
 
 #
+# Options
+#
+
+option(ER_BUILD_EXAMPLES "Build Erbium examples" ON)
+
+#
 # Set up some variables
 #
 
@@ -126,6 +132,10 @@ merge_static_libs(erbium_combined OUTPUT_NAME erbium
 	vorbis
 	zlib
 )
+
+if(ER_BUILD_EXAMPLES)
+	add_subdirectory(examples)
+endif()
 
 group_by_folder(${ER_ROOT_DIR} "${erbium_SOURCES}")
 group_by_folder(${ER_ROOT_DIR} "${erbium_INCLUDES}")
