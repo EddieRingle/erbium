@@ -87,6 +87,12 @@
 #define LOGI(...) (fprintf(stdout, __VA_ARGS__))
 #define LOGE(...) (fprintf(stderr, __VA_ARGS__))
 
+#if defined(TARGET_OS_ANDROID)
+#   define er_main() void android_main(struct android_app *state)
+#else
+#   define er_main() int main(int argc, char **argv)
+#endif
+
 #if defined(TARGET_COMPILER_VC)
 #   define ERCALL __cdecl
 #   pragma section(".CRT$XCU",read)
