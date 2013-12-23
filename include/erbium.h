@@ -111,4 +111,13 @@
 #   error "Compiler does not support __attribute__((constructor))"
 #endif
 
+typedef enum {
+    ERR_OK = 0,
+
+    ERR_UNINITIALIZED,
+    ERR_MEMORY_ERROR
+} ERR;
+
+#define ERAPI ERR
+
 #endif /* __included_erbium_h */
