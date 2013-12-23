@@ -115,9 +115,13 @@ typedef enum {
     ERR_OK = 0,
 
     ERR_UNINITIALIZED,
-    ERR_MEMORY_ERROR
+    ERR_MEMORY_ERROR,
+    ERR_ALREADY_INITIALIZED
 } ERR;
 
 #define ERAPI ERR
+
+ERAPI er_init(void);
+ERAPI er_quit(void);
 
 #endif /* __included_erbium_h */
