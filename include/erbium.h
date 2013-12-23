@@ -89,8 +89,10 @@
 
 #if defined(TARGET_OS_ANDROID)
 #   define er_main() void android_main(struct android_app *state)
+#   define er_return_main()
 #else
 #   define er_main() int main(int argc, char **argv)
+#   define er_return_main() return 0
 #endif
 
 #if defined(TARGET_COMPILER_VC)
