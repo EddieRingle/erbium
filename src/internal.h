@@ -15,4 +15,7 @@ extern er_app_t *g_app;
 void *er__malloc(size_t size);
 void  er__free(void *mem);
 
+char *er__strdup(const char *str);
+char *er__strtolower(const char *str);
+
 #endif /* __included_er_internal_h */
