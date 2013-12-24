@@ -117,7 +117,9 @@ typedef enum {
     ERR_UNINITIALIZED,
     ERR_MEMORY_ERROR,
     ERR_ALREADY_INITIALIZED,
-    ERR_NOT_IMPLEMENTED
+    ERR_NOT_IMPLEMENTED,
+    ERR_UNREACHABLE_RESULT,
+    ERR_INVALID_PATH
 } ERR;
 
 #define ERAPI ERR
@@ -126,6 +128,16 @@ typedef struct er_app_attrs_t {
     char *name;
     char *author;
 } er_app_attrs_t;
+
+typedef enum {
+    ER_PATH_BINARY,
+    ER_PATH_SUPPORT
+} er_path_e;
+
+typedef struct er_path_result_t {
+    char *path;
+    size_t len;
+} er_path_result_t;
 
 #if defined(TARGET_OS_ANDROID)
 ERAPI er_exec_android(er_app_attrs_t *attrs, struct android_app *state);
@@ -137,5 +149,7 @@ ERAPI er_exec_cli(er_app_attrs_t *attrs, int argc, char **argv);
 
 ERAPI er_init(void);
 ERAPI er_quit(void);
+
+ERAPI er_app_get_path(er_path_e path, er_path_result_t *result);
 
 #endif /* __included_erbium_h */
