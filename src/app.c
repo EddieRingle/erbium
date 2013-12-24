@@ -54,18 +54,18 @@ ERAPI er_exec_cli(er_app_attrs_t *attrs, int argc, char **argv)
 {
     INITCHECK();
     if (attrs != NULL) {
-        if (attrs->name != NULL) {
-            if (g_app->name != NULL) {
-                er__free(g_app->name);
-            }
-            g_app->name = er__strdup(attrs->name);
+        if (attrs->name == NULL || attrs->author == NULL) {
+            LOGE("You must call er_exec() with both a name and author\n");
+            return ERR_INVALID_ARGS;
         }
-        if (attrs->author != NULL) {
-            if (g_app->author != NULL) {
-                er__free(g_app->author);
-            }
-            g_app->author = er__strdup(attrs->author);
+        if (g_app->name != NULL) {
+            er__free(g_app->name);
         }
+        g_app->name = er__strdup(attrs->name);
+        if (g_app->author != NULL) {
+            er__free(g_app->author);
+        }
+        g_app->author = er__strdup(attrs->author);
     }
     /* TODO: Start making things happen */
     return ERR_OK;
@@ -130,13 +130,7 @@ ERAPI er__app_get_support_path(er_path_result_t *result)
     memset(temp_path, 0, sizeof temp_path);
 #if defined(TARGET_OS_WINDOWS)
     SHGetFolderPathA(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, temp_path);
-    if (g_app->author != NULL && g_app->name != NULL) {
-        sprintf(temp_path, "%s\\%s\\%s\\", temp_path, g_app->author, g_app->name);
-    } else if (g_app->author != NULL) {
-        sprintf(temp_path, "%s\\%s\\erbiumApp\\", temp_path, g_app->author);
-    } else if (g_app->name != NULL) {
-        sprintf(temp_path, "%s\\erbium\\%s", temp_path, g_app->name);
-    }
+    sprintf(temp_path, "%s\\%s\\%s\\", temp_path, g_app->author, g_app->name);
 #elif defined(TARGET_OS_LINUX)
     home_path = getenv("HOME");
     str = er__strtolower(g_app->author);
