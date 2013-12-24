@@ -5,6 +5,9 @@
 
 typedef struct er_app_t {
     int initialized;
+
+    char *name;
+    char *author;
 } er_app_t;
 
 extern er_app_t *g_app;

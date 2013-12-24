@@ -122,6 +122,19 @@ typedef enum {
 
 #define ERAPI ERR
 
+typedef struct er_app_attrs_t {
+    char *name;
+    char *author;
+} er_app_attrs_t;
+
+#if defined(TARGET_OS_ANDROID)
+ERAPI er_exec_android(er_app_attrs_t *attrs, struct android_app *state);
+#define er_exec(attrsptr) er_exec_android(attrsptr, state)
+#else
+ERAPI er_exec_cli(er_app_attrs_t *attrs, int argc, char **argv);
+#define er_exec(attrsptr) er_exec_cli(attrsptr, argc, argv)
+#endif
+
 ERAPI er_init(void);
 ERAPI er_quit(void);
 
