@@ -28,12 +28,18 @@ ERAPI er_init(void)
     g_app->initialized = 1;
     g_app->name = NULL;
     g_app->author = NULL;
+#if defined(TARGET_OS_DESKTOP)
+    glfwInit();
+#endif
     return ERR_OK;
 }
 
 ERAPI er_quit(void)
 {
     INITCHECK();
+#if defined(TARGET_OS_DESKTOP)
+    glfwTerminate();
+#endif
     er__free(g_app);
     g_app = NULL;
     return ERR_OK;
