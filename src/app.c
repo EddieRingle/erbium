@@ -76,10 +76,6 @@ ERAPI er_exec_cli(er_app_attrs_t *attrs, int argc, char **argv)
 ERAPI er__app_get_binary_path(er_path_result_t *result)
 {
     char temp_path[2048];
-#if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
-    const char *home_path;
-    char *str;
-#endif
     char *ptr;
 
     memset(temp_path, 0, sizeof temp_path);
@@ -126,7 +122,6 @@ ERAPI er__app_get_support_path(er_path_result_t *result)
     char temp_path[2048];
 #if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
     const char *home_path;
-    char *ptr;
 #   if defined(TARGET_OS_LINUX)
     char *str;
 #   endif
