@@ -151,5 +151,6 @@ ERAPI er_init(void);
 ERAPI er_quit(void);
 
 ERAPI er_app_get_path(er_path_e path, er_path_result_t *result);
+ERAPI er_app_cleanup_path_result(er_path_result_t *target);
 
 #endif /* __included_erbium_h */

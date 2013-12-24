@@ -184,6 +184,14 @@ ERAPI er_app_get_path(er_path_e path, er_path_result_t *result)
     if (result == NULL) {
         return ERR_UNREACHABLE_RESULT;
     }
+    if (result->path != NULL) {
+        /*
+         * Result struct already has a path, so try to clean it up.
+         * This could end badly if the struct has garbage in it,
+         * for whatever reason.
+         */
+        er_app_cleanup_path_result(result);
+    }
     switch (path) {
         case ER_PATH_BINARY:
             return er__app_get_binary_path(result);
@@ -191,4 +199,16 @@ ERAPI er_app_get_path(er_path_e path, er_path_result_t *result)
             return er__app_get_support_path(result);
     }
     return ERR_INVALID_PATH;
+}
+
+ERAPI er_app_cleanup_path_result(er_path_result_t *target)
+{
+    if (target != NULL) {
+        if (target->path != NULL) {
+            er__free(target->path);
+            target->path = NULL;
+        }
+        target->len = 0;
+    }
+    return ERR_OK;
 }
