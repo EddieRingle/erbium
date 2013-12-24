@@ -126,8 +126,10 @@ ERAPI er__app_get_support_path(er_path_result_t *result)
     char temp_path[2048];
 #if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
     const char *home_path;
-    char *str;
     char *ptr;
+#   if defined(TARGET_OS_LINUX)
+    char *str;
+#   endif
 #endif
 
     memset(temp_path, 0, sizeof temp_path);
@@ -156,18 +158,7 @@ ERAPI er__app_get_support_path(er_path_result_t *result)
     er__free(str);
 #elif defined(TARGET_OS_MACOSX)
     home_path = getenv("HOME");
-    str = er__strtolower(g_app->author);
-    if (str == NULL) {
-        return ERR_MEMORY_ERROR;
-    }
-    sprintf(temp_path, "%s/Library/Application Support/%s/", home_path, str);
-    er__free(str);
-    str = er__strtolower(g_app->name);
-    if (str == NULL) {
-        return ERR_MEMORY_ERROR;
-    }
-    strcat(temp_path, str);
-    er__free(str);
+    sprintf(temp_path, "%s/Library/Application Support/%s/%s", home_path, g_app->author, g_app->name);
 #endif
 
     result->path = er__strdup(temp_path);
