@@ -3,6 +3,8 @@
 
 #include "erbium.h"
 
+#include "cJSON.h"
+
 typedef struct er_app_t {
     int initialized;
 

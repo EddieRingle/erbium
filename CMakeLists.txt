@@ -90,6 +90,8 @@ set(erbium_SOURCES
 	${ER_SOURCE_DIR}/app.c
 	${ER_SOURCE_DIR}/internal.h
 	${ER_SOURCE_DIR}/string_utils.c
+	${ER_SOURCE_DIR}/cJSON.c
+	${ER_SOURCE_DIR}/cJSON.h
 	${CMAKE_CURRENT_BINARY_DIR}/er_version.c
 )
 
