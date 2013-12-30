@@ -19,17 +19,19 @@ else()
 	add_executable(main_test WIN32 main_test.c)
 endif()
 
+set(BINARIES main_test)
+
 if(MSVC)
-	set(WINDOWS_BINARIES main_test)
-	set_target_properties(${WINDOWS_BINARIES} PROPERTIES
-		LINK_FLAGS "/ENTRY:mainCRTStartup")
+    set_target_properties(${BINARIES} PROPERTIES
+        LINK_FLAGS "/ENTRY:mainCRTStartup")
 endif()
 
 if(APPLE)
-	set(BUNDLE_BINARIES main_test)
-	set_target_properties(${BUNDLE_BINARIES} PROPERTIES
+	set_target_properties(${BINARIES} PROPERTIES
 		MACOSX_BUNDLE_SHORT_VERSION_STRING ${er_VERSION_FULL}
 		MACOSX_BUNDLE_LONG_VERSION_STRING ${er_VERSION_FULL})
 endif()
 
-target_link_libraries(main_test erbium_combined ${er_LIBS})
+foreach(binary ${BINARIES})
+    target_link_libraries(${binary} erbium_combined ${er_LIBS})
+endforeach()
