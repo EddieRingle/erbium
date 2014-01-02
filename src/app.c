@@ -11,6 +11,8 @@ struct er_app_attrs_t {
 
 er_app_t *g_app = NULL;
 
+er_context_t g_ctx = NULL;
+
 void *er__malloc(size_t size)
 {
     return malloc(size);
@@ -24,6 +26,23 @@ void er__free(void *mem)
 void er__glfw_error_cb(int error, const char *description)
 {
     LOGE("GLFW error: %s\n", description);
+}
+
+ERAPI er__create_default_context(er_context_t *ctx)
+{
+    ERR ret = ERR_OK;
+    er_context_attrs_t attrs;
+    char title[255];
+
+    if (ctx == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    er_ctx_attrs_init(&attrs);
+    er_ctx_attrs_set_screen_height(&attrs, 480);
+    er_ctx_attrs_set_screen_width(&attrs, 854);
+    ret = er_ctx_open(&attrs, ctx);
+    er_ctx_attrs_destroy(&attrs);
+    return ret;
 }
 
 ERAPI er_init(void)
@@ -51,6 +70,10 @@ ERAPI er_init(void)
 ERAPI er_quit(void)
 {
     INITCHECK();
+    if (g_ctx != NULL) {
+        er_ctx_close(&g_ctx);
+        g_ctx = NULL;
+    }
 #if defined(TARGET_OS_DESKTOP)
     glfwTerminate();
 #endif
@@ -61,7 +84,7 @@ ERAPI er_quit(void)
 
 #if defined(TARGET_OS_ANDROID)
 
-ERAPI er_exec_android(er_app_attrs_t *attrs, struct android_app *state)
+ERAPI er_exec_android(er_app_attrs_t *attrs, er_context_t *ctx, struct android_app *state)
 {
     return ERR_NOT_IMPLEMENTED;
 }
@@ -70,8 +93,10 @@ ERAPI er_exec_android(er_app_attrs_t *attrs, struct android_app *state)
 
 #if defined(TARGET_OS_DESKTOP)
 
-ERAPI er_exec_cli(er_app_attrs_t *attrs, int argc, char **argv)
+ERAPI er_exec_cli(er_app_attrs_t *attrs, er_context_t *ctx, int argc, char **argv)
 {
+    ERR ret;
+
     INITCHECK();
     if (attrs != NULL) {
         if ((*attrs)->name == NULL || (*attrs)->author == NULL) {
@@ -86,6 +111,14 @@ ERAPI er_exec_cli(er_app_attrs_t *attrs, int argc, char **argv)
             er__free(g_app->author);
         }
         g_app->author = er__strdup((*attrs)->author);
+    }
+    if (ctx != NULL) {
+        g_ctx = *ctx;
+    } else {
+        ret = er__create_default_context(&g_ctx);
+        if (ret != ERR_OK) {
+            return ret;
+        }
     }
     /* TODO: Start making things happen */
     return ERR_OK;

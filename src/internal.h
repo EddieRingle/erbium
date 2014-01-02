@@ -14,6 +14,8 @@ typedef struct er_app_t {
 
 extern er_app_t *g_app;
 
+extern er_context_t g_ctx;
+
 #define INITCHECK() \
     {if (g_app == NULL || !g_app->initialized) { return ERR_UNINITIALIZED; }}
 

@@ -120,7 +120,8 @@ typedef enum {
     ERR_NOT_IMPLEMENTED,
     ERR_UNREACHABLE_RESULT,
     ERR_INVALID_PATH,
-    ERR_INVALID_ARGS
+    ERR_INVALID_ARGS,
+    ERR_UNKNOWN
 } ERR;
 
 #define ERAPI ERR
@@ -137,12 +138,16 @@ typedef struct er_path_result_t {
 
 typedef struct er_app_attrs_t * er_app_attrs_t;
 
+typedef struct er_context_t * er_context_t;
+
+typedef struct er_context_attrs_t * er_context_attrs_t;
+
 #if defined(TARGET_OS_ANDROID)
-ERAPI er_exec_android(er_app_attrs_t *attrs, struct android_app *state);
-#define er_exec(attrsptr) er_exec_android(attrsptr, state)
+ERAPI er_exec_android(er_app_attrs_t *attrs, er_context_t *ctx, struct android_app *state);
+#define er_exec(attrsptr, ctxptr, state) er_exec_android(attrsptr, ctxptr, state)
 #else
-ERAPI er_exec_cli(er_app_attrs_t *attrs, int argc, char **argv);
-#define er_exec(attrsptr) er_exec_cli(attrsptr, argc, argv)
+ERAPI er_exec_cli(er_app_attrs_t *attrs, er_context_t *ctx, int argc, char **argv);
+#define er_exec(attrsptr, ctxptr, argc, argv) er_exec_cli(attrsptr, ctxptr, argc, argv)
 #endif
 
 ERAPI er_init(void);
@@ -155,5 +160,14 @@ ERAPI er_app_attrs_destroy(er_app_attrs_t *attrs);
 
 ERAPI er_app_get_path(er_path_e path, er_path_result_t *result);
 ERAPI er_app_cleanup_path_result(er_path_result_t *target);
+
+ERAPI er_ctx_attrs_init(er_context_attrs_t *attrs);
+ERAPI er_ctx_attrs_set_window_title(er_context_attrs_t *attrs, const char *title);
+ERAPI er_ctx_attrs_set_screen_width(er_context_attrs_t *attrs, unsigned width);
+ERAPI er_ctx_attrs_set_screen_height(er_context_attrs_t *attrs, unsigned height);
+ERAPI er_ctx_attrs_set_fullscreen(er_context_attrs_t *attrs, int fullscreen);
+ERAPI er_ctx_attrs_destroy(er_context_attrs_t *attrs);
+ERAPI er_ctx_open(er_context_attrs_t *attrs, er_context_t *ctx);
+ERAPI er_ctx_close(er_context_t *ctx);
 
 #endif /* __included_erbium_h */
