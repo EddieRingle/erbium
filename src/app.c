@@ -16,6 +16,11 @@ void er__free(void *mem)
     free(mem);
 }
 
+void er__glfw_error_cb(int error, const char *description)
+{
+    LOGE("GLFW error: %s\n", description);
+}
+
 ERAPI er_init(void)
 {
     if (g_app != NULL) {
@@ -29,7 +34,11 @@ ERAPI er_init(void)
     g_app->name = NULL;
     g_app->author = NULL;
 #if defined(TARGET_OS_DESKTOP)
-    glfwInit();
+    if (!glfwInit()) {
+        er_quit();
+        return ERR_UNKNOWN;
+    }
+    glfwSetErrorCallback(er__glfw_error_cb);
 #endif
     return ERR_OK;
 }
