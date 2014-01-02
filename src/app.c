@@ -4,6 +4,11 @@
 extern char **NXArgv;
 #endif
 
+struct er_app_attrs_t {
+    char *name;
+    char *author;
+};
+
 er_app_t *g_app = NULL;
 
 void *er__malloc(size_t size)
@@ -69,24 +74,88 @@ ERAPI er_exec_cli(er_app_attrs_t *attrs, int argc, char **argv)
 {
     INITCHECK();
     if (attrs != NULL) {
-        if (attrs->name == NULL || attrs->author == NULL) {
+        if ((*attrs)->name == NULL || (*attrs)->author == NULL) {
             LOGE("You must call er_exec() with both a name and author\n");
             return ERR_INVALID_ARGS;
         }
         if (g_app->name != NULL) {
             er__free(g_app->name);
         }
-        g_app->name = er__strdup(attrs->name);
+        g_app->name = er__strdup((*attrs)->name);
         if (g_app->author != NULL) {
             er__free(g_app->author);
         }
-        g_app->author = er__strdup(attrs->author);
+        g_app->author = er__strdup((*attrs)->author);
     }
     /* TODO: Start making things happen */
     return ERR_OK;
 }
 
 #endif
+
+ERAPI er_app_attrs_init(er_app_attrs_t *attrs)
+{
+    if (attrs == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    *attrs = er__malloc(sizeof(struct er_app_attrs_t));
+    if (*attrs == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
+    (*attrs)->name = NULL;
+    (*attrs)->author = NULL;
+
+    return ERR_OK;
+}
+
+ERAPI er_app_attrs_set_name(er_app_attrs_t *attrs, const char *name)
+{
+    if (attrs == NULL || name == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    if ((*attrs)->name != NULL) {
+        er__free((*attrs)->name);
+    }
+    (*attrs)->name = er__strdup(name);
+    if ((*attrs)->name == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
+
+    return ERR_OK;
+}
+
+ERAPI er_app_attrs_set_author(er_app_attrs_t *attrs, const char *author)
+{
+    if (attrs == NULL || author == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    if ((*attrs)->author != NULL) {
+        er__free((*attrs)->author);
+    }
+    (*attrs)->author = er__strdup(author);
+    if ((*attrs)->author == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
+
+    return ERR_OK;
+}
+
+ERAPI er_app_attrs_destroy(er_app_attrs_t *attrs)
+{
+    if (attrs == NULL || *attrs == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    if ((*attrs)->name != NULL) {
+        er__free((*attrs)->name);
+    }
+    if ((*attrs)->author != NULL) {
+        er__free((*attrs)->author);
+    }
+    er__free(*attrs);
+    *attrs = NULL;
+
+    return ERR_OK;
+}
 
 ERAPI er__app_get_binary_path(er_path_result_t *result)
 {

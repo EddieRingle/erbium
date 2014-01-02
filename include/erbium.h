@@ -125,11 +125,6 @@ typedef enum {
 
 #define ERAPI ERR
 
-typedef struct er_app_attrs_t {
-    char *name;
-    char *author;
-} er_app_attrs_t;
-
 typedef enum {
     ER_PATH_BINARY,
     ER_PATH_SUPPORT
@@ -139,6 +134,8 @@ typedef struct er_path_result_t {
     char *path;
     size_t len;
 } er_path_result_t;
+
+typedef struct er_app_attrs_t * er_app_attrs_t;
 
 #if defined(TARGET_OS_ANDROID)
 ERAPI er_exec_android(er_app_attrs_t *attrs, struct android_app *state);
@@ -150,6 +147,11 @@ ERAPI er_exec_cli(er_app_attrs_t *attrs, int argc, char **argv);
 
 ERAPI er_init(void);
 ERAPI er_quit(void);
+
+ERAPI er_app_attrs_init(er_app_attrs_t *attrs);
+ERAPI er_app_attrs_set_name(er_app_attrs_t *attrs, const char *name);
+ERAPI er_app_attrs_set_author(er_app_attrs_t *attrs, const char *author);
+ERAPI er_app_attrs_destroy(er_app_attrs_t *attrs);
 
 ERAPI er_app_get_path(er_path_e path, er_path_result_t *result);
 ERAPI er_app_cleanup_path_result(er_path_result_t *target);
