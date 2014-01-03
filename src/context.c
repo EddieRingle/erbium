@@ -13,6 +13,7 @@ struct er_context_attrs_t {
     unsigned screen_width;
     unsigned screen_height;
     int fullscreen;
+    int decorated;
 };
 
 ERAPI er_ctx_attrs_init(er_context_attrs_t *attrs)
@@ -29,6 +30,7 @@ ERAPI er_ctx_attrs_init(er_context_attrs_t *attrs)
     (*attrs)->screen_width = 0;
     (*attrs)->screen_height = 0;
     (*attrs)->fullscreen = 0;
+    (*attrs)->decorated = 1;
 
     return ERR_OK;
 }
@@ -85,6 +87,16 @@ ERAPI er_ctx_attrs_set_fullscreen(er_context_attrs_t *attrs, int fullscreen)
     return ERR_OK;
 }
 
+ERAPI er_ctx_attrs_set_decorated(er_context_attrs_t *attrs, int decorated)
+{
+    if (attrs == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    (*attrs)->decorated = decorated;
+
+    return ERR_OK;
+}
+
 ERAPI er_ctx_attrs_destroy(er_context_attrs_t *attrs)
 {
     if (attrs == NULL) {
@@ -108,6 +120,7 @@ ERAPI er_ctx_open__glfw(er_context_t *ctx)
     if ((*ctx)->attrs->fullscreen) {
         monitor = glfwGetPrimaryMonitor();
     }
+    glfwWindowHint(GLFW_DECORATED, (*ctx)->attrs->decorated);
     (*ctx)->window = glfwCreateWindow(854, 480, (*ctx)->attrs->window_title, monitor, NULL);
     if (!(*ctx)->window) {
         return ERR_UNKNOWN;
@@ -144,6 +157,7 @@ ERAPI er_ctx_open(er_context_attrs_t *attrs, er_context_t *ctx)
     (*ctx)->attrs->screen_height = (*attrs)->screen_height;
     (*ctx)->attrs->screen_width = (*attrs)->screen_width;
     (*ctx)->attrs->fullscreen = (*attrs)->fullscreen;
+    (*ctx)->attrs->decorated = (*attrs)->decorated;
 
 #if defined(TARGET_OS_DESKTOP)
     (*ctx)->window = NULL;

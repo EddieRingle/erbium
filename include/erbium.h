@@ -166,6 +166,7 @@ ERAPI er_ctx_attrs_set_window_title(er_context_attrs_t *attrs, const char *title
 ERAPI er_ctx_attrs_set_screen_width(er_context_attrs_t *attrs, unsigned width);
 ERAPI er_ctx_attrs_set_screen_height(er_context_attrs_t *attrs, unsigned height);
 ERAPI er_ctx_attrs_set_fullscreen(er_context_attrs_t *attrs, int fullscreen);
+ERAPI er_ctx_attrs_set_decorated(er_context_attrs_t *attrs, int decorated);
 ERAPI er_ctx_attrs_destroy(er_context_attrs_t *attrs);
 ERAPI er_ctx_open(er_context_attrs_t *attrs, er_context_t *ctx);
 ERAPI er_ctx_close(er_context_t *ctx);
