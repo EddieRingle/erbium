@@ -7,6 +7,7 @@
 
 typedef struct er_app_t {
     int initialized;
+    int running;
 
     char *name;
     char *author;

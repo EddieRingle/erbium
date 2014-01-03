@@ -40,6 +40,19 @@ ERAPI er__create_default_context(er_context_t *ctx)
     return ret;
 }
 
+void er__loop(void)
+{
+    do {
+#if defined(TARGET_OS_DESKTOP)
+        glfwPollEvents();
+
+        if (glfwWindowShouldClose(g_ctx->window)) {
+            g_app->running = 0;
+        }
+#endif
+    } while (g_app->running);
+}
+
 ERAPI er_init(void)
 {
     if (g_app != NULL) {
@@ -50,6 +63,7 @@ ERAPI er_init(void)
         return ERR_MEMORY_ERROR;
     }
     g_app->initialized = 1;
+    g_app->running = 0;
     g_app->name = NULL;
     g_app->author = NULL;
 #if defined(TARGET_OS_DESKTOP)
@@ -115,7 +129,8 @@ ERAPI er_exec_cli(er_app_attrs_t *attrs, er_context_t *ctx, int argc, char **arg
             return ret;
         }
     }
-    /* TODO: Start making things happen */
+    g_app->running = 1;
+    er__loop();
     return ERR_OK;
 }
 
