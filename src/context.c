@@ -1,21 +1,5 @@
 #include "internal.h"
 
-struct er_context_t {
-    er_context_attrs_t attrs;
-
-#if defined(TARGET_OS_DESKTOP)
-    GLFWwindow *window;
-#endif
-};
-
-struct er_context_attrs_t {
-    char *window_title;
-    unsigned screen_width;
-    unsigned screen_height;
-    int fullscreen;
-    int decorated;
-};
-
 ERAPI er_ctx_attrs_init(er_context_attrs_t *attrs)
 {
     if (attrs == NULL) {

@@ -4,11 +4,6 @@
 extern char **NXArgv;
 #endif
 
-struct er_app_attrs_t {
-    char *name;
-    char *author;
-};
-
 er_app_t *g_app = NULL;
 
 er_context_t g_ctx = NULL;

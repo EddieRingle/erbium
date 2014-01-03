@@ -12,6 +12,27 @@ typedef struct er_app_t {
     char *author;
 } er_app_t;
 
+struct er_app_attrs_t {
+    char *name;
+    char *author;
+};
+
+struct er_context_t {
+    er_context_attrs_t attrs;
+
+#if defined(TARGET_OS_DESKTOP)
+    GLFWwindow *window;
+#endif
+};
+
+struct er_context_attrs_t {
+    char *window_title;
+    unsigned screen_width;
+    unsigned screen_height;
+    int fullscreen;
+    int decorated;
+};
+
 extern er_app_t *g_app;
 
 extern er_context_t g_ctx;
