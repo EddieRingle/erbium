@@ -15,11 +15,14 @@ endif()
 if(APPLE)
 	add_executable(main_test MACOSX_BUNDLE main_test.c)
 	set_target_properties(main_test PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Main Test")
+	add_executable(window_test MACOSX_BUNDLE window_test.c)
+	set_target_properties(window_test PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Window Test")
 else()
 	add_executable(main_test WIN32 main_test.c)
+	add_executable(window_test WIN32 window_test.c)
 endif()
 
-set(BINARIES main_test)
+set(BINARIES main_test window_test)
 
 if(MSVC)
     set_target_properties(${BINARIES} PROPERTIES
