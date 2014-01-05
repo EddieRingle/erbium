@@ -49,6 +49,9 @@ void er__loop(void)
         if (glfwWindowShouldClose(g_ctx->window)) {
             g_app->running = 0;
         }
+
+        glClear(GL_COLOR_BUFFER_BIT);
+        glfwSwapBuffers(g_ctx->window);
 #endif
     } while (g_app->running);
 }
