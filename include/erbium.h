@@ -257,10 +257,10 @@ typedef enum {
 #define ER_KEY_MENU               348
 #define ER_KEY_LAST               ER_KEY_MENU
 
-#define ER_MOD_SHIFT           0x0001
-#define ER_MOD_CONTROL         0x0002
-#define ER_MOD_ALT             0x0004
-#define ER_MOD_SUPER           0x0008
+#define ER_MOD_SHIFT              0x0001
+#define ER_MOD_CONTROL            0x0002
+#define ER_MOD_ALT                0x0004
+#define ER_MOD_SUPER              0x0008
 
 #define ER_MOUSE_BUTTON_1         0
 #define ER_MOUSE_BUTTON_2         1
