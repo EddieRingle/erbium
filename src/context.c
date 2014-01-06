@@ -97,7 +97,7 @@ ERAPI er_ctx_attrs_destroy(er_context_attrs_t *attrs)
 
 ERAPI er_ctx_open(er_context_attrs_t *attrs, er_context_t *ctx)
 {
-    ERR ret = ERR_OK;
+    ERR ret;
 
     if (attrs == NULL || ctx == NULL) {
         return ERR_INVALID_ARGS;
