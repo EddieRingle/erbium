@@ -327,14 +327,14 @@ typedef struct er_context_t * er_context_t;
 typedef struct er_context_attrs_t * er_context_attrs_t;
 
 #if defined(TARGET_OS_ANDROID)
-ERAPI er_exec_android(er_app_attrs_t *attrs, er_context_t *ctx, struct android_app *state);
-#define er_exec(attrsptr, ctxptr, state) er_exec_android(attrsptr, ctxptr, state)
+ERAPI er_exec_android(er_context_t *ctx, struct android_app *state);
+#define er_exec(ctxptr, state) er_exec_android(ctxptr, state)
 #else
-ERAPI er_exec_cli(er_app_attrs_t *attrs, er_context_t *ctx, int argc, char **argv);
-#define er_exec(attrsptr, ctxptr, argc, argv) er_exec_cli(attrsptr, ctxptr, argc, argv)
+ERAPI er_exec_cli(er_context_t *ctx, int argc, char **argv);
+#define er_exec(ctxptr, argc, argv) er_exec_cli(ctxptr, argc, argv)
 #endif
 
-ERAPI er_init(void);
+ERAPI er_init(er_app_attrs_t *attrs);
 ERAPI er_quit(void);
 
 ERAPI er_stop(void);

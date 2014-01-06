@@ -52,7 +52,7 @@ void er__loop(void)
     } while (g_app->running);
 }
 
-ERAPI er_init(void)
+ERAPI er_init(er_app_attrs_t *attrs)
 {
     if (g_app != NULL) {
         return ERR_ALREADY_INITIALIZED;
@@ -65,6 +65,14 @@ ERAPI er_init(void)
     g_app->running = 0;
     g_app->name = NULL;
     g_app->author = NULL;
+    if (attrs != NULL) {
+        if ((*attrs)->name == NULL || (*attrs)->author == NULL) {
+            LOGE("You must call er_init() with both a name and author\n");
+            return ERR_INVALID_ARGS;
+        }
+        g_app->name = er__strdup((*attrs)->name);
+        g_app->author = er__strdup((*attrs)->author);
+    }
 #if defined(TARGET_OS_DESKTOP)
     if (!glfwInit()) {
         er_quit();
@@ -100,7 +108,7 @@ ERAPI er_stop(void)
 
 #if defined(TARGET_OS_ANDROID)
 
-ERAPI er_exec_android(er_app_attrs_t *attrs, er_context_t *ctx, struct android_app *state)
+ERAPI er_exec_android(er_context_t *ctx, struct android_app *state)
 {
     return ERR_NOT_IMPLEMENTED;
 }
@@ -109,25 +117,11 @@ ERAPI er_exec_android(er_app_attrs_t *attrs, er_context_t *ctx, struct android_a
 
 #if defined(TARGET_OS_DESKTOP)
 
-ERAPI er_exec_cli(er_app_attrs_t *attrs, er_context_t *ctx, int argc, char **argv)
+ERAPI er_exec_cli(er_context_t *ctx, int argc, char **argv)
 {
     ERR ret;
 
     INITCHECK();
-    if (attrs != NULL) {
-        if ((*attrs)->name == NULL || (*attrs)->author == NULL) {
-            LOGE("You must call er_exec() with both a name and author\n");
-            return ERR_INVALID_ARGS;
-        }
-        if (g_app->name != NULL) {
-            er__free(g_app->name);
-        }
-        g_app->name = er__strdup((*attrs)->name);
-        if (g_app->author != NULL) {
-            er__free(g_app->author);
-        }
-        g_app->author = er__strdup((*attrs)->author);
-    }
     if (ctx != NULL) {
         g_ctx = *ctx;
     } else {
