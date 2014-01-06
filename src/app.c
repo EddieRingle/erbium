@@ -27,7 +27,6 @@ ERAPI er__create_default_context(er_context_t *ctx)
 {
     ERR ret = ERR_OK;
     er_context_attrs_t attrs;
-    char title[255];
 
     if (ctx == NULL) {
         return ERR_INVALID_ARGS;
