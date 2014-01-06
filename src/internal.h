@@ -48,4 +48,10 @@ void  er__free(void *mem);
 char *er__strdup(const char *str);
 char *er__strtolower(const char *str);
 
+typedef ERAPI (*er__ctx_open_f)(er_context_t *ctx);
+typedef ERAPI (*er__ctx_close_f)(er_context_t *ctx);
+
+extern er__ctx_open_f er__ctx_open;
+extern er__ctx_close_f er__ctx_close;
+
 #endif /* __included_er_internal_h */

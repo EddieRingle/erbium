@@ -95,29 +95,6 @@ ERAPI er_ctx_attrs_destroy(er_context_attrs_t *attrs)
     return ERR_OK;
 }
 
-#if defined(TARGET_OS_DESKTOP)
-
-ERAPI er_ctx_open__glfw(er_context_t *ctx)
-{
-    GLFWmonitor *monitor = NULL;
-
-    if ((*ctx)->attrs->fullscreen) {
-        monitor = glfwGetPrimaryMonitor();
-    }
-    glfwWindowHint(GLFW_DECORATED, (*ctx)->attrs->decorated);
-    (*ctx)->window = glfwCreateWindow(854, 480, (*ctx)->attrs->window_title, monitor, NULL);
-    if (!(*ctx)->window) {
-        return ERR_UNKNOWN;
-    }
-    glfwMakeContextCurrent((*ctx)->window);
-    glewExperimental = 1;
-    glfwInit();
-
-    return ERR_OK;
-}
-
-#endif
-
 ERAPI er_ctx_open(er_context_attrs_t *attrs, er_context_t *ctx)
 {
     ERR ret = ERR_OK;
@@ -145,34 +122,28 @@ ERAPI er_ctx_open(er_context_attrs_t *attrs, er_context_t *ctx)
     (*ctx)->attrs->fullscreen = (*attrs)->fullscreen;
     (*ctx)->attrs->decorated = (*attrs)->decorated;
 
-#if defined(TARGET_OS_DESKTOP)
-    (*ctx)->window = NULL;
-    if ((ret = er_ctx_open__glfw(ctx)) != ERR_OK) {
+    if ((ret = er__ctx_open(ctx)) != ERR_OK) {
         er_ctx_attrs_destroy(&(*ctx)->attrs);
         er__free(*ctx);
         return ret;
     }
-#endif
 
     return ERR_OK;
 }
 
 ERAPI er_ctx_close(er_context_t *ctx)
 {
+    ERR ret;
+
     if (ctx == NULL) {
         return ERR_INVALID_ARGS;
     }
 
-#if defined(TARGET_OS_DESKTOP)
-    if ((*ctx)->window != NULL) {
-        glfwDestroyWindow((*ctx)->window);
-        (*ctx)->window = NULL;
-    }
-#endif
+    ret = er__ctx_close(ctx);
 
     er_ctx_attrs_destroy(&(*ctx)->attrs);
     er__free(*ctx);
     *ctx = NULL;
 
-    return ERR_OK;
+    return ret;
 }
