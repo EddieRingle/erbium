@@ -43,13 +43,9 @@ ERAPI er__create_default_context(er_context_t *ctx)
 void er__loop(void)
 {
     do {
+        er__io_poll();
+
 #if defined(TARGET_OS_DESKTOP)
-        glfwPollEvents();
-
-        if (glfwWindowShouldClose(g_ctx->window)) {
-            g_app->running = 0;
-        }
-
         glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(g_ctx->window);
 #endif
@@ -91,6 +87,14 @@ ERAPI er_quit(void)
 #endif
     er__free(g_app);
     g_app = NULL;
+    return ERR_OK;
+}
+
+ERAPI er_stop(void)
+{
+    INITCHECK();
+    g_app->running = 0;
+
     return ERR_OK;
 }
 

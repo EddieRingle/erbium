@@ -91,6 +91,8 @@ set(erbium_SOURCES
 	${ER_SOURCE_DIR}/context.c
 	${ER_SOURCE_DIR}/context_glfw.c
 	${ER_SOURCE_DIR}/internal.h
+	${ER_SOURCE_DIR}/io.c
+	${ER_SOURCE_DIR}/io_glfw.c
 	${ER_SOURCE_DIR}/string_utils.c
 	${ER_SOURCE_DIR}/cJSON.c
 	${ER_SOURCE_DIR}/cJSON.h

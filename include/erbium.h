@@ -313,6 +313,13 @@ typedef struct er_path_result_t {
     size_t len;
 } er_path_result_t;
 
+typedef struct er_io_keyinfo_t {
+    int sym;
+    int state;
+    double x;
+    double y;
+} er_io_keyinfo_t;
+
 typedef struct er_app_attrs_t * er_app_attrs_t;
 
 typedef struct er_context_t * er_context_t;
@@ -329,6 +336,8 @@ ERAPI er_exec_cli(er_app_attrs_t *attrs, er_context_t *ctx, int argc, char **arg
 
 ERAPI er_init(void);
 ERAPI er_quit(void);
+
+ERAPI er_stop(void);
 
 ERAPI er_app_attrs_init(er_app_attrs_t *attrs);
 ERAPI er_app_attrs_set_name(er_app_attrs_t *attrs, const char *name);
@@ -347,5 +356,12 @@ ERAPI er_ctx_attrs_set_decorated(er_context_attrs_t *attrs, int decorated);
 ERAPI er_ctx_attrs_destroy(er_context_attrs_t *attrs);
 ERAPI er_ctx_open(er_context_attrs_t *attrs, er_context_t *ctx);
 ERAPI er_ctx_close(er_context_t *ctx);
+
+ERAPI er_io_register_action(const char *action_name, int (*action_cb)(er_io_keyinfo_t keyinfo));
+ERAPI er_io_unregister_action(const char *action_name);
+
+ERAPI er_io_add_trigger(const char *action_name, int trigger);
+ERAPI er_io_clear_action(const char *action_name);
+ERAPI er_io_clear_trigger(int trigger);
 
 #endif /* __included_erbium_h */

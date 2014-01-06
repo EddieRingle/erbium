@@ -128,6 +128,11 @@ ERAPI er_ctx_open(er_context_attrs_t *attrs, er_context_t *ctx)
         return ret;
     }
 
+    if ((ret = er__io_init(ctx)) != ERR_OK) {
+        er_ctx_close(ctx);
+        return ret;
+    }
+
     return ERR_OK;
 }
 
@@ -139,7 +144,17 @@ ERAPI er_ctx_close(er_context_t *ctx)
         return ERR_INVALID_ARGS;
     }
 
+    if (g_io != NULL) {
+        if ((ret = er__io_quit(ctx)) != ERR_OK) {
+            return ret;
+        }
+    }
+
     ret = er__ctx_close(ctx);
+
+    if (g_ctx == *ctx) {
+        g_ctx = NULL;
+    }
 
     er_ctx_attrs_destroy(&(*ctx)->attrs);
     er__free(*ctx);
