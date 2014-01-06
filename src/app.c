@@ -93,6 +93,12 @@ ERAPI er_quit(void)
 #if defined(TARGET_OS_DESKTOP)
     glfwTerminate();
 #endif
+    if (g_app->name != NULL) {
+        er__free(g_app->name);
+    }
+    if (g_app->author != NULL) {
+        er__free(g_app->author);
+    }
     er__free(g_app);
     g_app = NULL;
     return ERR_OK;
