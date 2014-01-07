@@ -3,7 +3,7 @@
 
 #include "erbium.h"
 
-#include "cJSON.h"
+#include "json.h"
 #include "uthash.h"
 
 typedef struct er_app_t {
