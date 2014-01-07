@@ -47,6 +47,33 @@ void er__loop(void)
     } while (g_app->running);
 }
 
+#if defined(TARGET_OS_ANDROID)
+static int64_t er_init_time;
+
+static uint64_t __get_raw_time(void)
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return (uint64_t) tv.tv_sec * (uint64_t) 1000000 + (uint64_t) tv.tv_usec;
+}
+#endif
+
+ERAPI er_time(double *time)
+{
+    if (time == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+#if defined(TARGET_OS_DESKTOP)
+    *time = glfwGetTime();
+    return ERR_OK;
+#elif defined(TARGET_OS_ANDROID)
+    *time = (double) (__get_raw_time() - er_init_time) * 1e-6;
+    return ERR_OK;
+#else
+    return ERR_NOT_IMPLEMENTED;
+#endif
+}
+
 ERAPI er_init(er_app_attrs_t *attrs)
 {
     if (g_app != NULL) {
@@ -74,7 +101,10 @@ ERAPI er_init(er_app_attrs_t *attrs)
         return ERR_UNKNOWN;
     }
     glfwSetErrorCallback(er__glfw_error_cb);
+#elif defined(TARGET_OS_ANDROID)
+    er_init_time = __get_raw_time();
 #endif
+
     return ERR_OK;
 }
 

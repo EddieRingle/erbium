@@ -339,6 +339,8 @@ ERAPI er_quit(void);
 
 ERAPI er_stop(void);
 
+ERAPI er_time(double *time);
+
 ERAPI er_app_attrs_init(er_app_attrs_t *attrs);
 ERAPI er_app_attrs_set_name(er_app_attrs_t *attrs, const char *name);
 ERAPI er_app_attrs_set_author(er_app_attrs_t *attrs, const char *author);
