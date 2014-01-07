@@ -28,6 +28,9 @@ ERAPI er_io_init__glfw(er_context_t *ctx)
 {
     INITCHECK();
     g_io = er__malloc(sizeof(er_io_t));
+    if (g_io == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
     g_io->action_map = NULL;
     g_io->trigger_map = NULL;
     glfwSetKeyCallback((*ctx)->window, &_glfw_key_callback);

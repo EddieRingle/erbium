@@ -10,6 +10,9 @@ ERAPI er_io_register_action(const char *action_name, int (*action_cb)(er_io_keyi
         return ERR_INVALID_ARGS;
     }
     io_action = er__malloc(sizeof(struct er_io_action_t));
+    if (io_action == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
     memset(io_action, 0, sizeof(struct er_io_action_t));
     len = strlen(action_name);
     if (len > sizeof(io_action->action)) {
@@ -52,6 +55,9 @@ ERAPI er_io_add_trigger(const char *action_name, int trigger)
         return ERR_INVALID_ARGS;
     }
     io_trigger = er__malloc(sizeof(struct er_io_triggermap_t));
+    if (io_trigger == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
     HASH_FIND_STR(g_io->action_map, action_name, io_action);
     if (io_action == NULL) {
         LOGI("Can't add trigger to action: No action registered with name '%s'\n", action_name);
