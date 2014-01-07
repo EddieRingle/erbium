@@ -128,7 +128,13 @@ ERAPI er_ctx_open(er_context_attrs_t *attrs, er_context_t *ctx)
         return ret;
     }
 
+    if ((ret = er__gfx_init(ctx)) != ERR_OK) {
+        er_ctx_close(ctx);
+        return ret;
+    }
+
     if ((ret = er__io_init(ctx)) != ERR_OK) {
+        er__gfx_quit(ctx);
         er_ctx_close(ctx);
         return ret;
     }
@@ -146,6 +152,12 @@ ERAPI er_ctx_close(er_context_t *ctx)
 
     if (g_io != NULL) {
         if ((ret = er__io_quit(ctx)) != ERR_OK) {
+            return ret;
+        }
+    }
+
+    if (g_gfx != NULL) {
+        if ((ret = er__gfx_quit(ctx)) != ERR_OK) {
             return ret;
         }
     }

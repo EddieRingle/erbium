@@ -35,6 +35,10 @@ struct er_context_attrs_t {
     int decorated;
 };
 
+typedef struct er_gfx_t {
+    int i;
+} er_gfx_t;
+
 struct er_io_action_t {
     char action[64];
     int (*callback)(er_io_keyinfo_t keyinfo);
@@ -58,6 +62,8 @@ extern er_app_t *g_app;
 
 extern er_context_t g_ctx;
 
+extern er_gfx_t *g_gfx;
+
 extern er_io_t *g_io;
 
 #define INITCHECK() \
@@ -72,12 +78,20 @@ char *er__strtolower(const char *str);
 typedef ERAPI (*er__ctx_open_f)(er_context_t *ctx);
 typedef ERAPI (*er__ctx_close_f)(er_context_t *ctx);
 
+typedef ERAPI (*er__gfx_init_f)(er_context_t *ctx);
+typedef ERAPI (*er__gfx_quit_f)(er_context_t *ctx);
+typedef ERAPI (*er__gfx_draw_f)(void);
+
 typedef ERAPI (*er__io_init_f)(er_context_t *ctx);
 typedef ERAPI (*er__io_quit_f)(er_context_t *ctx);
 typedef ERAPI (*er__io_poll_f)(void);
 
 extern er__ctx_open_f er__ctx_open;
 extern er__ctx_close_f er__ctx_close;
+
+extern er__gfx_init_f er__gfx_init;
+extern er__gfx_quit_f er__gfx_quit;
+extern er__gfx_draw_f er__gfx_draw;
 
 extern er__io_init_f er__io_init;
 extern er__io_quit_f er__io_quit;

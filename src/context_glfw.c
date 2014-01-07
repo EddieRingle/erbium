@@ -15,8 +15,6 @@ ERAPI er_ctx_open__glfw(er_context_t *ctx)
         return ERR_UNKNOWN;
     }
     glfwMakeContextCurrent((*ctx)->window);
-    glewExperimental = 1;
-    glewInit();
 
     return ERR_OK;
 }

@@ -43,11 +43,7 @@ void er__loop(void)
 {
     do {
         er__io_poll();
-
-#if defined(TARGET_OS_DESKTOP)
-        glClear(GL_COLOR_BUFFER_BIT);
-        glfwSwapBuffers(g_ctx->window);
-#endif
+        er__gfx_draw();
     } while (g_app->running);
 }
 
