@@ -2,12 +2,12 @@
 
 #if defined(TARGET_OS_DESKTOP)
 
-er_gfx_t *g_gfx = NULL;
+er_gfx *g_gfx = NULL;
 
-ERAPI er_gfx_init__glfw(er_context_t *ctx)
+ERAPI er_gfx_init__glfw(er_context *ctx)
 {
     INITCHECK();
-    g_gfx = er__malloc(sizeof(er_gfx_t));
+    g_gfx = er__malloc(sizeof(er_gfx));
     if (g_gfx == NULL) {
         return ERR_MEMORY_ERROR;
     }
@@ -17,7 +17,7 @@ ERAPI er_gfx_init__glfw(er_context_t *ctx)
     return ERR_OK;
 }
 
-ERAPI er_gfx_quit__glfw(er_context_t *ctx)
+ERAPI er_gfx_quit__glfw(er_context *ctx)
 {
     INITCHECK();
     er__free(g_gfx);

@@ -306,60 +306,60 @@ typedef enum {
 typedef enum {
     ER_PATH_BINARY,
     ER_PATH_SUPPORT
-} er_path_e;
+} er_path_type;
 
-typedef struct er_path_result_t {
+typedef struct er_path_result {
     char *path;
     size_t len;
-} er_path_result_t;
+} er_path_result;
 
-typedef struct er_io_keyinfo_t {
+typedef struct er_io_keyinfo {
     int sym;
     int state;
     double x;
     double y;
-} er_io_keyinfo_t;
+} er_io_keyinfo;
 
-typedef struct er_app_attrs_t * er_app_attrs_t;
+typedef struct er_app_attrs * er_app_attrs;
 
-typedef struct er_context_t * er_context_t;
+typedef struct er_context * er_context;
 
-typedef struct er_context_attrs_t * er_context_attrs_t;
+typedef struct er_context_attrs * er_context_attrs;
 
 #if defined(TARGET_OS_ANDROID)
-ERAPI er_exec_android(er_context_t *ctx, struct android_app *state);
+ERAPI er_exec_android(er_context *ctx, struct android_app *state);
 #define er_exec(ctxptr, state) er_exec_android(ctxptr, state)
 #else
-ERAPI er_exec_cli(er_context_t *ctx, int argc, char **argv);
+ERAPI er_exec_cli(er_context *ctx, int argc, char **argv);
 #define er_exec(ctxptr, argc, argv) er_exec_cli(ctxptr, argc, argv)
 #endif
 
-ERAPI er_init(er_app_attrs_t *attrs);
+ERAPI er_init(er_app_attrs *attrs);
 ERAPI er_quit(void);
 
 ERAPI er_stop(void);
 
 ERAPI er_time(double *time);
 
-ERAPI er_app_attrs_init(er_app_attrs_t *attrs);
-ERAPI er_app_attrs_set_name(er_app_attrs_t *attrs, const char *name);
-ERAPI er_app_attrs_set_author(er_app_attrs_t *attrs, const char *author);
-ERAPI er_app_attrs_destroy(er_app_attrs_t *attrs);
+ERAPI er_app_attrs_init(er_app_attrs *attrs);
+ERAPI er_app_attrs_set_name(er_app_attrs *attrs, const char *name);
+ERAPI er_app_attrs_set_author(er_app_attrs *attrs, const char *author);
+ERAPI er_app_attrs_destroy(er_app_attrs *attrs);
 
-ERAPI er_app_get_path(er_path_e path, er_path_result_t *result);
-ERAPI er_app_cleanup_path_result(er_path_result_t *target);
+ERAPI er_app_get_path(er_path_type path, er_path_result *result);
+ERAPI er_app_cleanup_path_result(er_path_result *target);
 
-ERAPI er_ctx_attrs_init(er_context_attrs_t *attrs);
-ERAPI er_ctx_attrs_set_window_title(er_context_attrs_t *attrs, const char *title);
-ERAPI er_ctx_attrs_set_screen_width(er_context_attrs_t *attrs, unsigned width);
-ERAPI er_ctx_attrs_set_screen_height(er_context_attrs_t *attrs, unsigned height);
-ERAPI er_ctx_attrs_set_fullscreen(er_context_attrs_t *attrs, int fullscreen);
-ERAPI er_ctx_attrs_set_decorated(er_context_attrs_t *attrs, int decorated);
-ERAPI er_ctx_attrs_destroy(er_context_attrs_t *attrs);
-ERAPI er_ctx_open(er_context_attrs_t *attrs, er_context_t *ctx);
-ERAPI er_ctx_close(er_context_t *ctx);
+ERAPI er_ctx_attrs_init(er_context_attrs *attrs);
+ERAPI er_ctx_attrs_set_window_title(er_context_attrs *attrs, const char *title);
+ERAPI er_ctx_attrs_set_screen_width(er_context_attrs *attrs, unsigned width);
+ERAPI er_ctx_attrs_set_screen_height(er_context_attrs *attrs, unsigned height);
+ERAPI er_ctx_attrs_set_fullscreen(er_context_attrs *attrs, int fullscreen);
+ERAPI er_ctx_attrs_set_decorated(er_context_attrs *attrs, int decorated);
+ERAPI er_ctx_attrs_destroy(er_context_attrs *attrs);
+ERAPI er_ctx_open(er_context_attrs *attrs, er_context *ctx);
+ERAPI er_ctx_close(er_context *ctx);
 
-ERAPI er_io_register_action(const char *action_name, int (*action_cb)(er_io_keyinfo_t keyinfo));
+ERAPI er_io_register_action(const char *action_name, int (*action_cb)(er_io_keyinfo keyinfo));
 ERAPI er_io_unregister_action(const char *action_name);
 
 ERAPI er_io_add_trigger(const char *action_name, int trigger);

@@ -4,9 +4,9 @@
 extern char **NXArgv;
 #endif
 
-er_app_t *g_app = NULL;
+er_app *g_app = NULL;
 
-er_context_t g_ctx = NULL;
+er_context g_ctx = NULL;
 
 void *er__malloc(size_t size)
 {
@@ -23,10 +23,10 @@ void er__glfw_error_cb(int error, const char *description)
     LOGE("GLFW error: %s\n", description);
 }
 
-ERAPI er__create_default_context(er_context_t *ctx)
+ERAPI er__create_default_context(er_context *ctx)
 {
     ERR ret = ERR_OK;
-    er_context_attrs_t attrs;
+    er_context_attrs attrs;
 
     if (ctx == NULL) {
         return ERR_INVALID_ARGS;
@@ -74,12 +74,12 @@ ERAPI er_time(double *time)
 #endif
 }
 
-ERAPI er_init(er_app_attrs_t *attrs)
+ERAPI er_init(er_app_attrs *attrs)
 {
     if (g_app != NULL) {
         return ERR_ALREADY_INITIALIZED;
     }
-    g_app = er__malloc(sizeof(er_app_t));
+    g_app = er__malloc(sizeof(er_app));
     if (g_app == NULL) {
         return ERR_MEMORY_ERROR;
     }
@@ -139,7 +139,7 @@ ERAPI er_stop(void)
 
 #if defined(TARGET_OS_ANDROID)
 
-ERAPI er_exec_android(er_context_t *ctx, struct android_app *state)
+ERAPI er_exec_android(er_context *ctx, struct android_app *state)
 {
     return ERR_NOT_IMPLEMENTED;
 }
@@ -148,7 +148,7 @@ ERAPI er_exec_android(er_context_t *ctx, struct android_app *state)
 
 #if defined(TARGET_OS_DESKTOP)
 
-ERAPI er_exec_cli(er_context_t *ctx, int argc, char **argv)
+ERAPI er_exec_cli(er_context *ctx, int argc, char **argv)
 {
     ERR ret;
 
@@ -168,12 +168,12 @@ ERAPI er_exec_cli(er_context_t *ctx, int argc, char **argv)
 
 #endif
 
-ERAPI er_app_attrs_init(er_app_attrs_t *attrs)
+ERAPI er_app_attrs_init(er_app_attrs *attrs)
 {
     if (attrs == NULL) {
         return ERR_INVALID_ARGS;
     }
-    *attrs = er__malloc(sizeof(struct er_app_attrs_t));
+    *attrs = er__malloc(sizeof(struct er_app_attrs));
     if (*attrs == NULL) {
         return ERR_MEMORY_ERROR;
     }
@@ -183,7 +183,7 @@ ERAPI er_app_attrs_init(er_app_attrs_t *attrs)
     return ERR_OK;
 }
 
-ERAPI er_app_attrs_set_name(er_app_attrs_t *attrs, const char *name)
+ERAPI er_app_attrs_set_name(er_app_attrs *attrs, const char *name)
 {
     if (attrs == NULL || name == NULL) {
         return ERR_INVALID_ARGS;
@@ -199,7 +199,7 @@ ERAPI er_app_attrs_set_name(er_app_attrs_t *attrs, const char *name)
     return ERR_OK;
 }
 
-ERAPI er_app_attrs_set_author(er_app_attrs_t *attrs, const char *author)
+ERAPI er_app_attrs_set_author(er_app_attrs *attrs, const char *author)
 {
     if (attrs == NULL || author == NULL) {
         return ERR_INVALID_ARGS;
@@ -215,7 +215,7 @@ ERAPI er_app_attrs_set_author(er_app_attrs_t *attrs, const char *author)
     return ERR_OK;
 }
 
-ERAPI er_app_attrs_destroy(er_app_attrs_t *attrs)
+ERAPI er_app_attrs_destroy(er_app_attrs *attrs)
 {
     if (attrs == NULL || *attrs == NULL) {
         return ERR_INVALID_ARGS;
@@ -232,7 +232,7 @@ ERAPI er_app_attrs_destroy(er_app_attrs_t *attrs)
     return ERR_OK;
 }
 
-ERAPI er__app_get_binary_path(er_path_result_t *result)
+ERAPI er__app_get_binary_path(er_path_result *result)
 {
     char temp_path[2048];
     char *ptr;
@@ -276,7 +276,7 @@ ERAPI er__app_get_binary_path(er_path_result_t *result)
     return ERR_OK;
 }
 
-ERAPI er__app_get_support_path(er_path_result_t *result)
+ERAPI er__app_get_support_path(er_path_result *result)
 {
     char temp_path[2048];
 #if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
@@ -318,7 +318,7 @@ ERAPI er__app_get_support_path(er_path_result_t *result)
     return ERR_OK;
 }
 
-ERAPI er_app_get_path(er_path_e path, er_path_result_t *result)
+ERAPI er_app_get_path(er_path_type path, er_path_result *result)
 {
     if (result == NULL) {
         return ERR_UNREACHABLE_RESULT;
@@ -340,7 +340,7 @@ ERAPI er_app_get_path(er_path_e path, er_path_result_t *result)
     return ERR_INVALID_PATH;
 }
 
-ERAPI er_app_cleanup_path_result(er_path_result_t *target)
+ERAPI er_app_cleanup_path_result(er_path_result *target)
 {
     if (target != NULL) {
         if (target->path != NULL) {

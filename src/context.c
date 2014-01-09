@@ -1,11 +1,11 @@
 #include "internal.h"
 
-ERAPI er_ctx_attrs_init(er_context_attrs_t *attrs)
+ERAPI er_ctx_attrs_init(er_context_attrs *attrs)
 {
     if (attrs == NULL) {
         return ERR_INVALID_ARGS;
     }
-    *attrs = er__malloc(sizeof(struct er_context_attrs_t));
+    *attrs = er__malloc(sizeof(struct er_context_attrs));
     if (*attrs == NULL) {
         return ERR_MEMORY_ERROR;
     }
@@ -19,7 +19,7 @@ ERAPI er_ctx_attrs_init(er_context_attrs_t *attrs)
     return ERR_OK;
 }
 
-ERAPI er_ctx_attrs_set_window_title(er_context_attrs_t *attrs, const char *title)
+ERAPI er_ctx_attrs_set_window_title(er_context_attrs *attrs, const char *title)
 {
     char tmp[256];
 
@@ -41,7 +41,7 @@ ERAPI er_ctx_attrs_set_window_title(er_context_attrs_t *attrs, const char *title
     return ERR_OK;
 }
 
-ERAPI er_ctx_attrs_set_screen_width(er_context_attrs_t *attrs, unsigned width)
+ERAPI er_ctx_attrs_set_screen_width(er_context_attrs *attrs, unsigned width)
 {
     if (attrs == NULL) {
         return ERR_INVALID_ARGS;
@@ -51,7 +51,7 @@ ERAPI er_ctx_attrs_set_screen_width(er_context_attrs_t *attrs, unsigned width)
     return ERR_OK;
 }
 
-ERAPI er_ctx_attrs_set_screen_height(er_context_attrs_t *attrs, unsigned height)
+ERAPI er_ctx_attrs_set_screen_height(er_context_attrs *attrs, unsigned height)
 {
     if (attrs == NULL) {
         return ERR_INVALID_ARGS;
@@ -61,7 +61,7 @@ ERAPI er_ctx_attrs_set_screen_height(er_context_attrs_t *attrs, unsigned height)
     return ERR_OK;
 }
 
-ERAPI er_ctx_attrs_set_fullscreen(er_context_attrs_t *attrs, int fullscreen)
+ERAPI er_ctx_attrs_set_fullscreen(er_context_attrs *attrs, int fullscreen)
 {
     if (attrs == NULL) {
         return ERR_INVALID_ARGS;
@@ -71,7 +71,7 @@ ERAPI er_ctx_attrs_set_fullscreen(er_context_attrs_t *attrs, int fullscreen)
     return ERR_OK;
 }
 
-ERAPI er_ctx_attrs_set_decorated(er_context_attrs_t *attrs, int decorated)
+ERAPI er_ctx_attrs_set_decorated(er_context_attrs *attrs, int decorated)
 {
     if (attrs == NULL) {
         return ERR_INVALID_ARGS;
@@ -81,7 +81,7 @@ ERAPI er_ctx_attrs_set_decorated(er_context_attrs_t *attrs, int decorated)
     return ERR_OK;
 }
 
-ERAPI er_ctx_attrs_destroy(er_context_attrs_t *attrs)
+ERAPI er_ctx_attrs_destroy(er_context_attrs *attrs)
 {
     if (attrs == NULL) {
         return ERR_INVALID_ARGS;
@@ -95,14 +95,14 @@ ERAPI er_ctx_attrs_destroy(er_context_attrs_t *attrs)
     return ERR_OK;
 }
 
-ERAPI er_ctx_open(er_context_attrs_t *attrs, er_context_t *ctx)
+ERAPI er_ctx_open(er_context_attrs *attrs, er_context *ctx)
 {
     ERR ret;
 
     if (attrs == NULL || ctx == NULL) {
         return ERR_INVALID_ARGS;
     }
-    (*ctx) = er__malloc(sizeof(er_context_t));
+    (*ctx) = er__malloc(sizeof(er_context));
     if ((*ctx) == NULL) {
         return ERR_MEMORY_ERROR;
     }
@@ -142,7 +142,7 @@ ERAPI er_ctx_open(er_context_attrs_t *attrs, er_context_t *ctx)
     return ERR_OK;
 }
 
-ERAPI er_ctx_close(er_context_t *ctx)
+ERAPI er_ctx_close(er_context *ctx)
 {
     ERR ret;
 

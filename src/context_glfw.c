@@ -2,7 +2,7 @@
 
 #if defined(TARGET_OS_DESKTOP)
 
-ERAPI er_ctx_open__glfw(er_context_t *ctx)
+ERAPI er_ctx_open__glfw(er_context *ctx)
 {
     GLFWmonitor *monitor = NULL;
 
@@ -19,7 +19,7 @@ ERAPI er_ctx_open__glfw(er_context_t *ctx)
     return ERR_OK;
 }
 
-ERAPI er_ctx_close__glfw(er_context_t *ctx)
+ERAPI er_ctx_close__glfw(er_context *ctx)
 {
     if ((*ctx)->window != NULL) {
         glfwDestroyWindow((*ctx)->window);

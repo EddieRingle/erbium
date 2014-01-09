@@ -1,6 +1,6 @@
 #include "erbium.h"
 
-int _cb_exit_app(er_io_keyinfo_t keyinfo)
+int _cb_exit_app(er_io_keyinfo keyinfo)
 {
     if (keyinfo.state == ER_KEYSTATE_RELEASE) {
         er_stop();
@@ -11,9 +11,9 @@ int _cb_exit_app(er_io_keyinfo_t keyinfo)
 
 er_main()
 {
-    er_app_attrs_t attrs;
-    er_context_attrs_t ctx_attrs;
-    er_context_t ctx;
+    er_app_attrs attrs;
+    er_context_attrs ctx_attrs;
+    er_context ctx;
 
     er_app_attrs_init(&attrs);
     er_app_attrs_set_name(&attrs, "Window Test");

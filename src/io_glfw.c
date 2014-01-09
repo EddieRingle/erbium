@@ -2,12 +2,12 @@
 
 #if defined(TARGET_OS_DESKTOP)
 
-er_io_t *g_io = NULL;
+er_io *g_io = NULL;
 
 static void _glfw_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-    struct er_io_triggermap_t *trigger = NULL;
-    er_io_keyinfo_t keyinfo;
+    struct er_io_triggermap *trigger = NULL;
+    er_io_keyinfo keyinfo;
 
     HASH_FIND_INT(g_io->trigger_map, &key, trigger);
     if (trigger != NULL && trigger->action != NULL && trigger->action->callback != NULL) {
@@ -24,10 +24,10 @@ static void _glfw_mouse_callback(GLFWwindow *window, int button, int action, int
     _glfw_key_callback(window, button, -1, action, mods);
 }
 
-ERAPI er_io_init__glfw(er_context_t *ctx)
+ERAPI er_io_init__glfw(er_context *ctx)
 {
     INITCHECK();
-    g_io = er__malloc(sizeof(er_io_t));
+    g_io = er__malloc(sizeof(er_io));
     if (g_io == NULL) {
         return ERR_MEMORY_ERROR;
     }
@@ -39,10 +39,10 @@ ERAPI er_io_init__glfw(er_context_t *ctx)
     return ERR_OK;
 }
 
-ERAPI er_io_quit__glfw(er_context_t *ctx)
+ERAPI er_io_quit__glfw(er_context *ctx)
 {
-    struct er_io_action_t *action = NULL, *tmp_action = NULL;
-    struct er_io_triggermap_t *trigger = NULL, *tmp_trigger = NULL;
+    struct er_io_action *action = NULL, *tmp_action = NULL;
+    struct er_io_triggermap *trigger = NULL, *tmp_trigger = NULL;
 
     INITCHECK();
     HASH_ITER(hh, g_io->trigger_map, trigger, tmp_trigger) {
