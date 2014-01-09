@@ -326,6 +326,8 @@ typedef struct er_context * er_context;
 
 typedef struct er_context_attrs * er_context_attrs;
 
+typedef struct er_entity * er_entity;
+
 #if defined(TARGET_OS_ANDROID)
 ERAPI er_exec_android(er_context *ctx, struct android_app *state);
 #define er_exec(ctxptr, state) er_exec_android(ctxptr, state)
