@@ -95,10 +95,15 @@ set(erbium_SOURCES
 	${ER_SOURCE_DIR}/internal.h
 	${ER_SOURCE_DIR}/io.c
 	${ER_SOURCE_DIR}/io_glfw.c
-	${ER_SOURCE_DIR}/json.c
-	${ER_SOURCE_DIR}/json.h
 	${ER_SOURCE_DIR}/string_utils.c
 	${ER_SOURCE_DIR}/uthash.h
+	${ER_SOURCE_DIR}/ccan/build_assert.h
+	${ER_SOURCE_DIR}/ccan/check_type.h
+	${ER_SOURCE_DIR}/ccan/container_of.h
+	${ER_SOURCE_DIR}/ccan/json.c
+	${ER_SOURCE_DIR}/ccan/json.h
+	${ER_SOURCE_DIR}/ccan/list.c
+	${ER_SOURCE_DIR}/ccan/list.h
 	${CMAKE_CURRENT_BINARY_DIR}/er_version.c
 )
 
