@@ -10,6 +10,7 @@
 #endif
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
@@ -121,6 +122,8 @@ typedef enum {
     ERR_UNREACHABLE_RESULT,
     ERR_INVALID_PATH,
     ERR_INVALID_ARGS,
+    ERR_KIDNAPPER,
+    ERR_NO_PARENT,
     ERR_UNKNOWN
 } ERR;
 
@@ -360,6 +363,16 @@ ERAPI er_ctx_attrs_set_decorated(er_context_attrs *attrs, int decorated);
 ERAPI er_ctx_attrs_destroy(er_context_attrs *attrs);
 ERAPI er_ctx_open(er_context_attrs *attrs, er_context *ctx);
 ERAPI er_ctx_close(er_context *ctx);
+
+ERAPI er_entity_reserve(er_entity *entity);
+ERAPI er_entity_release(er_entity *entity);
+
+ERAPI er_entity_add_child(er_entity *entity, er_entity *child);
+ERAPI er_entity_remove_from_parent(er_entity *entity);
+ERAPI er_entity_remove_children(er_entity *entity, void (*dcon)(er_entity *child));
+ERAPI er_entity_for_each_child(er_entity *entity, void (*fn)(er_entity *child));
+ERAPI er_entity_get_id(er_entity *entity, uint64_t *id);
+ERAPI er_entity_get_parent(er_entity *entity, er_entity *parent);
 
 ERAPI er_io_register_action(const char *action_name, int (*action_cb)(er_io_keyinfo keyinfo));
 ERAPI er_io_unregister_action(const char *action_name);

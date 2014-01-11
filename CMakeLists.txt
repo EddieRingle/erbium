@@ -90,6 +90,7 @@ set(erbium_SOURCES
 	${ER_SOURCE_DIR}/app.c
 	${ER_SOURCE_DIR}/context.c
 	${ER_SOURCE_DIR}/context_glfw.c
+	${ER_SOURCE_DIR}/entity.c
 	${ER_SOURCE_DIR}/graphics.c
 	${ER_SOURCE_DIR}/graphics_glfw.c
 	${ER_SOURCE_DIR}/internal.h

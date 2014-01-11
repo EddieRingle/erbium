@@ -62,8 +62,11 @@ typedef struct er_io {
 struct er_entity {
     uint64_t id;
     uint32_t num_children;
+    struct er_entity *parent;
     struct list_head children;
     struct list_node siblings;
+
+    UT_hash_handle hh;
 };
 
 extern er_app *g_app;
