@@ -373,6 +373,7 @@ ERAPI er_entity_remove_children(er_entity *entity, void (*dcon)(er_entity *child
 ERAPI er_entity_for_each_child(er_entity *entity, int recurse, void (*fn)(er_entity *child));
 ERAPI er_entity_get_id(er_entity *entity, uint64_t *id);
 ERAPI er_entity_get_parent(er_entity *entity, er_entity *parent);
+ERAPI er_entity_export_json(er_entity *entity, int export_children, char **json);
 
 ERAPI er_io_register_action(const char *action_name, int (*action_cb)(er_io_keyinfo keyinfo));
 ERAPI er_io_unregister_action(const char *action_name);

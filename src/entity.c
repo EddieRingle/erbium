@@ -153,3 +153,30 @@ ERAPI er_entity_get_parent(er_entity *entity, er_entity *parent)
     }
     return ERR_OK;
 }
+
+static JsonNode *entity_to_json(er_entity *entity, int export_children)
+{
+    struct er_entity *e;
+    JsonNode *node = json_mkobject();
+    JsonNode *children;
+    json_append_number_member(node, "id", (*entity)->id);
+    if (export_children) {
+        children = json_mkarray();
+        list_for_each(&(*entity)->children, e, siblings) {
+            json_append_element(children, entity_to_json(&e, 1));
+        }
+        json_append_member(node, "children", children);
+    }
+    return node;
+}
+
+ERAPI er_entity_export_json(er_entity *entity, int export_children, char **json)
+{
+    JsonNode *node;
+    if (entity == NULL || *entity == NULL || json == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    node = entity_to_json(entity, export_children);
+    *json = json_stringify(node, "  ");
+    return ERR_OK;
+}
