@@ -59,6 +59,27 @@ typedef struct er_io {
     struct er_io_triggermap *trigger_map;
 } er_io;
 
+struct er_property_def {
+    char name[64];
+    er_prop_type type;
+    struct er_property *instances;
+
+    UT_hash_handle hh;
+};
+
+struct er_property {
+    uint64_t key;
+    struct er_property_def *definition;
+    union {
+        int _bool;
+        double _number;
+        char *_string;
+        void *_unknown;
+    };
+
+    UT_hash_handle hh;
+};
+
 struct er_entity {
     uint64_t id;
     uint32_t num_children;
