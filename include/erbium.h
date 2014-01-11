@@ -370,7 +370,7 @@ ERAPI er_entity_release(er_entity *entity);
 ERAPI er_entity_add_child(er_entity *entity, er_entity *child);
 ERAPI er_entity_remove_from_parent(er_entity *entity);
 ERAPI er_entity_remove_children(er_entity *entity, void (*dcon)(er_entity *child));
-ERAPI er_entity_for_each_child(er_entity *entity, void (*fn)(er_entity *child));
+ERAPI er_entity_for_each_child(er_entity *entity, int recurse, void (*fn)(er_entity *child));
 ERAPI er_entity_get_id(er_entity *entity, uint64_t *id);
 ERAPI er_entity_get_parent(er_entity *entity, er_entity *parent);
 

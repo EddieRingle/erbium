@@ -115,7 +115,7 @@ ERAPI er_entity_remove_children(er_entity *entity, void (*dcon)(er_entity *child
     return ERR_OK;
 }
 
-ERAPI er_entity_for_each_child(er_entity *entity, void (*fn)(er_entity *child))
+ERAPI er_entity_for_each_child(er_entity *entity, int recurse, void (*fn)(er_entity *child))
 {
     struct er_entity *e, *tmp = NULL;
     if (entity == NULL || *entity == NULL) {
@@ -124,6 +124,9 @@ ERAPI er_entity_for_each_child(er_entity *entity, void (*fn)(er_entity *child))
     if (fn != NULL) {
         list_for_each_safe(&(*entity)->children, e, tmp, siblings) {
             fn(&e);
+            if (recurse) {
+                er_entity_for_each_child(&e, recurse, fn);
+            }
         }
     }
     return ERR_OK;
