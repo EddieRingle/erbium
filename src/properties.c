@@ -121,11 +121,10 @@ ERAPI er_prop_get_boolean_array(er_entity *entity, const char *key, int **out, s
         return ERR_PROP_TYPE_MISMATCH;
     }
     if (out != NULL) {
-        *out = er__malloc(sizeof(int) * prop->array_count);
+        *out = er__memdup(prop->_unknown, sizeof(int) * prop->array_count);
         if (*out == NULL) {
             return ERR_MEMORY_ERROR;
         }
-        memcpy(*out, prop->_unknown, sizeof(int) * prop->array_count);
     }
     if (count != NULL) {
         *count = prop->array_count;
@@ -147,11 +146,10 @@ ERAPI er_prop_get_number_array(er_entity *entity, const char *key, double **out,
         return ERR_PROP_TYPE_MISMATCH;
     }
     if (out != NULL) {
-        *out = er__malloc(sizeof(double) * prop->array_count);
+        *out = er__memdup(prop->_unknown, sizeof(double) * prop->array_count);
         if (*out == NULL) {
             return ERR_MEMORY_ERROR;
         }
-        memcpy(*out, prop->_unknown, sizeof(double) * prop->array_count);
     }
     if (count != NULL) {
         *count = prop->array_count;

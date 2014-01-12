@@ -105,6 +105,8 @@ extern er_io *g_io;
 void *er__malloc(size_t size);
 void  er__free(void *mem);
 
+void *er__memdup(const void *mem, size_t sz);
+
 char *er__strdup(const char *str);
 char *er__strtolower(const char *str);
 

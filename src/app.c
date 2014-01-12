@@ -18,6 +18,12 @@ void er__free(void *mem)
     free(mem);
 }
 
+void *er__memdup(const void *mem, size_t sz)
+{
+    void *p = er__malloc(sz);
+    return p ? memcpy(p, mem, sz) : NULL;
+}
+
 void er__glfw_error_cb(int error, const char *description)
 {
     LOGE("GLFW error: %s\n", description);
