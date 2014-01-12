@@ -122,6 +122,9 @@ ERAPI er_prop_get_boolean_array(er_entity *entity, const char *key, int **out, s
     }
     if (out != NULL) {
         *out = er__malloc(sizeof(int) * prop->array_count);
+        if (*out == NULL) {
+            return ERR_MEMORY_ERROR;
+        }
         memcpy(*out, prop->_unknown, sizeof(int) * prop->array_count);
     }
     if (count != NULL) {
@@ -145,6 +148,9 @@ ERAPI er_prop_get_number_array(er_entity *entity, const char *key, double **out,
     }
     if (out != NULL) {
         *out = er__malloc(sizeof(double) * prop->array_count);
+        if (*out == NULL) {
+            return ERR_MEMORY_ERROR;
+        }
         memcpy(*out, prop->_unknown, sizeof(double) * prop->array_count);
     }
     if (count != NULL) {
@@ -169,8 +175,18 @@ ERAPI er_prop_get_string_array(er_entity *entity, const char *key, char ***out, 
     }
     if (out != NULL) {
         *out = er__malloc(sizeof(char *) * prop->array_count);
+        if (*out == NULL) {
+            return ERR_MEMORY_ERROR;
+        }
         for (i = 0; i < prop->array_count; i++) {
             (*out)[i] = er__strdup(((char**)prop->_unknown)[i]);
+            if ((*out)[i] == NULL) {
+                for (i = i - 1; i >= 0; i--) {
+                    er__free((*out)[i]);
+                }
+                er__free(*out);
+                return ERR_MEMORY_ERROR;
+            }
         }
     }
     if (count != NULL) {
