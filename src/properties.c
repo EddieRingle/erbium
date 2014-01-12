@@ -491,3 +491,47 @@ ERAPI er_prop_set_string_array(er_entity *entity, const char *key, char **in, si
     HASH_ADD_INT(def->instances, key, prop);
     return ERR_OK;
 }
+
+ERAPI er_prop_remove(er_entity *entity, const char *key)
+{
+    ERR ret;
+    struct er_property *prop = NULL;
+    int i;
+    if (entity == NULL || *entity == NULL || key == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    if ((ret = get_prop(entity, key, &prop)) != ERR_OK) {
+        return ret;
+    }
+    HASH_DEL(prop->definition->instances, prop);
+    switch (prop->definition->type) {
+        case ER_PROP_STRING_ARRAY:
+            if (prop->_unknown != NULL) {
+                for (i = 0; i < prop->array_count; i++) {
+                    if (((char **)prop->_unknown)[i] != NULL) {
+                        er__free(((char **)prop->_unknown)[i]);
+                    }
+                }
+                er__free(prop->_unknown);
+            }
+            er__free(prop);
+            break;
+        case ER_PROP_NUMBER_ARRAY:
+        case ER_PROP_BOOLEAN_ARRAY:
+            if (prop->_unknown != NULL) {
+                er__free(prop->_unknown);
+            }
+            er__free(prop);
+            break;
+        case ER_PROP_STRING:
+            if (prop->_string != NULL) {
+                er__free(prop->_string);
+            }
+        case ER_PROP_NUMBER:
+        case ER_PROP_BOOLEAN:
+        default:
+            er__free(prop);
+            break;
+    }
+    return ERR_OK;
+}
