@@ -124,6 +124,8 @@ typedef enum {
     ERR_INVALID_ARGS,
     ERR_KIDNAPPER,
     ERR_NO_PARENT,
+    ERR_NOT_FOUND,
+    ERR_PROP_TYPE_MISMATCH,
     ERR_UNKNOWN
 } ERR;
 
@@ -393,7 +395,7 @@ ERAPI er_prop_get_type(const char *key, er_prop_type *type);
 
 ERAPI er_prop_get_boolean(er_entity *entity, const char *key, int *out);
 ERAPI er_prop_get_number(er_entity *entity, const char *key, double *out);
-ERAPI er_prop_get_string(er_entity *entity, const char *key, char **out, size_t *len);
+ERAPI er_prop_get_string(er_entity *entity, const char *key, char **out);
 ERAPI er_prop_get_boolean_array(er_entity *entity, const char *key, int **out, size_t *count);
 ERAPI er_prop_get_number_array(er_entity *entity, const char *key, double **out, size_t *count);
 ERAPI er_prop_get_string_array(er_entity *entity, const char *key, char ***out, size_t *count);

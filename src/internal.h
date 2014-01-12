@@ -70,6 +70,7 @@ struct er_property_def {
 struct er_property {
     uint64_t key;
     struct er_property_def *definition;
+    uint32_t array_count;
     union {
         int _bool;
         double _number;
