@@ -51,6 +51,9 @@ ERAPI er_prop_get_boolean(er_entity *entity, const char *key, int *out)
 {
     ERR ret;
     struct er_property *prop = NULL;
+    if (entity == NULL || *entity == NULL || key == NULL) {
+        return ERR_INVALID_ARGS;
+    }
     if ((ret = get_prop(entity, key, &prop)) != ERR_OK) {
         return ret;
     }
@@ -67,6 +70,9 @@ ERAPI er_prop_get_number(er_entity *entity, const char *key, double *out)
 {
     ERR ret;
     struct er_property *prop = NULL;
+    if (entity == NULL || *entity == NULL || key == NULL) {
+        return ERR_INVALID_ARGS;
+    }
     if ((ret = get_prop(entity, key, &prop)) != ERR_OK) {
         return ret;
     }
@@ -83,6 +89,9 @@ ERAPI er_prop_get_string(er_entity *entity, const char *key, char **out)
 {
     ERR ret;
     struct er_property *prop = NULL;
+    if (entity == NULL || *entity == NULL || key == NULL) {
+        return ERR_INVALID_ARGS;
+    }
     if ((ret = get_prop(entity, key, &prop)) != ERR_OK) {
         return ret;
     }
@@ -102,6 +111,9 @@ ERAPI er_prop_get_boolean_array(er_entity *entity, const char *key, int **out, s
 {
     ERR ret;
     struct er_property *prop = NULL;
+    if (entity == NULL || *entity == NULL || key == NULL) {
+        return ERR_INVALID_ARGS;
+    }
     if ((ret = get_prop(entity, key, &prop)) != ERR_OK) {
         return ret;
     }
@@ -122,6 +134,9 @@ ERAPI er_prop_get_number_array(er_entity *entity, const char *key, double **out,
 {
     ERR ret;
     struct er_property *prop = NULL;
+    if (entity == NULL || *entity == NULL || key == NULL) {
+        return ERR_INVALID_ARGS;
+    }
     if ((ret = get_prop(entity, key, &prop)) != ERR_OK) {
         return ret;
     }
@@ -143,6 +158,9 @@ ERAPI er_prop_get_string_array(er_entity *entity, const char *key, char ***out, 
     ERR ret;
     struct er_property *prop = NULL;
     int i;
+    if (entity == NULL || *entity == NULL || key == NULL) {
+        return ERR_INVALID_ARGS;
+    }
     if ((ret = get_prop(entity, key, &prop)) != ERR_OK) {
         return ret;
     }
