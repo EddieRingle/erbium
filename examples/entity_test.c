@@ -45,7 +45,7 @@ void entities(void)
     er_prop_set_number(&e1, "numbertest", numbertest);
     numbertest = 0;
     er_prop_get_number(&e1, "numbertest", &numbertest);
-    printf("numbertest: %d\n", numbertest);
+    printf("numbertest: %f\n", numbertest);
 
     er_entity_get_id(&e1, &id);
     printf("Entity #%"PRId64"\n |\n", id);
