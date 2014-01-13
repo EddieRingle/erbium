@@ -402,7 +402,7 @@ ERAPI er_prop_get_string_array(er_entity *entity, const char *key, char ***out, 
 
 ERAPI er_prop_set_boolean(er_entity *entity, const char *key, int in);
 ERAPI er_prop_set_number(er_entity *entity, const char *key, double in);
-ERAPI er_prop_set_string(er_entity *entity, const char *key, char *in);
+ERAPI er_prop_set_string(er_entity *entity, const char *key, const char *in);
 ERAPI er_prop_set_boolean_array(er_entity *entity, const char *key, int *in, size_t count);
 ERAPI er_prop_set_number_array(er_entity *entity, const char *key, double *in, size_t count);
 ERAPI er_prop_set_string_array(er_entity *entity, const char *key, char **in, size_t count);

@@ -292,7 +292,7 @@ ERAPI er_prop_set_number(er_entity *entity, const char *key, double in)
     return ERR_OK;
 }
 
-ERAPI er_prop_set_string(er_entity *entity, const char *key, char *in)
+ERAPI er_prop_set_string(er_entity *entity, const char *key, const char *in)
 {
     ERR ret;
     struct er_property_def *def = NULL;
