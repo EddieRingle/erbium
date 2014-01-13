@@ -154,29 +154,77 @@ ERAPI er_entity_get_parent(er_entity *entity, er_entity *parent)
     return ERR_OK;
 }
 
-static JsonNode *entity_to_json(er_entity *entity, int export_children)
+static JsonNode *entity_to_json(er_entity *entity, int export_children, int export_properties)
 {
     struct er_entity *e;
+    struct er_property_def *def = NULL, *def_tmp = NULL;
+    struct er_property *prop = NULL;
     JsonNode *node = json_mkobject();
-    JsonNode *children;
+    JsonNode *properties, *children;
+    JsonNode *prop_node;
+    int i;
     json_append_number_member(node, "id", (*entity)->id);
+    if (export_properties) {
+        properties = json_mkobject();
+        HASH_ITER(hh, g_property_definitions, def, def_tmp) {
+            HASH_FIND_INT(def->instances, &(*entity)->id, prop);
+            if (prop != NULL) {
+                switch (def->type) {
+                    case ER_PROP_BOOLEAN:
+                        json_append_bool_member(properties, def->name, (prop->_bool)?true:false);
+                        break;
+                    case ER_PROP_NUMBER:
+                        json_append_number_member(properties, def->name, prop->_number);
+                        break;
+                    case ER_PROP_STRING:
+                        json_append_string_member(properties, def->name, prop->_string);
+                        break;
+                    case ER_PROP_BOOLEAN_ARRAY:
+                        prop_node = json_mkarray();
+                        for (i = 0; i < prop->array_count; i++) {
+                            json_append_bool_element(prop_node, (((int*)prop->_unknown)[i])?true:false);
+                        }
+                        json_append_member(properties, def->name, prop_node);
+                        break;
+                    case ER_PROP_NUMBER_ARRAY:
+                        prop_node = json_mkarray();
+                        for (i = 0; i < prop->array_count; i++) {
+                            json_append_number_element(prop_node, ((double*)prop->_unknown)[i]);
+                        }
+                        json_append_member(properties, def->name, prop_node);
+                        break;
+                    case ER_PROP_STRING_ARRAY:
+                        prop_node = json_mkarray();
+                        for (i = 0; i < prop->array_count; i++) {
+                            json_append_string_element(prop_node, ((char**)prop->_unknown)[i]);
+                        }
+                        json_append_member(properties, def->name, prop_node);
+                        break;
+                    default:
+                        json_append_null_member(properties, def->name);
+                        break;
+                }
+            }
+        }
+        json_append_member(node, "properties", properties);
+    }
     if (export_children) {
         children = json_mkarray();
         list_for_each(&(*entity)->children, e, siblings) {
-            json_append_element(children, entity_to_json(&e, 1));
+            json_append_element(children, entity_to_json(&e, 1, export_properties));
         }
         json_append_member(node, "children", children);
     }
     return node;
 }
 
-ERAPI er_entity_export_json(er_entity *entity, int export_children, char **json)
+ERAPI er_entity_export_json(er_entity *entity, int export_children, int export_properties, char **json)
 {
     JsonNode *node;
     if (entity == NULL || *entity == NULL || json == NULL) {
         return ERR_INVALID_ARGS;
     }
-    node = entity_to_json(entity, export_children);
+    node = entity_to_json(entity, export_children, export_properties);
     *json = json_stringify(node, "  ");
     return ERR_OK;
 }

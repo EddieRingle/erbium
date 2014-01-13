@@ -1,6 +1,6 @@
 #include "internal.h"
 
-struct er_property_def *definitions = NULL;
+struct er_property_def *g_property_definitions = NULL;
 
 ERAPI er_prop_get_type(const char *key, er_prop_type *type)
 {
@@ -8,7 +8,7 @@ ERAPI er_prop_get_type(const char *key, er_prop_type *type)
     if (key == NULL || type == NULL) {
         return ERR_INVALID_ARGS;
     }
-    HASH_FIND_STR(definitions, key, prop_def);
+    HASH_FIND_STR(g_property_definitions, key, prop_def);
     if (prop_def == NULL) {
         return ERR_NOT_FOUND;
     }
@@ -19,7 +19,7 @@ ERAPI er_prop_get_type(const char *key, er_prop_type *type)
 static ERAPI get_prop_def(const char *key, struct er_property_def **out)
 {
     struct er_property_def *prop_def = NULL;
-    HASH_FIND_STR(definitions, key, prop_def);
+    HASH_FIND_STR(g_property_definitions, key, prop_def);
     if (prop_def == NULL) {
         return ERR_NOT_FOUND;
     }
@@ -206,7 +206,7 @@ static ERAPI get_or_create_prop_def(const char *key, er_prop_type type, struct e
             strncpy(def->name, key, sizeof def->name);
             def->type = type;
             def->instances = NULL;
-            HASH_ADD_STR(definitions, name, def);
+            HASH_ADD_STR(g_property_definitions, name, def);
             if (out != NULL) {
                 *out = def;
             }

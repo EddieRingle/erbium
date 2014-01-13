@@ -57,7 +57,7 @@ void entities(void)
     printf("Entity #%"PRId64"\n |\n", id);
     er_entity_for_each_child(&e1, 1, &en_fn);
 
-    er_entity_export_json(&e1, 1, &json);
+    er_entity_export_json(&e1, 1, 1, &json);
     printf("JSON:\n%s\n", json);
 
     er_entity_release(&e1);

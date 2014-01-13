@@ -99,6 +99,8 @@ extern er_gfx *g_gfx;
 
 extern er_io *g_io;
 
+extern struct er_property_def *g_property_definitions;
+
 #define INITCHECK() \
     {if (g_app == NULL || !g_app->initialized) { return ERR_UNINITIALIZED; }}
 
