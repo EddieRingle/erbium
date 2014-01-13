@@ -10,6 +10,25 @@ if(APPLE)
 		${IOKIT_FRAMEWORK}
 		${CORE_FOUNDATION_FRAMEWORK}
 		${CORE_VIDEO_FRAMEWORK})
+elseif(UNIX)
+	find_package(X11 REQUIRED)
+	list(APPEND er_LIBS
+		${X11_X11_LIB}
+		${CMAKE_THREAD_LIBS_INIT}
+#		${RT_LIBRARY}
+		${X11_Xrandr_LIB}
+		m
+	)
+	if(X11_Xinput_LIB)
+		list(APPEND er_LIBS ${X11_Xinput_LIB})
+	else()
+		list(APPEND er_LIBS Xi)
+	endif()
+	if(X11_Xxf86vm_LIB)
+		list(APPEND er_LIBS ${X11_Xxf86vm_LIB})
+	else()
+		list(APPEND er_LIBS Xxf86vm)
+	endif()
 endif()
 
 if(APPLE)

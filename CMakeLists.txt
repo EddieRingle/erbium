@@ -80,6 +80,8 @@ configure_file("${ER_SOURCE_DIR}/er_version.c.in" "${CMAKE_CURRENT_BINARY_DIR}/e
 # Dependencies
 #
 
+find_package(Threads REQUIRED)
+
 include("${ER_CONTRIB_DIR}/CMakeLists.txt")
 
 #
