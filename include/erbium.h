@@ -10,6 +10,7 @@
 #endif
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
@@ -121,6 +122,10 @@ typedef enum {
     ERR_UNREACHABLE_RESULT,
     ERR_INVALID_PATH,
     ERR_INVALID_ARGS,
+    ERR_KIDNAPPER,
+    ERR_NO_PARENT,
+    ERR_NOT_FOUND,
+    ERR_PROP_TYPE_MISMATCH,
     ERR_UNKNOWN
 } ERR;
 
@@ -320,11 +325,27 @@ typedef struct er_io_keyinfo {
     double y;
 } er_io_keyinfo;
 
+typedef enum {
+    ER_PROP_UNKNOWN = 0,
+    ER_PROP_BOOLEAN,
+    ER_PROP_NUMBER,
+    ER_PROP_STRING,
+    ER_PROP_BOOLEAN_ARRAY,
+    ER_PROP_NUMBER_ARRAY,
+    ER_PROP_STRING_ARRAY
+} er_prop_type;
+
 typedef struct er_app_attrs * er_app_attrs;
 
 typedef struct er_context * er_context;
 
 typedef struct er_context_attrs * er_context_attrs;
+
+typedef struct er_property_def * er_property_def;
+
+typedef struct er_property * er_property;
+
+typedef struct er_entity * er_entity;
 
 #if defined(TARGET_OS_ANDROID)
 ERAPI er_exec_android(er_context *ctx, struct android_app *state);
@@ -358,6 +379,35 @@ ERAPI er_ctx_attrs_set_decorated(er_context_attrs *attrs, int decorated);
 ERAPI er_ctx_attrs_destroy(er_context_attrs *attrs);
 ERAPI er_ctx_open(er_context_attrs *attrs, er_context *ctx);
 ERAPI er_ctx_close(er_context *ctx);
+
+ERAPI er_entity_reserve(er_entity *entity);
+ERAPI er_entity_release(er_entity *entity);
+
+ERAPI er_entity_add_child(er_entity *entity, er_entity *child);
+ERAPI er_entity_remove_from_parent(er_entity *entity);
+ERAPI er_entity_remove_children(er_entity *entity, void (*dcon)(er_entity *child));
+ERAPI er_entity_for_each_child(er_entity *entity, int recurse, void (*fn)(er_entity *child));
+ERAPI er_entity_get_id(er_entity *entity, uint64_t *id);
+ERAPI er_entity_get_parent(er_entity *entity, er_entity *parent);
+ERAPI er_entity_export_json(er_entity *entity, int export_children, int export_properties, char **json);
+
+ERAPI er_prop_get_type(const char *key, er_prop_type *type);
+
+ERAPI er_prop_get_boolean(er_entity *entity, const char *key, int *out);
+ERAPI er_prop_get_number(er_entity *entity, const char *key, double *out);
+ERAPI er_prop_get_string(er_entity *entity, const char *key, char **out);
+ERAPI er_prop_get_boolean_array(er_entity *entity, const char *key, int **out, size_t *count);
+ERAPI er_prop_get_number_array(er_entity *entity, const char *key, double **out, size_t *count);
+ERAPI er_prop_get_string_array(er_entity *entity, const char *key, char ***out, size_t *count);
+
+ERAPI er_prop_set_boolean(er_entity *entity, const char *key, int in);
+ERAPI er_prop_set_number(er_entity *entity, const char *key, double in);
+ERAPI er_prop_set_string(er_entity *entity, const char *key, const char *in);
+ERAPI er_prop_set_boolean_array(er_entity *entity, const char *key, int *in, size_t count);
+ERAPI er_prop_set_number_array(er_entity *entity, const char *key, double *in, size_t count);
+ERAPI er_prop_set_string_array(er_entity *entity, const char *key, char **in, size_t count);
+
+ERAPI er_prop_remove(er_entity *entity, const char *key);
 
 ERAPI er_io_register_action(const char *action_name, int (*action_cb)(er_io_keyinfo keyinfo));
 ERAPI er_io_unregister_action(const char *action_name);

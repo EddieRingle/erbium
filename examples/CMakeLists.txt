@@ -36,12 +36,15 @@ if(APPLE)
 	set_target_properties(main_test PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Main Test")
 	add_executable(window_test MACOSX_BUNDLE window_test.c)
 	set_target_properties(window_test PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Window Test")
+	add_executable(entity_test MACOSX_BUNDLE entity_test.c)
+	set_target_properties(entity_test PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Entity Test")
 else()
 	add_executable(main_test WIN32 main_test.c)
 	add_executable(window_test WIN32 window_test.c)
+	add_executable(entity_test WIN32 entity_test.c)
 endif()
 
-set(BINARIES main_test window_test)
+set(BINARIES main_test window_test entity_test)
 
 if(MSVC)
     set_target_properties(${BINARIES} PROPERTIES

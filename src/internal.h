@@ -3,7 +3,8 @@
 
 #include "erbium.h"
 
-#include "json.h"
+#include "ccan/json.h"
+#include "ccan/list.h"
 #include "uthash.h"
 
 typedef struct er_app {
@@ -58,6 +59,38 @@ typedef struct er_io {
     struct er_io_triggermap *trigger_map;
 } er_io;
 
+struct er_property_def {
+    char name[64];
+    er_prop_type type;
+    struct er_property *instances;
+
+    UT_hash_handle hh;
+};
+
+struct er_property {
+    uint64_t key;
+    struct er_property_def *definition;
+    uint32_t array_count;
+    union {
+        int _bool;
+        double _number;
+        char *_string;
+        void *_unknown;
+    };
+
+    UT_hash_handle hh;
+};
+
+struct er_entity {
+    uint64_t id;
+    uint32_t num_children;
+    struct er_entity *parent;
+    struct list_head children;
+    struct list_node siblings;
+
+    UT_hash_handle hh;
+};
+
 extern er_app *g_app;
 
 extern er_context g_ctx;
@@ -66,11 +99,15 @@ extern er_gfx *g_gfx;
 
 extern er_io *g_io;
 
+extern struct er_property_def *g_property_definitions;
+
 #define INITCHECK() \
     {if (g_app == NULL || !g_app->initialized) { return ERR_UNINITIALIZED; }}
 
 void *er__malloc(size_t size);
 void  er__free(void *mem);
+
+void *er__memdup(const void *mem, size_t sz);
 
 char *er__strdup(const char *str);
 char *er__strtolower(const char *str);
