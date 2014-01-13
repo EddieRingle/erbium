@@ -85,7 +85,7 @@ er_main()
 
     entities();
 
-    er_exec(&ctx, argc, argv);
+    er_exec(&ctx, NULL, argc, argv);
 
     er_ctx_close(&ctx);
     er_ctx_attrs_destroy(&ctx_attrs);

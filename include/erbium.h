@@ -347,12 +347,14 @@ typedef struct er_property * er_property;
 
 typedef struct er_entity * er_entity;
 
+typedef struct er_scene * er_scene;
+
 #if defined(TARGET_OS_ANDROID)
-ERAPI er_exec_android(er_context *ctx, struct android_app *state);
-#define er_exec(ctxptr, state) er_exec_android(ctxptr, state)
+ERAPI er_exec_android(er_context *ctx, er_scene *scene, struct android_app *state);
+#define er_exec(ctxptr, scene, state) er_exec_android(ctxptr, scene, state)
 #else
-ERAPI er_exec_cli(er_context *ctx, int argc, char **argv);
-#define er_exec(ctxptr, argc, argv) er_exec_cli(ctxptr, argc, argv)
+ERAPI er_exec_cli(er_context *ctx, er_scene *scene, int argc, char **argv);
+#define er_exec(ctxptr, scene, argc, argv) er_exec_cli(ctxptr, scene, argc, argv)
 #endif
 
 ERAPI er_init(er_app_attrs *attrs);
@@ -408,6 +410,14 @@ ERAPI er_prop_set_number_array(er_entity *entity, const char *key, double *in, s
 ERAPI er_prop_set_string_array(er_entity *entity, const char *key, char **in, size_t count);
 
 ERAPI er_prop_remove(er_entity *entity, const char *key);
+
+ERAPI er_scene_create(er_scene *scene);
+ERAPI er_scene_destroy(er_scene *scene);
+
+ERAPI er_scene_set_on_create_cb(er_scene *scene, void (*cb)(er_entity root));
+ERAPI er_scene_set_on_destroy_cb(er_scene *scene, void (*cb)(er_entity root));
+
+ERAPI er_set_current_scene(er_scene *scene);
 
 ERAPI er_io_register_action(const char *action_name, int (*action_cb)(er_io_keyinfo keyinfo));
 ERAPI er_io_unregister_action(const char *action_name);

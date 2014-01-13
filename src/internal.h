@@ -91,6 +91,13 @@ struct er_entity {
     UT_hash_handle hh;
 };
 
+struct er_scene {
+    struct er_entity *entity;
+
+    void (*on_create)(er_entity root);
+    void (*on_destroy)(er_entity root);
+};
+
 extern er_app *g_app;
 
 extern er_context g_ctx;
@@ -98,6 +105,8 @@ extern er_context g_ctx;
 extern er_gfx *g_gfx;
 
 extern er_io *g_io;
+
+extern er_scene g_rootscene;
 
 extern struct er_property_def *g_property_definitions;
 
