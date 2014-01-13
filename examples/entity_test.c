@@ -21,6 +21,8 @@ void entities(void)
     int i;
     int booltest;
     double numbertest;
+    const char *teststring = "This is a test string.";
+    char *stringtest;
     uint64_t id;
     er_entity e1, e2, e3;
     char *json;
@@ -46,6 +48,10 @@ void entities(void)
     numbertest = 0;
     er_prop_get_number(&e1, "numbertest", &numbertest);
     printf("numbertest: %f\n", numbertest);
+
+    er_prop_set_string(&e1, "stringtest", teststring);
+    er_prop_get_string(&e1, "stringtest", &stringtest);
+    printf("stringtest: %s\n", stringtest);
 
     er_entity_get_id(&e1, &id);
     printf("Entity #%"PRId64"\n |\n", id);
