@@ -56,6 +56,7 @@ ERAPI er_entity_release(er_entity *entity)
     if ((*entity)->id == max_key_reserved) {
         max_key_reserved--;
     }
+    er_prop_clear_all(entity);
     list_for_each_safe((&(*entity)->children), e, tmp, siblings) {
         list_del(&e->siblings);
         e->parent = NULL;

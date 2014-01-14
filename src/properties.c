@@ -535,3 +535,12 @@ ERAPI er_prop_remove(er_entity *entity, const char *key)
     }
     return ERR_OK;
 }
+
+ERAPI er_prop_clear_all(er_entity *entity)
+{
+    struct er_property_def *def = NULL, *def_tmp = NULL;
+    HASH_ITER(hh, g_property_definitions, def, def_tmp) {
+        er_prop_remove(entity, def->name);
+    }
+    return ERR_OK;
+}

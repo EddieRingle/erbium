@@ -408,6 +408,7 @@ ERAPI er_prop_set_number_array(er_entity *entity, const char *key, double *in, s
 ERAPI er_prop_set_string_array(er_entity *entity, const char *key, char **in, size_t count);
 
 ERAPI er_prop_remove(er_entity *entity, const char *key);
+ERAPI er_prop_clear_all(er_entity *entity);
 
 ERAPI er_io_register_action(const char *action_name, int (*action_cb)(er_io_keyinfo keyinfo));
 ERAPI er_io_unregister_action(const char *action_name);
