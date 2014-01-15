@@ -8,6 +8,10 @@ er_app *g_app = NULL;
 
 er_context g_ctx = NULL;
 
+er_scene g_rootscene = NULL;
+
+static er_scene *current_scene = NULL;
+
 void *er__malloc(size_t size)
 {
     return malloc(size);
@@ -82,6 +86,7 @@ ERAPI er_time(double *time)
 
 ERAPI er_init(er_app_attrs *attrs)
 {
+    ERR ret;
     if (g_app != NULL) {
         return ERR_ALREADY_INITIALIZED;
     }
@@ -110,13 +115,20 @@ ERAPI er_init(er_app_attrs *attrs)
 #elif defined(TARGET_OS_ANDROID)
     er_init_time = __get_raw_time();
 #endif
-
+    if ((ret = er_scene_create(&g_rootscene)) != ERR_OK) {
+        er_quit();
+        return ret;
+    }
     return ERR_OK;
 }
 
 ERAPI er_quit(void)
 {
     INITCHECK();
+    if (g_rootscene != NULL) {
+        er_scene_destroy(&g_rootscene);
+        g_rootscene = NULL;
+    }
     if (g_ctx != NULL) {
         er_ctx_close(&g_ctx);
         g_ctx = NULL;
@@ -145,7 +157,7 @@ ERAPI er_stop(void)
 
 #if defined(TARGET_OS_ANDROID)
 
-ERAPI er_exec_android(er_context *ctx, struct android_app *state)
+ERAPI er_exec_android(er_context *ctx, er_scene *scene, struct android_app *state)
 {
     return ERR_NOT_IMPLEMENTED;
 }
@@ -154,7 +166,7 @@ ERAPI er_exec_android(er_context *ctx, struct android_app *state)
 
 #if defined(TARGET_OS_DESKTOP)
 
-ERAPI er_exec_cli(er_context *ctx, int argc, char **argv)
+ERAPI er_exec_cli(er_context *ctx, er_scene *scene, int argc, char **argv)
 {
     ERR ret;
 
@@ -168,6 +180,13 @@ ERAPI er_exec_cli(er_context *ctx, int argc, char **argv)
         }
     }
     g_app->running = 1;
+    if (scene != NULL && *scene != NULL) {
+        current_scene = scene;
+        if ((*scene)->on_create != NULL) {
+            (*scene)->on_create((*scene)->entity);
+        }
+        er_entity_add_child(&g_rootscene->entity, &(*scene)->entity);
+    }
     er__loop();
     return ERR_OK;
 }
@@ -354,6 +373,24 @@ ERAPI er_app_cleanup_path_result(er_path_result *target)
             target->path = NULL;
         }
         target->len = 0;
+    }
+    return ERR_OK;
+}
+
+ERAPI er_set_current_scene(er_scene *scene)
+{
+    if (current_scene != NULL && *current_scene != NULL) {
+        if ((*current_scene)->on_destroy != NULL) {
+            (*current_scene)->on_destroy((*scene)->entity);
+        }
+        er_entity_remove_from_parent(&(*scene)->entity);
+    }
+    current_scene = scene;
+    if (scene != NULL && *scene != NULL) {
+        if ((*scene)->on_create != NULL) {
+            (*scene)->on_create((*scene)->entity);
+        }
+        er_entity_add_child(&g_rootscene->entity, &(*scene)->entity);
     }
     return ERR_OK;
 }

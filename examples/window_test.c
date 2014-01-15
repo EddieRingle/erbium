@@ -29,7 +29,7 @@ er_main()
     er_io_register_action("exit_app", &_cb_exit_app);
     er_io_add_trigger("exit_app", ER_KEY_ESCAPE);
 
-    er_exec(&ctx, argc, argv);
+    er_exec(&ctx, NULL, argc, argv);
 
     er_ctx_close(&ctx);
     er_ctx_attrs_destroy(&ctx_attrs);
