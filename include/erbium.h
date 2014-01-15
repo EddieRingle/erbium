@@ -308,6 +308,10 @@ typedef enum {
 #   define ER_KEYSTATE_REPEAT 3
 #endif
 
+#define PI 3.14159265359
+#define TO_RADS(d) (d*(PI/180.0f))
+#define TO_DEGS(r) (r*(180.0f/PI))
+
 typedef enum {
     ER_PATH_BINARY,
     ER_PATH_SUPPORT
@@ -449,6 +453,6 @@ ERAPI er_matrix_inverse(er_matrix *m);
 ERAPI er_matrix_translates(er_matrix *m, double tx, double ty, double tz);
 ERAPI er_matrix_translatev(er_matrix *m, er_vector *v);
 ERAPI er_matrix_rotate(er_matrix *m, double angle, double x, double y, double z);
-ERAPI er_matrix_scale(er_matrix *m, double sx, double sy, double tz);
+ERAPI er_matrix_scale(er_matrix *m, double sx, double sy, double sz);
 
 #endif /* __included_erbium_h */
