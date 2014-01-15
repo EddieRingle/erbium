@@ -98,6 +98,10 @@ struct er_scene {
     void (*on_destroy)(er_entity root);
 };
 
+struct er_vector {
+    double i, j, k, l;
+};
+
 extern er_app *g_app;
 
 extern er_context g_ctx;

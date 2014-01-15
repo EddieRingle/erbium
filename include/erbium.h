@@ -349,6 +349,8 @@ typedef struct er_entity * er_entity;
 
 typedef struct er_scene * er_scene;
 
+typedef struct er_vector er_vector;
+
 #if defined(TARGET_OS_ANDROID)
 ERAPI er_exec_android(er_context *ctx, er_scene *scene, struct android_app *state);
 #define er_exec(ctxptr, scene, state) er_exec_android(ctxptr, scene, state)
@@ -426,5 +428,13 @@ ERAPI er_io_unregister_action(const char *action_name);
 ERAPI er_io_add_trigger(const char *action_name, int trigger);
 ERAPI er_io_clear_action(const char *action_name);
 ERAPI er_io_clear_trigger(int trigger);
+
+ERAPI er_vector_addv(er_vector *v1, er_vector *v2);
+ERAPI er_vector_adds(er_vector *v, double s);
+ERAPI er_vector_muls(er_vector *v, double s);
+ERAPI er_vector_dot(er_vector *v1, er_vector *v2, double *out);
+ERAPI er_vector_cross(er_vector *v1, er_vector *v2, er_vector *out);
+ERAPI er_vector_mag(er_vector *v, double *out);
+ERAPI er_vector_normalize(er_vector *v);
 
 #endif /* __included_erbium_h */

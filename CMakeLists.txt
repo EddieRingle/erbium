@@ -98,6 +98,7 @@ set(erbium_SOURCES
 	${ER_SOURCE_DIR}/internal.h
 	${ER_SOURCE_DIR}/io.c
 	${ER_SOURCE_DIR}/io_glfw.c
+	${ER_SOURCE_DIR}/matrix.c
 	${ER_SOURCE_DIR}/properties.c
 	${ER_SOURCE_DIR}/scene.c
 	${ER_SOURCE_DIR}/string_utils.c
