@@ -351,6 +351,8 @@ typedef struct er_scene * er_scene;
 
 typedef struct er_vector er_vector;
 
+typedef struct er_matrix er_matrix;
+
 #if defined(TARGET_OS_ANDROID)
 ERAPI er_exec_android(er_context *ctx, er_scene *scene, struct android_app *state);
 #define er_exec(ctxptr, scene, state) er_exec_android(ctxptr, scene, state)
@@ -436,5 +438,17 @@ ERAPI er_vector_dot(er_vector *v1, er_vector *v2, double *out);
 ERAPI er_vector_cross(er_vector *v1, er_vector *v2, er_vector *out);
 ERAPI er_vector_mag(er_vector *v, double *out);
 ERAPI er_vector_normalize(er_vector *v);
+
+ERAPI er_matrix_addm(er_matrix *m1, er_matrix *m2);
+ERAPI er_matrix_adds(er_matrix *m, double s);
+ERAPI er_matrix_mulm(er_matrix *m1, er_matrix *m2, er_matrix *out);
+ERAPI er_matrix_muls(er_matrix *m, double s);
+ERAPI er_matrix_identity(er_matrix *m);
+ERAPI er_matrix_determinant(er_matrix *m, double *out);
+ERAPI er_matrix_inverse(er_matrix *m);
+ERAPI er_matrix_translates(er_matrix *m, double tx, double ty, double tz);
+ERAPI er_matrix_translatev(er_matrix *m, er_vector *v);
+ERAPI er_matrix_rotate(er_matrix *m, double angle, double x, double y, double z);
+ERAPI er_matrix_scale(er_matrix *m, double sx, double sy, double tz);
 
 #endif /* __included_erbium_h */
