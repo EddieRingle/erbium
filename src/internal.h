@@ -102,11 +102,9 @@ struct er_vector {
     double i, j, k, l;
 };
 
-struct er_matrix {
-    union {
-        struct er_vector vectors[4];
-        double values[4][4];
-    };
+union er_matrix {
+    struct er_vector vectors[4];
+    double values[4][4];
 };
 
 extern er_app *g_app;

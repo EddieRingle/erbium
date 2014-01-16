@@ -396,14 +396,14 @@ ERAPI er_matrix_inverse(er_matrix *m)
             w.values[i][j] *= det;
         }
     }
-    memcpy(m, &w, sizeof(struct er_matrix));
+    memcpy(m, &w, sizeof(union er_matrix));
     return ERR_OK;
 }
 
 ERAPI er_matrix_translates(er_matrix *m, double tx, double ty, double tz)
 {
     ERR ret;
-    struct er_matrix translate_matrix, result;
+    union er_matrix translate_matrix, result;
     if (m == NULL) {
         return ERR_INVALID_ARGS;
     }
@@ -412,7 +412,7 @@ ERAPI er_matrix_translates(er_matrix *m, double tx, double ty, double tz)
     translate_matrix.values[3][1] = ty;
     translate_matrix.values[3][2] = tz;
     if ((ret = er_matrix_mulm(&translate_matrix, m, &result)) == ERR_OK) {
-        memcpy(m, &result, sizeof(struct er_matrix));
+        memcpy(m, &result, sizeof(union er_matrix));
     }
     return ret;
 }
@@ -428,7 +428,7 @@ ERAPI er_matrix_translatev(er_matrix *m, er_vector *v)
 ERAPI er_matrix_rotate(er_matrix *m, double angle, double x, double y, double z)
 {
     ERR ret;
-    struct er_matrix rotation_matrix = {0}, result;
+    union er_matrix rotation_matrix = {0}, result;
     double c = 0, s = 0;
     if (m == NULL) {
         return ERR_INVALID_ARGS;
@@ -446,7 +446,7 @@ ERAPI er_matrix_rotate(er_matrix *m, double angle, double x, double y, double z)
     rotation_matrix.values[2][2] = z*z*(1-c)+c;
     rotation_matrix.values[3][3] = 1;
     if ((ret = er_matrix_mulm(&rotation_matrix, m, &result)) == ERR_OK) {
-        memcpy(m, &result, sizeof(struct er_matrix));
+        memcpy(m, &result, sizeof(union er_matrix));
     }
     return ret;
 }
@@ -454,17 +454,17 @@ ERAPI er_matrix_rotate(er_matrix *m, double angle, double x, double y, double z)
 ERAPI er_matrix_scale(er_matrix *m, double sx, double sy, double sz)
 {
     ERR ret;
-    struct er_matrix scale_matrix, result;
+    union er_matrix scale_matrix, result;
     if (m == NULL) {
         return ERR_INVALID_ARGS;
     }
-    memset(&scale_matrix, 0, sizeof(struct er_matrix));
+    memset(&scale_matrix, 0, sizeof(union er_matrix));
     scale_matrix.values[0][0] = sx;
     scale_matrix.values[1][1] = sy;
     scale_matrix.values[2][2] = sz;
     scale_matrix.values[3][3] = 1.0;
     if ((ret = er_matrix_mulm(&scale_matrix, m, &result)) == ERR_OK) {
-        memcpy(m, &result, sizeof(struct er_matrix));
+        memcpy(m, &result, sizeof(union er_matrix));
     }
     return ret;
 }

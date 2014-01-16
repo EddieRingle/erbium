@@ -355,7 +355,7 @@ typedef struct er_scene * er_scene;
 
 typedef struct er_vector er_vector;
 
-typedef struct er_matrix er_matrix;
+typedef union er_matrix er_matrix;
 
 #if defined(TARGET_OS_ANDROID)
 ERAPI er_exec_android(er_context *ctx, er_scene *scene, struct android_app *state);
