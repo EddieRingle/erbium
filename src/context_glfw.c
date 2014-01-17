@@ -10,7 +10,7 @@ ERAPI er_ctx_open__glfw(er_context *ctx)
         monitor = glfwGetPrimaryMonitor();
     }
     glfwWindowHint(GLFW_DECORATED, (*ctx)->attrs->decorated);
-    (*ctx)->window = glfwCreateWindow(854, 480, (*ctx)->attrs->window_title, monitor, NULL);
+    (*ctx)->window = glfwCreateWindow((*ctx)->attrs->screen_width, (*ctx)->attrs->screen_height, (*ctx)->attrs->window_title, monitor, NULL);
     if (!(*ctx)->window) {
         return ERR_UNKNOWN;
     }
