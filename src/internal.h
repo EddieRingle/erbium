@@ -167,4 +167,6 @@ extern er__io_init_f er__io_init;
 extern er__io_quit_f er__io_quit;
 extern er__io_poll_f er__io_poll;
 
+#include "subsystem/subsystem_defaults.h"
+
 #endif /* __included_er_internal_h */

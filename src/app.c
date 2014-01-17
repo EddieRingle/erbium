@@ -90,21 +90,9 @@ ERAPI er_time(double *time)
 #endif
 }
 
-void _tmp_renderer_update_cb(er_entity root, double delta)
-{
-    glClearColor(0.5f, 0.6f, 0.9f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-}
-
 static void init_default_subsystems(void)
 {
-    er_subsystem_attrs attrs;
-
-    er_subsystem_attrs_init(&attrs);
-    er_subsystem_attrs_set_name(&attrs, "renderer");
-    er_subsystem_attrs_set_update_cb(&attrs, &_tmp_renderer_update_cb);
-    er_subsystem_register(&attrs, NULL);
-    er_subsystem_attrs_destroy(&attrs);
+    er__subsystem_register_default_renderer();
 }
 
 
