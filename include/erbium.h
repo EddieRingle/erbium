@@ -353,6 +353,10 @@ typedef struct er_entity * er_entity;
 
 typedef struct er_scene * er_scene;
 
+typedef struct er_subsystem_attrs * er_subsystem_attrs;
+
+typedef struct er_subsystem * er_subsystem;
+
 typedef struct er_vector er_vector;
 
 typedef union er_matrix er_matrix;
@@ -435,6 +439,15 @@ ERAPI er_io_unregister_action(const char *action_name);
 ERAPI er_io_add_trigger(const char *action_name, int trigger);
 ERAPI er_io_clear_action(const char *action_name);
 ERAPI er_io_clear_trigger(int trigger);
+
+ERAPI er_subsystem_attrs_init(er_subsystem_attrs *attrs);
+ERAPI er_subsystem_attrs_set_name(er_subsystem_attrs *attrs, const char *name);
+ERAPI er_subsystem_attrs_set_init_cb(er_subsystem_attrs *attrs, void (*cb)(void));
+ERAPI er_subsystem_attrs_set_update_cb(er_subsystem_attrs *attrs, void (*cb)(er_entity root, double delta));
+ERAPI er_subsystem_attrs_set_quit_cb(er_subsystem_attrs *attrs, void (*cb)(void));
+ERAPI er_subsystem_attrs_destroy(er_subsystem_attrs *attrs);
+ERAPI er_subsystem_register(er_subsystem_attrs *attrs, er_subsystem *subsystem);
+ERAPI er_subsystem_unregister(er_subsystem *subsystem);
 
 ERAPI er_vector_addv(er_vector *v1, er_vector *v2);
 ERAPI er_vector_adds(er_vector *v, double s);

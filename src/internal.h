@@ -98,6 +98,19 @@ struct er_scene {
     void (*on_destroy)(er_entity root);
 };
 
+struct er_subsystem_attrs {
+    char name[64];
+    void (*init)(void);
+    void (*update)(er_entity root, double delta);
+    void (*quit)(void);
+};
+
+struct er_subsystem {
+    struct er_subsystem_attrs attrs;
+
+    UT_hash_handle hh;
+};
+
 struct er_vector {
     double i, j, k, l;
 };
@@ -118,6 +131,8 @@ extern er_io *g_io;
 extern er_scene g_rootscene;
 
 extern struct er_property_def *g_property_definitions;
+
+extern struct er_subsystem *g_subsystems;
 
 #define INITCHECK() \
     {if (g_app == NULL || !g_app->initialized) { return ERR_UNINITIALIZED; }}

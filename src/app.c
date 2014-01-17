@@ -51,8 +51,14 @@ ERAPI er__create_default_context(er_context *ctx)
 
 void er__loop(void)
 {
+    struct er_subsystem *subsystem = NULL, *tmp = NULL;
     do {
         er__io_poll();
+        HASH_ITER(hh, g_subsystems, subsystem, tmp) {
+            if (subsystem->attrs.update != NULL) {
+                subsystem->attrs.update(g_rootscene->entity, 0);
+            }
+        }
         er__gfx_draw();
     } while (g_app->running);
 }
@@ -83,6 +89,24 @@ ERAPI er_time(double *time)
     return ERR_NOT_IMPLEMENTED;
 #endif
 }
+
+void _tmp_renderer_update_cb(er_entity root, double delta)
+{
+    glClearColor(0.5f, 0.6f, 0.9f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+static void init_default_subsystems(void)
+{
+    er_subsystem_attrs attrs;
+
+    er_subsystem_attrs_init(&attrs);
+    er_subsystem_attrs_set_name(&attrs, "renderer");
+    er_subsystem_attrs_set_update_cb(&attrs, &_tmp_renderer_update_cb);
+    er_subsystem_register(&attrs, NULL);
+    er_subsystem_attrs_destroy(&attrs);
+}
+
 
 ERAPI er_init(er_app_attrs *attrs)
 {
@@ -115,6 +139,7 @@ ERAPI er_init(er_app_attrs *attrs)
 #elif defined(TARGET_OS_ANDROID)
     er_init_time = __get_raw_time();
 #endif
+    init_default_subsystems();
     if ((ret = er_scene_create(&g_rootscene)) != ERR_OK) {
         er_quit();
         return ret;
@@ -122,9 +147,20 @@ ERAPI er_init(er_app_attrs *attrs)
     return ERR_OK;
 }
 
+static void delete_subsystems(void)
+{
+    struct er_subsystem *subsystem = NULL, *tmp = NULL;
+    HASH_ITER(hh, g_subsystems, subsystem, tmp) {
+        er_subsystem_unregister(&subsystem);
+    }
+}
+
 ERAPI er_quit(void)
 {
     INITCHECK();
+    if (g_subsystems != NULL) {
+        delete_subsystems();
+    }
     if (g_rootscene != NULL) {
         er_scene_destroy(&g_rootscene);
         g_rootscene = NULL;

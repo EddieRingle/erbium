@@ -102,6 +102,7 @@ set(erbium_SOURCES
 	${ER_SOURCE_DIR}/properties.c
 	${ER_SOURCE_DIR}/scene.c
 	${ER_SOURCE_DIR}/string_utils.c
+	${ER_SOURCE_DIR}/subsystem.c
 	${ER_SOURCE_DIR}/uthash.h
 	${ER_SOURCE_DIR}/ccan/build_assert.h
 	${ER_SOURCE_DIR}/ccan/check_type.h
