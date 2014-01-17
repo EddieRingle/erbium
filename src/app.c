@@ -127,11 +127,11 @@ ERAPI er_init(er_app_attrs *attrs)
 #elif defined(TARGET_OS_ANDROID)
     er_init_time = __get_raw_time();
 #endif
-    init_default_subsystems();
     if ((ret = er_scene_create(&g_rootscene)) != ERR_OK) {
         er_quit();
         return ret;
     }
+    init_default_subsystems();
     return ERR_OK;
 }
 
