@@ -51,12 +51,16 @@ ERAPI er__create_default_context(er_context *ctx)
 
 void er__loop(void)
 {
+    double now_time = 0, last_time = 0, delta = 0;
     struct er_subsystem *subsystem = NULL, *tmp = NULL;
     do {
+        last_time = now_time;
+        er_time(&now_time);
+        delta = now_time - last_time;
         er__io_poll();
         HASH_ITER(hh, g_subsystems, subsystem, tmp) {
             if (subsystem->attrs.update != NULL) {
-                subsystem->attrs.update(g_rootscene->entity, 0);
+                subsystem->attrs.update(g_rootscene->entity, delta);
             }
         }
         er__gfx_draw();
