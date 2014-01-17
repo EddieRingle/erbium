@@ -2,6 +2,14 @@
 
 #if defined(TARGET_OS_DESKTOP)
 
+void er__ctx_glfw_window_resize_cb(GLFWwindow *window, int width, int height)
+{
+    if (g_ctx != NULL && width >= 0 && height >= 0) {
+        g_ctx->attrs->screen_width = (unsigned)width;
+        g_ctx->attrs->screen_height = (unsigned)height;
+    }
+}
+
 ERAPI er_ctx_open__glfw(er_context *ctx)
 {
     GLFWmonitor *monitor = NULL;
@@ -14,6 +22,7 @@ ERAPI er_ctx_open__glfw(er_context *ctx)
     if (!(*ctx)->window) {
         return ERR_UNKNOWN;
     }
+    glfwSetWindowSizeCallback((*ctx)->window, &er__ctx_glfw_window_resize_cb);
     glfwMakeContextCurrent((*ctx)->window);
 
     return ERR_OK;
