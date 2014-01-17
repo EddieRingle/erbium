@@ -60,7 +60,13 @@ void entities(void)
     er_entity_export_json(&e1, 1, 1, &json);
     printf("JSON:\n%s\n", json);
 
+    er_entity_import_json(&e3, json);
+    numbertest = 0;
+    er_prop_get_number(&e3, "numbertest", &numbertest);
+    printf("numbertest, post-import: %f\n", numbertest);
+
     er_entity_release(&e1);
+    er_entity_release(&e3);
 }
 
 er_main()

@@ -229,3 +229,118 @@ ERAPI er_entity_export_json(er_entity *entity, int export_children, int export_p
     *json = json_stringify(node, "  ");
     return ERR_OK;
 }
+
+static void json_to_entity(er_entity *entity, JsonNode *node)
+{
+    er_entity child = NULL;
+    JsonNode *itr = NULL, *array_itr = NULL, *mem = NULL;
+    JsonTag array_tag;
+    er_entity_reserve(entity);
+    size_t count, i;
+    void *array;
+    mem = json_find_member(node, "properties");
+    json_foreach(itr, mem) {
+        switch (itr->tag) {
+            case JSON_BOOL:
+                er_prop_set_boolean(entity, itr->key, (itr->bool_)?1:0);
+                break;
+            case JSON_NUMBER:
+                er_prop_set_number(entity, itr->key, itr->number_);
+                break;
+            case JSON_STRING:
+                er_prop_set_string(entity, itr->key, itr->string_);
+                break;
+            case JSON_ARRAY:
+                count = 0;
+                json_foreach(array_itr, itr) {
+                    array_tag = itr->tag;
+                    count++;
+                }
+                switch (array_tag) {
+                    case JSON_BOOL:
+                        array = er__malloc(sizeof(int) * count);
+                        if (array == NULL) {
+                            *entity = NULL;
+                            return;
+                        }
+                        i = 0;
+                        json_foreach(array_itr, itr) {
+                            if (array_itr->tag != JSON_BOOL) {
+                                *entity = NULL;
+                                return;
+                            }
+                            ((int *)array)[i] = (array_itr->bool_)?1:0;
+                            i++;
+                        }
+                        er_prop_set_boolean_array(entity, itr->key, array, count);
+                        er__free(array);
+                        break;
+                    case JSON_NUMBER:
+                        array = er__malloc(sizeof(double) * count);
+                        if (array == NULL) {
+                            *entity = NULL;
+                            return;
+                        }
+                        i = 0;
+                        json_foreach(array_itr, itr) {
+                            if (array_itr->tag != JSON_NUMBER) {
+                                *entity = NULL;
+                                return;
+                            }
+                            ((double *)array)[i] = array_itr->number_;
+                            i++;
+                        }
+                        er_prop_set_number_array(entity, itr->key, array, count);
+                        er__free(array);
+                        break;
+                    case JSON_STRING:
+                        array = er__malloc(sizeof(char*) * count);
+                        if (array == NULL) {
+                            *entity = NULL;
+                            return;
+                        }
+                        i = 0;
+                        json_foreach(array_itr, itr) {
+                            if (array_itr->tag != JSON_STRING) {
+                                *entity = NULL;
+                                return;
+                            }
+                            ((char **)array)[i] = er__strdup(array_itr->string_);
+                            if (((char **)array)[i] == NULL) {
+                                *entity = NULL;
+                                return;
+                            }
+                            i++;
+                        }
+                        er_prop_set_string_array(entity, itr->key, array, count);
+                        for (i = 0; i < count; i++) {
+                            er__free(((char **)array)[i]);
+                        }
+                        er__free(array);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+ERAPI er_entity_import_json(er_entity *entity, const char *json)
+{
+    JsonNode *node;
+    if (entity == NULL || json == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    node = json_decode(json);
+    if (node == NULL) {
+        return ERR_UNKNOWN;
+    }
+    json_to_entity(entity, node);
+    if (*entity == NULL) {
+        return ERR_UNKNOWN;
+    }
+    return ERR_OK;
+}

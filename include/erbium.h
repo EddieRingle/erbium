@@ -400,6 +400,7 @@ ERAPI er_entity_for_each_child(er_entity *entity, int recurse, void (*fn)(er_ent
 ERAPI er_entity_get_id(er_entity *entity, uint64_t *id);
 ERAPI er_entity_get_parent(er_entity *entity, er_entity *parent);
 ERAPI er_entity_export_json(er_entity *entity, int export_children, int export_properties, char **json);
+ERAPI er_entity_import_json(er_entity *entity, const char *json);
 
 ERAPI er_prop_get_type(const char *key, er_prop_type *type);
 
