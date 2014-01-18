@@ -1,5 +1,7 @@
 #include "subsystem_defaults.h"
 
+#include "renderer/renderer.h"
+
 void er__ssys_renderer_init_cb(void)
 {
 }
