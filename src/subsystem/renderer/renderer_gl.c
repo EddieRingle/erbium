@@ -230,7 +230,7 @@ ERAPI er__renderer_free_texture__gl(er_texture *texture)
     }
     er__free(*texture);
     *texture = NULL;
-    return ERR_NOT_IMPLEMENTED;
+    return ERR_OK;
 }
 er__renderer_free_texture_f er__renderer_free_texture = &er__renderer_free_texture__gl;
 
