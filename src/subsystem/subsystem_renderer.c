@@ -4,6 +4,7 @@
 
 void er__ssys_renderer_init_cb(void)
 {
+    er__renderer_init();
 }
 
 void er__ssys_renderer_update_cb(er_entity root, double delta)
@@ -14,6 +15,7 @@ void er__ssys_renderer_update_cb(er_entity root, double delta)
 
 void er__ssys_renderer_quit_cb(void)
 {
+    er__renderer_quit();
 }
 
 void er__subsystem_register_default_renderer(void)
