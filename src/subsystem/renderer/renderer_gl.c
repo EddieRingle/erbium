@@ -3,7 +3,7 @@
 #if defined(TARGET_OS_DESKTOP)
 
 struct er_texture {
-    GLuint *id;
+    GLuint id;
     char *filename;
     unsigned width;
     unsigned height;
