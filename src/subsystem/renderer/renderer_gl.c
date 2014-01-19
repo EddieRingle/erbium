@@ -10,8 +10,13 @@ struct er_texture {
     int is_bound;
 };
 
+static struct {
+    struct er_texture *last_used_texture;
+} gl_renderer;
+
 ERAPI er__renderer_init__gl(void)
 {
+    gl_renderer.last_used_texture = NULL;
     return ERR_OK;
 }
 er__renderer_init_f er__renderer_init = &er__renderer_init__gl;
@@ -24,7 +29,17 @@ er__renderer_quit_f er__renderer_quit = &er__renderer_quit__gl;
 
 ERAPI gl__renderer_bind_texture(er_texture *texture)
 {
-    return ERR_NOT_IMPLEMENTED;
+    if (gl_renderer.last_used_texture != NULL) {
+        gl_renderer.last_used_texture->is_bound = 0;
+    }
+    gl_renderer.last_used_texture = (texture != NULL) ? *texture : NULL;
+    if (texture == NULL || *texture == NULL) {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    } else {
+        glBindTexture(GL_TEXTURE_2D, (*texture)->id);
+        (*texture)->is_bound = 1;
+    }
+    return ERR_OK;
 }
 
 ERAPI gl__renderer_load_texture(const char *filename, er_texture *texture)
