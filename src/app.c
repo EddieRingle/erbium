@@ -94,12 +94,6 @@ ERAPI er_time(double *time)
 #endif
 }
 
-static void init_default_subsystems(void)
-{
-    er__subsystem_register_default_renderer();
-}
-
-
 ERAPI er_init(er_app_attrs *attrs)
 {
     ERR ret;
@@ -135,7 +129,6 @@ ERAPI er_init(er_app_attrs *attrs)
         er_quit();
         return ret;
     }
-    init_default_subsystems();
     return ERR_OK;
 }
 
@@ -183,6 +176,11 @@ ERAPI er_stop(void)
     return ERR_OK;
 }
 
+static void init_default_subsystems(void)
+{
+    er__subsystem_register_default_renderer();
+}
+
 #if defined(TARGET_OS_ANDROID)
 
 ERAPI er_exec_android(er_context *ctx, er_scene *scene, struct android_app *state)
@@ -215,6 +213,7 @@ ERAPI er_exec_cli(er_context *ctx, er_scene *scene, int argc, char **argv)
         }
         er_entity_add_child(&g_rootscene->entity, &(*scene)->entity);
     }
+    init_default_subsystems();
     er__loop();
     return ERR_OK;
 }
