@@ -10,6 +10,18 @@ struct er_texture {
     int is_bound;
 };
 
+ERAPI er__renderer_init__gl(void)
+{
+    return ERR_OK;
+}
+er__renderer_init_f er__renderer_init = &er__renderer_init__gl;
+
+ERAPI er__renderer_quit__gl(void)
+{
+    return ERR_OK;
+}
+er__renderer_quit_f er__renderer_quit = &er__renderer_quit__gl;
+
 ERAPI gl__renderer_bind_texture(er_texture *texture)
 {
     return ERR_NOT_IMPLEMENTED;
