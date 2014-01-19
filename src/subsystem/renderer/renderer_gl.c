@@ -21,6 +21,9 @@ static struct {
 ERAPI er__renderer_init__gl(void)
 {
     gl_renderer.last_used_texture = NULL;
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     return ERR_OK;
 }
 er__renderer_init_f er__renderer_init = &er__renderer_init__gl;
