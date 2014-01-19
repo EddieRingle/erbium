@@ -27,7 +27,7 @@ ERAPI er__renderer_quit__gl(void)
 }
 er__renderer_quit_f er__renderer_quit = &er__renderer_quit__gl;
 
-ERAPI gl__renderer_bind_texture(er_texture *texture)
+ERAPI er__renderer_bind_texture__gl(er_texture *texture)
 {
     if (gl_renderer.last_used_texture != NULL) {
         gl_renderer.last_used_texture->is_bound = 0;
@@ -41,25 +41,24 @@ ERAPI gl__renderer_bind_texture(er_texture *texture)
     }
     return ERR_OK;
 }
+er__renderer_bind_texture_f er__renderer_bind_texture = &er__renderer_bind_texture__gl;
 
-ERAPI gl__renderer_load_texture(const char *filename, er_texture *texture)
+ERAPI er__renderer_load_texture__gl(const char *filename, er_texture *texture)
 {
     return ERR_NOT_IMPLEMENTED;
 }
+er__renderer_load_texture_f er__renderer_load_texture = &er__renderer_load_texture__gl;
 
-ERAPI gl__renderer_free_texture(er_texture *texture)
+ERAPI er__renderer_free_texture__gl(er_texture *texture)
 {
     return ERR_NOT_IMPLEMENTED;
 }
+er__renderer_free_texture_f er__renderer_free_texture = &er__renderer_free_texture__gl;
 
-ERAPI gl__renderer_blit_texture(er_texture *texture, double x, double y, double w, double h)
+ERAPI er__renderer_blit_texture__gl(er_texture *texture, double x, double y, double w, double h)
 {
     return ERR_NOT_IMPLEMENTED;
 }
-
-er__renderer_bind_texture_f er__renderer_bind_texture = &gl__renderer_bind_texture;
-er__renderer_load_texture_f er__renderer_load_texture = &gl__renderer_load_texture;
-er__renderer_free_texture_f er__renderer_free_texture = &gl__renderer_free_texture;
-er__renderer_blit_texture_f er__renderer_blit_texture = &gl__renderer_blit_texture;
+er__renderer_blit_texture_f er__renderer_blit_texture = &er__renderer_blit_texture__gl;
 
 #endif /* defined(TARGET_OS_DESKTOP) */
