@@ -11,6 +11,9 @@ struct er_texture {
     int bit_depth;
     int color_type;
 
+    int blur;
+    int clamp;
+
     int is_bound;
 };
 
@@ -50,6 +53,42 @@ ERAPI er__renderer_bind_texture__gl(er_texture *texture)
 }
 er__renderer_bind_texture_f er__renderer_bind_texture = &er__renderer_bind_texture__gl;
 
+static void read_meta_info(const char *filename, er_texture *texture)
+{
+    char metafilename[strlen(filename) + 8];
+    char *json;
+    size_t json_len;
+    FILE *fp;
+    JsonNode *node, *texture_node, *child;
+    sprintf(metafilename, "%s.ermeta", filename);
+    fp = fopen(metafilename, "rb");
+    if (fp == NULL) {
+        return;
+    }
+    fseek(fp, 0, SEEK_END);
+    json_len = (size_t)ftell(fp);
+    rewind(fp);
+    json = er__malloc(json_len + 1);
+    fread(json, json_len, 1, fp);
+    fclose(fp);
+    node = json_decode(json);
+    texture_node = json_find_member(node, "texture");
+    (*texture)->blur = 0;
+    (*texture)->clamp = 0;
+    if (texture_node != NULL) {
+        child = json_find_member(texture_node, "blur");
+        if (child != NULL && child->tag == JSON_BOOL) {
+            (*texture)->blur = child->bool_;
+        }
+        child = json_find_member(texture_node, "clamp");
+        if (child != NULL && child->tag == JSON_BOOL) {
+            (*texture)->clamp = child->bool_;
+        }
+    }
+    json_delete(node);
+    er__free(json);
+}
+
 ERAPI er__renderer_load_texture__gl(const char *filename, er_texture *texture)
 {
     png_byte header[8];
@@ -73,6 +112,8 @@ ERAPI er__renderer_load_texture__gl(const char *filename, er_texture *texture)
         return ERR_MEMORY_ERROR;
     }
     memset(*texture, 0, sizeof(struct er_texture));
+
+    read_meta_info(filename, texture);
 
     (*texture)->filename = er__strdup(filename);
     if ((*texture)->filename == NULL) {
@@ -199,10 +240,20 @@ ERAPI er__renderer_load_texture__gl(const char *filename, er_texture *texture)
         return ERR_UNKNOWN;
     }
     er__renderer_bind_texture(texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    if ((*texture)->clamp) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    } else {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    }
+    if ((*texture)->blur) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    } else {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
     if ((*texture)->color_type == PNG_COLOR_TYPE_RGBA) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, twidth, theight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
     } else {
