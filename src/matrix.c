@@ -468,3 +468,35 @@ ERAPI er_matrix_scale(er_matrix *m, double sx, double sy, double sz)
     }
     return ret;
 }
+
+ERAPI er_matrix_ortho(er_matrix *m, double left, double right, double bottom, double top, double near, double far)
+{
+    ERR ret;
+    union er_matrix ortho_matrix = { 0 }, result;
+    ortho_matrix.values[0][0] =  2.0 / (right - left);
+    ortho_matrix.values[1][1] =  2.0 / (top - bottom);
+    ortho_matrix.values[2][2] = -2.0 / (far - near);
+    ortho_matrix.values[3][0] = -(right + left) / (right - left);
+    ortho_matrix.values[3][1] = -(top + bottom) / (top - bottom);
+    ortho_matrix.values[3][3] = 1.0;
+    if ((ret = er_matrix_mulm(m, &ortho_matrix, &result)) == ERR_OK) {
+        memcpy(m, &result, sizeof(union er_matrix));
+    }
+    return ret;
+}
+
+ERAPI er_matrix_perspective(er_matrix *m, double fovy, double aspect, double near, double far)
+{
+    ERR ret;
+    union er_matrix perspective_matrix = { 0 }, result;
+    double f = 1.0 / tan(fovy / 2.0);
+    perspective_matrix.values[0][0] = f / aspect;
+    perspective_matrix.values[1][1] = f;
+    perspective_matrix.values[2][2] = (far + near) / (near - far);
+    perspective_matrix.values[2][3] = -1;
+    perspective_matrix.values[3][2] = (2.0 * far * near) / (near - far);
+    if ((ret = er_matrix_mulm(m, &perspective_matrix, &result)) == ERR_OK) {
+        memcpy(m, &result, sizeof(union er_matrix));
+    }
+    return ret;
+}
