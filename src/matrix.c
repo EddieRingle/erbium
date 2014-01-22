@@ -500,3 +500,92 @@ ERAPI er_matrix_perspective(er_matrix *m, double fovy, double aspect, double nea
     }
     return ret;
 }
+
+ERAPI er_matrix_lookat(er_vector *eye, er_vector *target, er_vector *up, er_matrix *out)
+{
+    ERR ret = ERR_OK;
+    struct er_vector xaxis, yaxis, zaxis;
+    double xdot, ydot, zdot;
+    union er_matrix view_matrix;
+    if (eye == NULL || target == NULL || up == NULL || out == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    er_vector_muls(target, -1);
+    memcpy(&zaxis, eye, sizeof(struct er_vector));
+    er_vector_addv(&zaxis, target);
+    er_vector_normalize(&zaxis);
+    er_vector_cross(up, &zaxis, &xaxis);
+    er_vector_normalize(&xaxis);
+    er_vector_cross(&zaxis, &xaxis, &yaxis);
+    er_vector_dot(&xaxis, eye, &xdot);
+    er_vector_dot(&yaxis, eye, &ydot);
+    er_vector_dot(&zaxis, eye, &zdot);
+    view_matrix.values[0][0] = xaxis.i;
+    view_matrix.values[0][1] = xaxis.j;
+    view_matrix.values[0][2] = xaxis.k;
+    view_matrix.values[0][3] = -xdot;
+    view_matrix.values[1][0] = yaxis.i;
+    view_matrix.values[1][1] = yaxis.j;
+    view_matrix.values[1][2] = yaxis.k;
+    view_matrix.values[1][3] = -ydot;
+    view_matrix.values[2][0] = zaxis.i;
+    view_matrix.values[2][1] = zaxis.j;
+    view_matrix.values[2][2] = zaxis.k;
+    view_matrix.values[2][3] = -zdot;
+    view_matrix.values[3][0] = 0;
+    view_matrix.values[3][1] = 0;
+    view_matrix.values[3][2] = 0;
+    view_matrix.values[3][3] = 1;
+    memcpy(out, &view_matrix, sizeof(union er_matrix));
+    return ret;
+}
+
+ERAPI er_matrix_lookatyp(er_vector *eye, double pitch, double yaw, er_matrix *out)
+{
+    ERR ret = ERR_OK;
+    double cos_pitch, sin_pitch;
+    double cos_yaw, sin_yaw;
+    double xdot, ydot, zdot;
+    struct er_vector xaxis, yaxis, zaxis;
+    union er_matrix view_matrix;
+    if (eye == NULL || out == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    cos_pitch = cos(pitch);
+    sin_pitch = sin(pitch);
+    cos_yaw = cos(yaw);
+    sin_yaw = sin(yaw);
+    xaxis.i = cos_yaw;
+    xaxis.j = -sin_pitch * sin_yaw;
+    xaxis.k = -cos_pitch * sin_yaw;
+    xaxis.l = 0;
+    yaxis.i = 0;
+    yaxis.j = cos_pitch;
+    yaxis.k = -sin_pitch;
+    yaxis.l = 0;
+    zaxis.i = sin_yaw;
+    zaxis.j = sin_pitch * cos_yaw;
+    zaxis.k = cos_pitch * cos_yaw;
+    zaxis.l = 0;
+    er_vector_dot(&xaxis, eye, &xdot);
+    er_vector_dot(&yaxis, eye, &ydot);
+    er_vector_dot(&zaxis, eye, &zdot);
+    view_matrix.values[0][0] = xaxis.i;
+    view_matrix.values[0][1] = xaxis.j;
+    view_matrix.values[0][2] = xaxis.k;
+    view_matrix.values[0][3] = -xdot;
+    view_matrix.values[1][0] = yaxis.i;
+    view_matrix.values[1][1] = yaxis.j;
+    view_matrix.values[1][2] = yaxis.k;
+    view_matrix.values[1][3] = -ydot;
+    view_matrix.values[2][0] = zaxis.i;
+    view_matrix.values[2][1] = zaxis.j;
+    view_matrix.values[2][2] = zaxis.k;
+    view_matrix.values[2][3] = -zdot;
+    view_matrix.values[3][0] = 0;
+    view_matrix.values[3][1] = 0;
+    view_matrix.values[3][2] = 0;
+    view_matrix.values[3][3] = 1;
+    memcpy(out, &view_matrix, sizeof(union er_matrix));
+    return ret;
+}
