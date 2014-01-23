@@ -2,6 +2,13 @@
 
 #if defined(TARGET_OS_DESKTOP)
 
+struct er_vbuffer {
+    GLuint id;
+    unsigned size;
+
+    int is_bound;
+};
+
 struct er_texture {
     GLuint id;
     char *filename;
@@ -18,11 +25,13 @@ struct er_texture {
 };
 
 static struct {
+    struct er_vbuffer *last_used_vbuffer;
     struct er_texture *last_used_texture;
 } gl_renderer;
 
 ERAPI er__renderer_init__gl(void)
 {
+    gl_renderer.last_used_vbuffer = NULL;
     gl_renderer.last_used_texture = NULL;
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
@@ -36,6 +45,65 @@ ERAPI er__renderer_quit__gl(void)
     return ERR_OK;
 }
 er__renderer_quit_f er__renderer_quit = &er__renderer_quit__gl;
+
+ERAPI er__renderer_bind_buffer__gl(er_vbuffer *buffer)
+{
+    if (gl_renderer.last_used_vbuffer != NULL) {
+        gl_renderer.last_used_vbuffer->is_bound = 0;
+    }
+    gl_renderer.last_used_vbuffer = (buffer != NULL) ? *buffer : NULL;
+    if (buffer == NULL || *buffer == NULL) {
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    } else {
+        glBindBuffer(GL_ARRAY_BUFFER, (*buffer)->id);
+        (*buffer)->is_bound = 1;
+    }
+    return ERR_OK;
+}
+er__renderer_bind_buffer_f er__renderer_bind_buffer = &er__renderer_bind_buffer__gl;
+
+ERAPI er__renderer_make_buffer__gl(er_vbuffer *buffer)
+{
+    if (buffer == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    *buffer = er__malloc(sizeof(struct er_vbuffer));
+    if (*buffer == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
+    glGenBuffers(1, &(*buffer)->id);
+    (*buffer)->size = 0;
+    (*buffer)->is_bound = 0;
+    return ERR_OK;
+}
+er__renderer_make_buffer_f er__renderer_make_buffer = &er__renderer_make_buffer__gl;
+
+ERAPI er__renderer_fill_buffer__gl(er_vbuffer *buffer, size_t size, void *data)
+{
+    if (buffer == NULL || *buffer == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    if (gl_renderer.last_used_vbuffer != *buffer) {
+        er__renderer_bind_buffer(buffer);
+    }
+    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+    return ERR_OK;
+}
+
+ERAPI er__renderer_free_buffer__gl(er_vbuffer *buffer)
+{
+    if (buffer == NULL || *buffer == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    if (gl_renderer.last_used_vbuffer == *buffer) {
+        er__renderer_bind_buffer(NULL);
+    }
+    glDeleteBuffers(1, &(*buffer)->id);
+    er__free(*buffer);
+    *buffer = NULL;
+    return ERR_OK;
+}
+er__renderer_free_buffer_f er__renderer_free_buffer = &er__renderer_free_buffer__gl;
 
 ERAPI er__renderer_bind_texture__gl(er_texture *texture)
 {
