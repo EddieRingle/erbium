@@ -89,6 +89,7 @@ ERAPI er__renderer_fill_buffer__gl(er_vbuffer *buffer, size_t size, void *data)
     glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
     return ERR_OK;
 }
+er__renderer_fill_buffer_f er__renderer_fill_buffer = &er__renderer_fill_buffer__gl;
 
 ERAPI er__renderer_free_buffer__gl(er_vbuffer *buffer)
 {
