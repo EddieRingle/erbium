@@ -313,8 +313,49 @@ typedef enum {
 #define TO_DEGS(r) (r*(180.0f/PI))
 
 typedef enum {
+    /*
+     * Path to the binary being executed
+     */
     ER_PATH_BINARY,
-    ER_PATH_SUPPORT
+
+    /*
+     * Path to the application's support directory
+     * - On OS X, this is ~/Application Support/{author}/{name}
+     * - On Windows, this is ~/{APPDATA}/{author}/{name}
+     * - On Linux, this is ~/.{author}/{name}
+     */
+    ER_PATH_SUPPORT,
+
+    /*
+     * Path to game assets; Most of the time this is relative to ER_PATH_BINARY
+     */
+    ER_PATH_ASSETS,
+
+    /*
+     * Path to textures; Relative to ER_PATH_ASSETS
+     */
+    ER_PATH_TEXTURES,
+
+    /*
+     * Path to shaders; Relative to ER_PATH_ASSETS
+     */
+    ER_PATH_SHADERS,
+
+    /*
+     * Path to fonts; Relative to ER_PATH_ASSETS
+     */
+    ER_PATH_FONTS,
+
+    /*
+     * Path to sound effects; Relative to ER_PATH_ASSETS
+     */
+    ER_PATH_SOUNDS,
+
+    /*
+     * Path to music files; Relative to ER_PATH_ASSETS
+     */
+    ER_PATH_MUSIC
+
 } er_path_type;
 
 typedef struct er_path_result {

@@ -284,7 +284,7 @@ ERAPI er_app_attrs_destroy(er_app_attrs *attrs)
     return ERR_OK;
 }
 
-ERAPI er__app_get_binary_path(er_path_result *result)
+static ERAPI er__app_get_binary_path(er_path_result *result)
 {
     char temp_path[2048];
     char *ptr;
@@ -328,7 +328,7 @@ ERAPI er__app_get_binary_path(er_path_result *result)
     return ERR_OK;
 }
 
-ERAPI er__app_get_support_path(er_path_result *result)
+static ERAPI er__app_get_support_path(er_path_result *result)
 {
     char temp_path[2048];
 #if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
@@ -370,6 +370,33 @@ ERAPI er__app_get_support_path(er_path_result *result)
     return ERR_OK;
 }
 
+static ERAPI er__append_path_with_path(er_path_result *result, ERAPI (*base)(er_path_result *result), const char *path)
+{
+    ERR ret;
+    char temp_path[2048];
+    if ((ret = base(result)) != ERR_OK) {
+        return ret;
+    }
+    memset(temp_path, 0, sizeof temp_path);
+    sprintf(temp_path, "%s/%s", result->path, path);
+    er__free(result->path);
+    result->path = er__strdup(temp_path);
+    if (result->path == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
+    result->len = strlen(temp_path);
+    return ERR_OK;
+}
+
+static ERAPI er__app_get_assets_path(er_path_result *result)
+{
+#if defined(TARGET_OS_MACOSX)
+    return er__append_path_with_path(result, &er__app_get_binary_path, "../Resources/assets");
+#else
+    return er__append_path_with_path(result, &er__app_get_binary_path, "assets";
+#endif
+}
+
 ERAPI er_app_get_path(er_path_type path, er_path_result *result)
 {
     if (result == NULL) {
@@ -388,6 +415,18 @@ ERAPI er_app_get_path(er_path_type path, er_path_result *result)
             return er__app_get_binary_path(result);
         case ER_PATH_SUPPORT:
             return er__app_get_support_path(result);
+        case ER_PATH_ASSETS:
+            return er__app_get_assets_path(result);
+        case ER_PATH_TEXTURES:
+            return er__append_path_with_path(result, &er__app_get_assets_path, "textures");
+        case ER_PATH_SHADERS:
+            return er__append_path_with_path(result, &er__app_get_assets_path, "shaders");
+        case ER_PATH_FONTS:
+            return er__append_path_with_path(result, &er__app_get_assets_path, "fonts");
+        case ER_PATH_SOUNDS:
+            return er__append_path_with_path(result, &er__app_get_assets_path, "sounds");
+        case ER_PATH_MUSIC:
+            return er__append_path_with_path(result, &er__app_get_assets_path, "music");
     }
     return ERR_INVALID_PATH;
 }
