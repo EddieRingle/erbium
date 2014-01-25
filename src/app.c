@@ -17,6 +17,11 @@ void *er__malloc(size_t size)
     return malloc(size);
 }
 
+void *er__realloc(void *ptr, size_t size)
+{
+    return realloc(ptr, size);
+}
+
 void er__free(void *mem)
 {
     free(mem);

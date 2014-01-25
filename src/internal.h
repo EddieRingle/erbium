@@ -138,6 +138,7 @@ extern struct er_subsystem *g_subsystems;
     {if (g_app == NULL || !g_app->initialized) { return ERR_UNINITIALIZED; }}
 
 void *er__malloc(size_t size);
+void *er__realloc(void *ptr, size_t size);
 void  er__free(void *mem);
 
 void *er__memdup(const void *mem, size_t sz);
