@@ -425,6 +425,10 @@ ERAPI er_app_attrs_destroy(er_app_attrs *attrs);
 ERAPI er_app_get_path(er_path_type path, er_path_result *result);
 ERAPI er_app_cleanup_path_result(er_path_result *target);
 
+ERAPI er_fs_fopen(er_path_type root, const char *path, FILE **fp);
+ERAPI er_fs_fread(FILE *fp, char **out, size_t *len);
+ERAPI er_fs_ffree(FILE *fp);
+
 ERAPI er_ctx_attrs_init(er_context_attrs *attrs);
 ERAPI er_ctx_attrs_set_window_title(er_context_attrs *attrs, const char *title);
 ERAPI er_ctx_attrs_set_screen_width(er_context_attrs *attrs, unsigned width);
