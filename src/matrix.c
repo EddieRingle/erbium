@@ -589,3 +589,102 @@ ERAPI er_matrix_lookatyp(er_vector *eye, double pitch, double yaw, er_matrix *ou
     memcpy(out, &view_matrix, sizeof(union er_matrix));
     return ret;
 }
+
+static int mstack_empty(er_matrix_stack stack)
+{
+    return stack->top < 0;
+}
+
+static int mstack_full(er_matrix_stack stack)
+{
+    return stack->top >= stack->capacity - 1;
+}
+
+static ERAPI mstack_grow(er_matrix_stack stack)
+{
+    if (stack == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    stack->matrices = er__realloc(stack->matrices, sizeof(union er_matrix) * stack->capacity * 2);
+    if (stack->matrices == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
+    stack->capacity *= 2;
+    return ERR_OK;
+}
+
+ERAPI er_mstack_init(er_matrix_stack *stack)
+{
+    if (stack == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    *stack = er__malloc(sizeof(struct er_matrix_stack));
+    if (*stack == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
+    (*stack)->top = -1;
+    (*stack)->capacity = 128;
+    (*stack)->matrices = er__malloc(sizeof(union er_matrix) * 128);
+    memset((*stack)->matrices, 0, sizeof(union er_matrix) * 128);
+    return ERR_OK;
+}
+
+ERAPI er_mstack_destroy(er_matrix_stack *stack)
+{
+    if (stack == NULL || *stack == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    if ((*stack)->matrices != NULL) {
+        er__free((*stack)->matrices);
+    }
+    er__free(*stack);
+    *stack = NULL;
+    return ERR_OK;
+}
+
+ERAPI er_mstack_pop(er_matrix_stack *stack)
+{
+    if (stack == NULL || *stack == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    if (mstack_empty(*stack)) {
+        LOGE("Can't pop any more matrices from this stack\n");
+        return ERR_UNKNOWN;
+    }
+    (*stack)->top -= 1;
+    return ERR_OK;
+}
+
+ERAPI er_mstack_push(er_matrix_stack *stack)
+{
+    ERR ret;
+    if (stack == NULL || *stack == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    if (mstack_full(*stack)) {
+        if ((ret = mstack_grow(*stack)) != ERR_OK) {
+            return ret;
+        }
+    }
+    if (mstack_empty(*stack)) {
+        (*stack)->top = 0;
+        memset((*stack)->matrices, 0, sizeof(union er_matrix));
+    } else {
+        memcpy((*stack)->matrices + (*stack)->top + 1, (*stack)->matrices + (*stack)->top, sizeof(union er_matrix));
+        (*stack)->top += 1;
+    }
+    return ERR_OK;
+}
+
+ERAPI er_mstack_peek(er_matrix_stack *stack, er_matrix **top)
+{
+    if (stack == NULL || *stack == NULL || top == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    if (mstack_empty(*stack)) {
+        LOGE("Can't peek at an empty stack\n");
+        return ERR_UNKNOWN;
+    }
+    *top = ((*stack)->matrices) + (*stack)->top;
+    return ERR_OK;
+}

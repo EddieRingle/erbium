@@ -402,6 +402,8 @@ typedef struct er_vector er_vector;
 
 typedef union er_matrix er_matrix;
 
+typedef struct er_matrix_stack * er_matrix_stack;
+
 #if defined(TARGET_OS_ANDROID)
 ERAPI er_exec_android(er_context *ctx, er_scene *scene, struct android_app *state);
 #define er_exec(ctxptr, scene, state) er_exec_android(ctxptr, scene, state)
@@ -517,5 +519,10 @@ ERAPI er_matrix_ortho(er_matrix *m, double left, double right, double bottom, do
 ERAPI er_matrix_perspective(er_matrix *m, double fovy, double aspect, double near, double far);
 ERAPI er_matrix_lookat(er_vector *eye, er_vector *target, er_vector *up, er_matrix *out);
 ERAPI er_matrix_lookatyp(er_vector *eye, double pitch, double yaw, er_matrix *out);
+ERAPI er_mstack_init(er_matrix_stack *stack);
+ERAPI er_mstack_destroy(er_matrix_stack *stack);
+ERAPI er_mstack_pop(er_matrix_stack *stack);
+ERAPI er_mstack_push(er_matrix_stack *stack);
+ERAPI er_mstack_peek(er_matrix_stack *stack, er_matrix **top);
 
 #endif /* __included_erbium_h */

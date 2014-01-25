@@ -120,6 +120,12 @@ union er_matrix {
     double values[4][4];
 };
 
+struct er_matrix_stack {
+    union er_matrix *matrices;
+    int top;
+    int capacity;
+};
+
 extern er_app *g_app;
 
 extern er_context g_ctx;
