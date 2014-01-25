@@ -2,9 +2,29 @@
 
 #include "renderer/renderer.h"
 
+static er_matrix_stack proj_stack;
+static er_matrix_stack view_stack;
+static er_matrix_stack model_stack;
+
 void er__ssys_renderer_init_cb(void)
 {
+    er_matrix *mat;
     er__renderer_init();
+
+    er_mstack_init(&proj_stack);
+    er_mstack_push(&proj_stack);
+    er_mstack_peek(&proj_stack, &mat);
+    er_matrix_identity(mat);
+
+    er_mstack_init(&view_stack);
+    er_mstack_push(&view_stack);
+    er_mstack_peek(&view_stack, &mat);
+    er_matrix_identity(mat);
+
+    er_mstack_init(&model_stack);
+    er_mstack_push(&model_stack);
+    er_mstack_peek(&model_stack, &mat);
+    er_matrix_identity(mat);
 }
 
 void er__ssys_renderer_update_cb(er_entity root, double delta)
@@ -15,6 +35,9 @@ void er__ssys_renderer_update_cb(er_entity root, double delta)
 
 void er__ssys_renderer_quit_cb(void)
 {
+    er_mstack_destroy(&model_stack);
+    er_mstack_destroy(&view_stack);
+    er_mstack_destroy(&proj_stack);
     er__renderer_quit();
 }
 
