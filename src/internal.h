@@ -140,12 +140,18 @@ extern struct er_property_def *g_property_definitions;
 
 extern struct er_subsystem *g_subsystems;
 
+typedef ERAPI (*er_ptr_dcon)(void *ptr);
+
 #define INITCHECK() \
     {if (g_app == NULL || !g_app->initialized) { return ERR_UNINITIALIZED; }}
 
 void *er__malloc(size_t size);
 void *er__realloc(void *ptr, size_t size);
 void  er__free(void *mem);
+
+void *er__obtain(size_t size, er_ptr_dcon dcon_fn);
+void  er__retain(void *ptr);
+void  er__release(void *ptr);
 
 void *er__memdup(const void *mem, size_t sz);
 

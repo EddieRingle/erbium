@@ -27,6 +27,40 @@ void er__free(void *mem)
     free(mem);
 }
 
+struct referenced_block {
+    unsigned owners;
+    er_ptr_dcon dcon_fn;
+    void *ptr;
+};
+
+void *er__obtain(size_t size, er_ptr_dcon dcon_fn)
+{
+    struct referenced_block *blk = er__malloc(sizeof(struct referenced_block));
+    blk->owners = 1;
+    blk->dcon_fn = dcon_fn;
+    blk->ptr = er__malloc(size);
+    return blk->ptr;
+}
+
+void er__retain(void *ptr)
+{
+    struct referenced_block *blk = container_of(ptr, struct referenced_block, ptr);
+    blk->owners++;
+}
+
+void er__release(void *ptr)
+{
+    struct referenced_block *blk = container_of(ptr, struct referenced_block, ptr);
+    if (--(blk->owners) < 1) {
+        if (blk->dcon_fn != NULL) {
+            blk->dcon_fn(ptr);
+        } else {
+            er__free(blk->ptr);
+        }
+        er__free(blk);
+    }
+}
+
 void *er__memdup(const void *mem, size_t sz)
 {
     void *p = er__malloc(sz);
