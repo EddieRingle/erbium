@@ -13,6 +13,8 @@ ERAPI er_gfx_init__glfw(er_context *ctx)
     }
     glewExperimental = 1;
     glewInit();
+    /* Discard glew error */
+    glGetError();
 
     return ERR_OK;
 }
