@@ -519,6 +519,7 @@ ERAPI er_matrix_ortho(er_matrix *m, double left, double right, double bottom, do
 ERAPI er_matrix_perspective(er_matrix *m, double fovy, double aspect, double near, double far);
 ERAPI er_matrix_lookat(er_vector *eye, er_vector *target, er_vector *up, er_matrix *out);
 ERAPI er_matrix_lookatyp(er_vector *eye, double pitch, double yaw, er_matrix *out);
+ERAPI er_matrix_print(er_matrix *m);
 ERAPI er_mstack_init(er_matrix_stack *stack);
 ERAPI er_mstack_destroy(er_matrix_stack *stack);
 ERAPI er_mstack_pop(er_matrix_stack *stack);

@@ -590,6 +590,20 @@ ERAPI er_matrix_lookatyp(er_vector *eye, double pitch, double yaw, er_matrix *ou
     return ret;
 }
 
+ERAPI er_matrix_print(er_matrix *m)
+{
+    if (m == NULL) {
+        LOGE("Matrix to log is NULL\n");
+        return ERR_INVALID_ARGS;
+    }
+    LOGI("= Logging matrix =\n");
+    LOGI("[ %f,  %f,  %f,  %f ]\n", m->values[0][0], m->values[1][0], m->values[2][0], m->values[3][0]);
+    LOGI("[ %f,  %f,  %f,  %f ]\n", m->values[0][1], m->values[1][1], m->values[2][1], m->values[3][1]);
+    LOGI("[ %f,  %f,  %f,  %f ]\n", m->values[0][2], m->values[1][2], m->values[2][2], m->values[3][2]);
+    LOGI("[ %f,  %f,  %f,  %f ]\n", m->values[0][3], m->values[1][3], m->values[2][3], m->values[3][3]);
+    return ERR_OK;
+}
+
 static int mstack_empty(er_matrix_stack stack)
 {
     return stack->top < 0;
