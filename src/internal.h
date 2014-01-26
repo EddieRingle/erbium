@@ -112,12 +112,12 @@ struct er_subsystem {
 };
 
 struct er_vector {
-    double i, j, k, l;
+    float i, j, k, l;
 };
 
 union er_matrix {
     struct er_vector vectors[4];
-    double values[4][4];
+    float values[4][4];
 };
 
 struct er_matrix_stack {
