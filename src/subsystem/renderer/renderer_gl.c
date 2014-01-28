@@ -45,7 +45,6 @@ ERAPI er__renderer_init__gl(void)
     gl_renderer.last_used_vbuffer = NULL;
     gl_renderer.last_used_texture = NULL;
     gl_renderer.last_used_program = NULL;
-    glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glGenVertexArrays(1, &vao);
