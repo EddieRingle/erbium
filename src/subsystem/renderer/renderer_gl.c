@@ -2,6 +2,14 @@
 
 #if defined(TARGET_OS_DESKTOP)
 
+struct er_shader_program {
+    GLuint vshader_id;
+    GLuint fshader_id;
+    GLuint program_id;
+
+    int is_bound;
+};
+
 struct er_vbuffer {
     GLuint vbo_id;
     GLuint ebo_id;
@@ -26,6 +34,7 @@ struct er_texture {
 };
 
 static struct {
+    struct er_shader_program *last_used_program;
     struct er_vbuffer *last_used_vbuffer;
     struct er_texture *last_used_texture;
 } gl_renderer;
@@ -34,6 +43,7 @@ ERAPI er__renderer_init__gl(void)
 {
     gl_renderer.last_used_vbuffer = NULL;
     gl_renderer.last_used_texture = NULL;
+    gl_renderer.last_used_program = NULL;
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -46,6 +56,124 @@ ERAPI er__renderer_quit__gl(void)
     return ERR_OK;
 }
 er__renderer_quit_f er__renderer_quit = &er__renderer_quit__gl;
+
+#define SHADER_TYPE_VERTEX 1
+#define SHADER_TYPE_FRAGMENT 2
+
+static ERAPI read_shader(const char *shader_file, int type, char **out, size_t *len)
+{
+    ERR ret;
+    FILE *fp;
+    char fullname[256];
+    if (type == SHADER_TYPE_VERTEX) {
+        sprintf(fullname, "glsl/150/%s.v.glsl", shader_file);
+    } else if (type == SHADER_TYPE_FRAGMENT) {
+        sprintf(fullname, "glsl/150/%s.f.glsl", shader_file);
+    }
+    if ((ret = er_fs_fopen(ER_PATH_SHADERS, fullname, &fp)) != ERR_OK) {
+        LOGE("Error opening shader '%s'\n", shader_file);
+        return ret;
+    }
+    if ((ret = er_fs_fread(fp, out, len)) != ERR_OK) {
+        LOGE("Error reading shader file '%s'\n", shader_file);
+        er_fs_ffree(fp);
+        return ret;
+    }
+    if ((ret = er_fs_ffree(fp)) != ERR_OK) {
+        return ret;
+    }
+    return ERR_OK;
+}
+
+ERAPI er__renderer_load_program__gl(const char *vshader_file, const char *fshader_file, er_shader_program *program)
+{
+    ERR ret;
+    GLint status;
+    char *shader_source;
+    char gl_error_buffer[512];
+    if (vshader_file == NULL || fshader_file == NULL || program == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    *program = er__malloc(sizeof(struct er_shader_program));
+    if (*program == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
+    if ((ret = read_shader(vshader_file, SHADER_TYPE_VERTEX, &shader_source, NULL)) != ERR_OK) {
+        return ret;
+    }
+    (*program)->vshader_id = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource((*program)->vshader_id, 1, &shader_source, NULL);
+    glCompileShader((*program)->vshader_id);
+    glGetShaderiv((*program)->vshader_id, GL_COMPILE_STATUS, &status);
+    if (status != GL_TRUE) {
+        glGetShaderInfoLog((*program)->vshader_id, sizeof gl_error_buffer, NULL, gl_error_buffer);
+        LOGE("Error compiling vertex shader '%s':\n%s\n", vshader_file, gl_error_buffer);
+        LOGE("\nShader source:\n%s\n", shader_source);
+        return ERR_UNKNOWN;
+    }
+    er__free(shader_source);
+    if ((ret = read_shader(fshader_file, SHADER_TYPE_FRAGMENT, &shader_source, NULL)) != ERR_OK) {
+        LOGE("Error reading fragment shader\n");
+        return ret;
+    }
+    (*program)->fshader_id = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource((*program)->fshader_id, 1, &shader_source, NULL);
+    glCompileShader((*program)->fshader_id);
+    glGetShaderiv((*program)->fshader_id, GL_COMPILE_STATUS, &status);
+    if (status != GL_TRUE) {
+        glGetShaderInfoLog((*program)->fshader_id, sizeof gl_error_buffer, NULL, gl_error_buffer);
+        LOGE("Error compiling fragment shader '%s':\n%s\n", fshader_file, gl_error_buffer);
+        LOGE("\nShader source:\n%s\n", shader_source);
+        return ERR_UNKNOWN;
+    }
+    er__free(shader_source);
+    (*program)->program_id = glCreateProgram();
+    glAttachShader((*program)->program_id, (*program)->vshader_id);
+    glAttachShader((*program)->program_id, (*program)->fshader_id);
+    glLinkProgram((*program)->program_id);
+    glGetProgramiv((*program)->program_id, GL_LINK_STATUS, &status);
+    if (status != GL_TRUE) {
+        glGetProgramInfoLog((*program)->program_id, sizeof gl_error_buffer, NULL, gl_error_buffer);
+        LOGE("Error linking shader program (%s, %s):\n%s\n", vshader_file, fshader_file, gl_error_buffer);
+        return ERR_UNKNOWN;
+    }
+    (*program)->is_bound = 0;
+    return ERR_OK;
+}
+er__renderer_load_program_f er__renderer_load_program = &er__renderer_load_program__gl;
+
+ERAPI er__renderer_bind_program__gl(er_shader_program *program)
+{
+    if (gl_renderer.last_used_program != NULL) {
+        gl_renderer.last_used_program->is_bound = 0;
+    }
+    gl_renderer.last_used_program = (program != NULL) ? *program : NULL;
+    if (program == NULL || *program == NULL) {
+        glUseProgram(0);
+    } else {
+        glUseProgram((*program)->program_id);
+        (*program)->is_bound = 1;
+    }
+    return ERR_OK;
+}
+er__renderer_bind_program_f er__renderer_bind_program = &er__renderer_bind_program__gl;
+
+ERAPI er__renderer_free_program__gl(er_shader_program *program)
+{
+    if (program == NULL || *program == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    if (gl_renderer.last_used_program == *program) {
+        er__renderer_bind_program(NULL);
+    }
+    glDeleteShader((*program)->vshader_id);
+    glDeleteShader((*program)->fshader_id);
+    glDeleteProgram((*program)->program_id);
+    er__free(*program);
+    *program = NULL;
+    return ERR_OK;
+}
+er__renderer_free_program_f er__renderer_free_program = &er__renderer_free_program__gl;
 
 ERAPI er__renderer_bind_buffer__gl(er_vbuffer *buffer)
 {

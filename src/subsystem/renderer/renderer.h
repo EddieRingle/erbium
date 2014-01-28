@@ -3,12 +3,18 @@
 
 #include "../../internal.h"
 
+typedef struct er_shader_program * er_shader_program;
+
 typedef struct er_vbuffer * er_vbuffer;
 
 typedef struct er_texture * er_texture;
 
 typedef ERAPI (*er__renderer_init_f)(void);
 typedef ERAPI (*er__renderer_quit_f)(void);
+
+typedef ERAPI (*er__renderer_load_program_f)(const char *vshader_name, const char *fshader_name, er_shader_program *out);
+typedef ERAPI (*er__renderer_bind_program_f)(er_shader_program *program);
+typedef ERAPI (*er__renderer_free_program_f)(er_shader_program *program);
 
 typedef ERAPI (*er__renderer_bind_buffer_f)(er_vbuffer *buffer);
 typedef ERAPI (*er__renderer_make_buffer_f)(er_vbuffer *buffer);
@@ -22,6 +28,10 @@ typedef ERAPI (*er__renderer_blit_texture_f)(er_texture *texture, double x, doub
 
 extern er__renderer_init_f er__renderer_init;
 extern er__renderer_quit_f er__renderer_quit;
+
+extern er__renderer_load_program_f er__renderer_load_program;
+extern er__renderer_bind_program_f er__renderer_bind_program;
+extern er__renderer_free_program_f er__renderer_free_program;
 
 extern er__renderer_bind_buffer_f er__renderer_bind_buffer;
 extern er__renderer_make_buffer_f er__renderer_make_buffer;
