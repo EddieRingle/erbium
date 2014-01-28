@@ -58,5 +58,16 @@ if(APPLE)
 endif()
 
 foreach(binary ${BINARIES})
-    target_link_libraries(${binary} erbium_combined ${er_LIBS})
+	target_link_libraries(${binary} erbium_combined ${er_LIBS})
+	if(APPLE)
+		add_custom_command(TARGET ${binary} POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_directory
+				"${ER_ASSETS_DIR}"
+				"$<TARGET_FILE_DIR:${binary}>/../Resources/assets")
+	else()
+		add_custom_command(TARGET ${binary} POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_directory
+				"${ER_ASSETS_DIR}"
+				"$<TARGET_FILE_DIR:${binary}>/assets")
+	endif()
 endforeach()

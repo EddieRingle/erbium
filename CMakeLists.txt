@@ -13,6 +13,7 @@ option(ER_BUILD_EXAMPLES "Build Erbium examples" ON)
 #
 
 set(ER_ROOT_DIR "${CMAKE_SOURCE_DIR}")
+set(ER_ASSETS_DIR "${ER_ROOT_DIR}/assets")
 set(ER_CONTRIB_DIR "${ER_ROOT_DIR}/contrib")
 set(ER_SCRIPTS_DIR "${ER_ROOT_DIR}/scripts")
 set(ER_SOURCE_DIR "${ER_ROOT_DIR}/src")
