@@ -41,12 +41,15 @@ static struct {
 
 ERAPI er__renderer_init__gl(void)
 {
+    GLuint vao;
     gl_renderer.last_used_vbuffer = NULL;
     gl_renderer.last_used_texture = NULL;
     gl_renderer.last_used_program = NULL;
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
     return ERR_OK;
 }
 er__renderer_init_f er__renderer_init = &er__renderer_init__gl;
