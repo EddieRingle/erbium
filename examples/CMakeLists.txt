@@ -47,8 +47,8 @@ endif()
 set(BINARIES main_test window_test entity_test)
 
 if(MSVC)
-    set_target_properties(${BINARIES} PROPERTIES
-        LINK_FLAGS "/ENTRY:mainCRTStartup")
+	set_target_properties(${BINARIES} PROPERTIES
+		LINK_FLAGS "/ENTRY:mainCRTStartup")
 endif()
 
 if(APPLE)
