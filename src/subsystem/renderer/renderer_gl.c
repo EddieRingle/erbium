@@ -3,7 +3,8 @@
 #if defined(TARGET_OS_DESKTOP)
 
 struct er_vbuffer {
-    GLuint id;
+    GLuint vbo_id;
+    GLuint ebo_id;
     unsigned size;
 
     int is_bound;
@@ -54,8 +55,10 @@ ERAPI er__renderer_bind_buffer__gl(er_vbuffer *buffer)
     gl_renderer.last_used_vbuffer = (buffer != NULL) ? *buffer : NULL;
     if (buffer == NULL || *buffer == NULL) {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     } else {
-        glBindBuffer(GL_ARRAY_BUFFER, (*buffer)->id);
+        glBindBuffer(GL_ARRAY_BUFFER, (*buffer)->vbo_id);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*buffer)->ebo_id);
         (*buffer)->is_bound = 1;
     }
     return ERR_OK;
@@ -71,14 +74,15 @@ ERAPI er__renderer_make_buffer__gl(er_vbuffer *buffer)
     if (*buffer == NULL) {
         return ERR_MEMORY_ERROR;
     }
-    glGenBuffers(1, &(*buffer)->id);
+    glGenBuffers(1, &(*buffer)->vbo_id);
+    glGenBuffers(1, &(*buffer)->ebo_id);
     (*buffer)->size = 0;
     (*buffer)->is_bound = 0;
     return ERR_OK;
 }
 er__renderer_make_buffer_f er__renderer_make_buffer = &er__renderer_make_buffer__gl;
 
-ERAPI er__renderer_fill_buffer__gl(er_vbuffer *buffer, size_t size, void *data)
+ERAPI er__renderer_fill_buffer__gl(er_vbuffer *buffer, size_t data_size, void *data, size_t elements_size, void *elements)
 {
     if (buffer == NULL || *buffer == NULL) {
         return ERR_INVALID_ARGS;
@@ -86,7 +90,9 @@ ERAPI er__renderer_fill_buffer__gl(er_vbuffer *buffer, size_t size, void *data)
     if (gl_renderer.last_used_vbuffer != *buffer) {
         er__renderer_bind_buffer(buffer);
     }
-    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+    (*buffer)->size = elements_size / sizeof(unsigned int);
+    glBufferData(GL_ARRAY_BUFFER, data_size, data, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements_size, elements, GL_STATIC_DRAW);
     return ERR_OK;
 }
 er__renderer_fill_buffer_f er__renderer_fill_buffer = &er__renderer_fill_buffer__gl;

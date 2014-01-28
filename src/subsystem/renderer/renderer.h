@@ -12,7 +12,7 @@ typedef ERAPI (*er__renderer_quit_f)(void);
 
 typedef ERAPI (*er__renderer_bind_buffer_f)(er_vbuffer *buffer);
 typedef ERAPI (*er__renderer_make_buffer_f)(er_vbuffer *buffer);
-typedef ERAPI (*er__renderer_fill_buffer_f)(er_vbuffer *buffer, size_t size, void *data);
+typedef ERAPI (*er__renderer_fill_buffer_f)(er_vbuffer *buffer, size_t data_size, void *data, size_t elements_size, void *elements);
 typedef ERAPI (*er__renderer_free_buffer_f)(er_vbuffer *buffer);
 
 typedef ERAPI (*er__renderer_bind_texture_f)(er_texture *texture);
