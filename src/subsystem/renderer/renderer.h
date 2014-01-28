@@ -23,6 +23,11 @@ typedef ERAPI (*er__renderer_blit_texture_f)(er_texture *texture, double x, doub
 extern er__renderer_init_f er__renderer_init;
 extern er__renderer_quit_f er__renderer_quit;
 
+extern er__renderer_bind_buffer_f er__renderer_bind_buffer;
+extern er__renderer_make_buffer_f er__renderer_make_buffer;
+extern er__renderer_fill_buffer_f er__renderer_fill_buffer;
+extern er__renderer_free_buffer_f er__renderer_free_buffer;
+
 extern er__renderer_bind_texture_f er__renderer_bind_texture;
 extern er__renderer_load_texture_f er__renderer_load_texture;
 extern er__renderer_free_texture_f er__renderer_free_texture;
