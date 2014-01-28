@@ -4,7 +4,7 @@ ERAPI er_fs_fopen(er_path_type root, const char *path, FILE **fp)
 {
     ERR ret;
     char full_path[2048];
-    er_path_result root_result;
+    er_path_result root_result = {0};
     if (path == NULL || fp == NULL) {
         return ERR_INVALID_ARGS;
     }
