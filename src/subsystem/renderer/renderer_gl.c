@@ -233,7 +233,8 @@ ERAPI er__renderer_free_buffer__gl(er_vbuffer *buffer)
     if (gl_renderer.last_used_vbuffer == *buffer) {
         er__renderer_bind_buffer(NULL);
     }
-    glDeleteBuffers(1, &(*buffer)->id);
+    glDeleteBuffers(1, &(*buffer)->vbo_id);
+    glDeleteBuffers(1, &(*buffer)->ebo_id);
     er__free(*buffer);
     *buffer = NULL;
     return ERR_OK;
