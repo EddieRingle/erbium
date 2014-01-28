@@ -489,7 +489,7 @@ ERAPI er_matrix_perspective(er_matrix *m, double fovy, double aspect, double nea
 {
     ERR ret;
     union er_matrix perspective_matrix = { 0 }, result;
-    double f = 1.0 / tan(fovy / 2.0);
+    double f = 1.0 / tan(TO_RADS(fovy) / 2.0);
     perspective_matrix.values[0][0] = f / aspect;
     perspective_matrix.values[1][1] = f;
     perspective_matrix.values[2][2] = (far + near) / (near - far);
@@ -551,10 +551,10 @@ ERAPI er_matrix_lookatyp(er_vector *eye, double pitch, double yaw, er_matrix *ou
     if (eye == NULL || out == NULL) {
         return ERR_INVALID_ARGS;
     }
-    cos_pitch = cos(pitch);
-    sin_pitch = sin(pitch);
-    cos_yaw = cos(yaw);
-    sin_yaw = sin(yaw);
+    cos_pitch = cos(TO_RADS(pitch));
+    sin_pitch = sin(TO_RADS(pitch));
+    cos_yaw = cos(TO_RADS(yaw));
+    sin_yaw = sin(TO_RADS(yaw));
     xaxis.i = cos_yaw;
     xaxis.j = -sin_pitch * sin_yaw;
     xaxis.k = -cos_pitch * sin_yaw;
