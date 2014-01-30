@@ -35,6 +35,7 @@ ERAPI er_fs_fread(FILE *fp, char **out, size_t *len)
     if (out != NULL) {
         *out = er__malloc(flen + 1);
         fread(*out, flen, 1, fp);
+        (*out)[flen] = '\0';
     }
     return ERR_OK;
 }
