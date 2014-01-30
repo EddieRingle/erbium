@@ -516,6 +516,7 @@ ERAPI er_matrix_translatev(er_matrix *m, er_vector *v);
 ERAPI er_matrix_rotate(er_matrix *m, double angle, double x, double y, double z);
 ERAPI er_matrix_scale(er_matrix *m, double sx, double sy, double sz);
 ERAPI er_matrix_ortho(er_matrix *m, double left, double right, double bottom, double top, double near, double far);
+ERAPI er_matrix_orthoa(er_matrix *m, double aspect, double near, double far);
 ERAPI er_matrix_perspective(er_matrix *m, double fovy, double aspect, double near, double far);
 ERAPI er_matrix_lookat(er_vector *eye, er_vector *target, er_vector *up, er_matrix *out);
 ERAPI er_matrix_lookatyp(er_vector *eye, double pitch, double yaw, er_matrix *out);

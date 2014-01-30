@@ -485,6 +485,11 @@ ERAPI er_matrix_ortho(er_matrix *m, double left, double right, double bottom, do
     return ret;
 }
 
+ERAPI er_matrix_orthoa(er_matrix *m, double aspect, double near, double far)
+{
+    return er_matrix_ortho(m, -aspect / 2.0f, aspect / 2.0f, -1, 1, near, far);
+}
+
 ERAPI er_matrix_perspective(er_matrix *m, double fovy, double aspect, double near, double far)
 {
     ERR ret;
