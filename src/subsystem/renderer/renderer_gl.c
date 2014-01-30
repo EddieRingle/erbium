@@ -101,6 +101,7 @@ ERAPI er__renderer_load_program__gl(const char *vshader_file, const char *fshade
         return ERR_MEMORY_ERROR;
     }
     if ((ret = read_shader(vshader_file, SHADER_TYPE_VERTEX, &shader_source, NULL)) != ERR_OK) {
+        LOGE("Error reading vertex shader\n");
         return ret;
     }
     (*program)->vshader_id = glCreateShader(GL_VERTEX_SHADER);
