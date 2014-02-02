@@ -20,7 +20,7 @@ ExternalProject_Add(openal_build
 
 	DOWNLOAD_DIR ${ER_CONTRIB_DOWNLOAD_DIR}
 
-	GIT_REPOSITORY git://repo.or.cz/openal-soft.git
+	GIT_REPOSITORY git://github.com/mirror/openal-soft.git
 
 	INSTALL_DIR ${ER_TARGET_CONTRIB_OUT_DIR}
 	CMAKE_ARGS ${openal_CMAKE_ARGS}
