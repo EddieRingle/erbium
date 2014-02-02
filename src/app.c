@@ -432,7 +432,7 @@ static ERAPI er__app_get_assets_path(er_path_result *result)
 #if defined(TARGET_OS_MACOSX)
     return er__append_path_with_path(result, &er__app_get_binary_path, "../Resources/assets");
 #else
-    return er__append_path_with_path(result, &er__app_get_binary_path, "assets";
+    return er__append_path_with_path(result, &er__app_get_binary_path, "assets");
 #endif
 }
 
