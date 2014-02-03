@@ -87,6 +87,39 @@ static ERAPI read_shader(const char *shader_file, int type, char **out, size_t *
     return ERR_OK;
 }
 
+void print_program_inputs(GLuint program)
+{
+    GLint numActiveAttribs = 0, numActiveUniforms = 0;
+    GLint maxAttribNameLength = 0;
+    GLchar *buffer;
+    GLint arraySize;
+    GLenum type;
+    GLsizei actualLength;
+    int i;
+    glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &numActiveAttribs);
+    glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &numActiveUniforms);
+    LOGI("Loaded program has %i active attributes and %i active uniforms\n", numActiveAttribs, numActiveUniforms);
+    glGetProgramiv(program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxAttribNameLength);
+    buffer = er__malloc((size_t)maxAttribNameLength);
+    for (i = 0; i < numActiveAttribs; ++i) {
+        arraySize = 0;
+        type = 0;
+        actualLength = 0;
+        glGetActiveAttrib(program, i, maxAttribNameLength, &actualLength, &arraySize, &type, buffer);
+        LOGI("Attribute \"%s\":\n", buffer);
+    }
+    er__free(buffer);
+    buffer = er__malloc(sizeof(char) * 256);
+    for (i = 0; i < numActiveUniforms; ++i) {
+        arraySize = 0;
+        type = 0;
+        actualLength = 0;
+        glGetActiveUniform(program, i, sizeof(char) * 256, &actualLength, &arraySize, &type, buffer);
+        LOGI("Uniform \"%s\":\n", buffer);
+    }
+    er__free(buffer);
+}
+
 ERAPI er__renderer_load_program__gl(const char *vshader_file, const char *fshader_file, er_shader_program *program)
 {
     ERR ret;
@@ -140,6 +173,7 @@ ERAPI er__renderer_load_program__gl(const char *vshader_file, const char *fshade
         LOGE("Error linking shader program (%s, %s):\n%s\n", vshader_file, fshader_file, gl_error_buffer);
         return ERR_UNKNOWN;
     }
+    print_program_inputs((*program)->program_id);
     (*program)->is_bound = 0;
     return ERR_OK;
 }
