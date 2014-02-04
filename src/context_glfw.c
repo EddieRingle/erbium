@@ -28,6 +28,7 @@ ERAPI er_ctx_open__glfw(er_context *ctx)
     }
     glfwSetWindowSizeCallback((*ctx)->window, &er__ctx_glfw_window_resize_cb);
     glfwMakeContextCurrent((*ctx)->window);
+    glfwSwapInterval(0);
 
     return ERR_OK;
 }
