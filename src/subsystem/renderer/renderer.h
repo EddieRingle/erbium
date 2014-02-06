@@ -5,6 +5,14 @@
 
 typedef struct er_shader_program * er_shader_program;
 
+typedef struct er_vertex {
+    float x, y, z, w;
+    float s, t, u, v;
+    float r, g, b, a;
+    float normal;
+    float padding[3];
+} er_vertex;
+
 typedef struct er_vbuffer * er_vbuffer;
 
 typedef struct er_texture * er_texture;
