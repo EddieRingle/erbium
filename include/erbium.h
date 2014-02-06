@@ -96,22 +96,6 @@
 #   define er_return_main() return 0
 #endif
 
-#if defined(TARGET_COMPILER_VC)
-#   define ERCALL __cdecl
-#   pragma section(".CRT$XCU",read)
-#   define ER_INITIALIZER(f) \
-    static void __cdecl f(void); \
-    __declspec(allocate(".CRT$XCU")) void (__cdecl*f##_)(void) = f; \
-    static void __cdecl f(void)
-#elif defined(__GNUC__)
-#   define ERCALL
-#   define ER_INITIALIZER(f) \
-    static void f(void) __attribute__((constructor)); \
-    static void f(void)
-#else
-#   error "Compiler does not support __attribute__((constructor))"
-#endif
-
 typedef enum {
     ERR_OK = 0,
 
