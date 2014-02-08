@@ -450,6 +450,8 @@ typedef union er_matrix er_matrix;
 
 typedef struct er_matrix_stack * er_matrix_stack;
 
+typedef struct er_file * er_file;
+
 #if defined(TARGET_OS_ANDROID)
 ERAPI er_exec_android(er_context *ctx, er_scene *scene, struct android_app *state);
 #define er_exec(ctxptr, scene, state) er_exec_android(ctxptr, scene, state)
@@ -473,9 +475,9 @@ ERAPI er_app_attrs_destroy(er_app_attrs *attrs);
 ERAPI er_app_get_path(er_path_type path, er_path_result *result);
 ERAPI er_app_cleanup_path_result(er_path_result *target);
 
-ERAPI er_fs_fopen(er_path_type root, const char *path, FILE **fp);
-ERAPI er_fs_fread(FILE *fp, char **out, size_t *len);
-ERAPI er_fs_ffree(FILE *fp);
+ERAPI er_fs_fopen(er_path_type root, const char *path, er_file *fp);
+ERAPI er_fs_fread(er_file *fp, char **out, size_t *len);
+ERAPI er_fs_ffree(er_file *fp);
 
 ERAPI er_ctx_attrs_init(er_context_attrs *attrs);
 ERAPI er_ctx_attrs_set_window_title(er_context_attrs *attrs, const char *title);

@@ -1,6 +1,10 @@
 #include "internal.h"
 
-ERAPI er_fs_fopen(er_path_type root, const char *path, FILE **fp)
+struct er_file {
+    FILE *fp;
+};
+
+ERAPI er_fs_fopen(er_path_type root, const char *path, er_file *fp)
 {
     ERR ret;
     char full_path[2048];
@@ -12,38 +16,44 @@ ERAPI er_fs_fopen(er_path_type root, const char *path, FILE **fp)
         return ret;
     }
     sprintf(full_path, "%s/%s", root_result.path, path);
-    *fp = fopen(full_path, "rb");
+    *fp = er__malloc(sizeof(struct er_file));
     if (*fp == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
+    (*fp)->fp = fopen(full_path, "rb");
+    if ((*fp)->fp == NULL) {
         return ERR_NOT_FOUND;
     }
     er_app_cleanup_path_result(&root_result);
     return ERR_OK;
 }
 
-ERAPI er_fs_fread(FILE *fp, char **out, size_t *len)
+ERAPI er_fs_fread(er_file *fp, char **out, size_t *len)
 {
     size_t flen;
-    if (fp == NULL) {
+    if (fp == NULL || *fp == NULL) {
         return ERR_INVALID_ARGS;
     }
-    fseek(fp, 0, SEEK_END);
-    flen = (size_t)ftell(fp);
-    rewind(fp);
+    fseek((*fp)->fp, 0, SEEK_END);
+    flen = (size_t)ftell((*fp)->fp);
+    rewind((*fp)->fp);
     if (len != NULL) {
         *len = flen;
     }
     if (out != NULL) {
         *out = er__malloc(flen + 1);
-        fread(*out, flen, 1, fp);
+        fread(*out, flen, 1, (*fp)->fp);
         (*out)[flen] = '\0';
     }
     return ERR_OK;
 }
 
-ERAPI er_fs_ffree(FILE *fp)
+ERAPI er_fs_ffree(er_file *fp)
 {
-    if (fclose(fp)) {
+    if (fclose((*fp)->fp)) {
         return ERR_UNKNOWN;
     }
+    er__free(*fp);
+    *fp = NULL;
     return ERR_OK;
 }

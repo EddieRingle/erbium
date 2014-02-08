@@ -65,7 +65,7 @@ er__renderer_quit_f er__renderer_quit = &er__renderer_quit__gl;
 static ERAPI read_shader(const char *shader_file, int type, char **out, size_t *len)
 {
     ERR ret;
-    FILE *fp;
+    er_file fp;
     char fullname[256];
     if (type == SHADER_TYPE_VERTEX) {
         sprintf(fullname, "glsl/150/%s.v.glsl", shader_file);
@@ -76,12 +76,12 @@ static ERAPI read_shader(const char *shader_file, int type, char **out, size_t *
         LOGE("Error opening shader '%s'\n", shader_file);
         return ret;
     }
-    if ((ret = er_fs_fread(fp, out, len)) != ERR_OK) {
+    if ((ret = er_fs_fread(&fp, out, len)) != ERR_OK) {
         LOGE("Error reading shader file '%s'\n", shader_file);
-        er_fs_ffree(fp);
+        er_fs_ffree(&fp);
         return ret;
     }
-    if ((ret = er_fs_ffree(fp)) != ERR_OK) {
+    if ((ret = er_fs_ffree(&fp)) != ERR_OK) {
         return ret;
     }
     return ERR_OK;
