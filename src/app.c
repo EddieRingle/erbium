@@ -325,8 +325,12 @@ ERAPI er_app_attrs_destroy(er_app_attrs *attrs)
 
 static ERAPI er__app_get_binary_path(er_path_result *result)
 {
-    char temp_path[2048];
+    uint32_t buf_size = 2048;
+    char temp_path[buf_size];
     char *ptr;
+#if !defined(TARGET_OS_WINDOWS)
+    char real_path[PATH_MAX];
+#endif
 
     memset(temp_path, 0, sizeof temp_path);
 #if defined(TARGET_OS_WINDOWS)
@@ -358,11 +362,16 @@ static ERAPI er__app_get_binary_path(er_path_result *result)
     }
 #endif
 
+#if defined(TARGET_OS_WINDOWS)
     result->path = er__strdup(temp_path);
+#else
+    realpath(temp_path, real_path);
+    result->path = er__strdup(real_path);
+#endif
     if (result->path == NULL) {
         return ERR_MEMORY_ERROR;
     }
-    result->len = strlen(temp_path);
+    result->len = strlen(result->path);
 
     return ERR_OK;
 }
@@ -413,17 +422,25 @@ static ERAPI er__append_path_with_path(er_path_result *result, ERAPI (*base)(er_
 {
     ERR ret;
     char temp_path[2048];
+#if !defined(TARGET_OS_WINDOWS)
+    char real_path[PATH_MAX];
+#endif
     if ((ret = base(result)) != ERR_OK) {
         return ret;
     }
     memset(temp_path, 0, sizeof temp_path);
     sprintf(temp_path, "%s/%s", result->path, path);
     er__free(result->path);
+#if defined(TARGET_OS_WINDOWS)
     result->path = er__strdup(temp_path);
+#else
+    realpath(temp_path, real_path);
+    result->path = er__strdup(real_path);
+#endif
     if (result->path == NULL) {
         return ERR_MEMORY_ERROR;
     }
-    result->len = strlen(temp_path);
+    result->len = strlen(result->path);
     return ERR_OK;
 }
 
