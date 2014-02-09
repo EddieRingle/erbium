@@ -475,8 +475,11 @@ ERAPI er_app_attrs_destroy(er_app_attrs *attrs);
 ERAPI er_app_get_path(er_path_type path, er_path_result *result);
 ERAPI er_app_cleanup_path_result(er_path_result *target);
 
-ERAPI er_fs_fopen(er_path_type root, const char *path, er_file *fp);
-ERAPI er_fs_fread(er_file *fp, char **out, size_t *len);
+ERAPI er_fs_fopen(er_path_type root, const char *path, const char *mode, er_file *fp);
+ERAPI er_fs_fread(er_file *fp, char *buffer, size_t count, size_t *bytes_read);
+ERAPI er_fs_fseek(er_file *fp, off_t offset, int whence);
+ERAPI er_fs_flength(er_file *fp, size_t *len);
+ERAPI er_fs_ftell(er_file *fp, long int *pos);
 ERAPI er_fs_ffree(er_file *fp);
 
 ERAPI er_ctx_attrs_init(er_context_attrs *attrs);

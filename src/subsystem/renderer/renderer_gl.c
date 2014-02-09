@@ -67,20 +67,31 @@ static ERAPI read_shader(const char *shader_file, int type, char **out, size_t *
     ERR ret;
     er_file fp;
     char fullname[256];
+    size_t slen = 0;
     if (type == SHADER_TYPE_VERTEX) {
         sprintf(fullname, "glsl/150/%s.v.glsl", shader_file);
     } else if (type == SHADER_TYPE_FRAGMENT) {
         sprintf(fullname, "glsl/150/%s.f.glsl", shader_file);
     }
-    if ((ret = er_fs_fopen(ER_PATH_SHADERS, fullname, &fp)) != ERR_OK) {
+    if ((ret = er_fs_fopen(ER_PATH_SHADERS, fullname, "rb", &fp)) != ERR_OK) {
         LOGE("Error opening shader '%s'\n", shader_file);
         return ret;
     }
-    if ((ret = er_fs_fread(&fp, out, len)) != ERR_OK) {
+    if ((ret = er_fs_flength(&fp, &slen)) != ERR_OK) {
+        er_fs_ffree(&fp);
+        return ret;
+    }
+    *out = er__malloc(sizeof(char) * slen + 1);
+    if (*out == NULL) {
+        er_fs_ffree(&fp);
+        return ERR_MEMORY_ERROR;
+    }
+    if ((ret = er_fs_fread(&fp, *out, slen, len)) != ERR_OK) {
         LOGE("Error reading shader file '%s'\n", shader_file);
         er_fs_ffree(&fp);
         return ret;
     }
+    (*out)[slen] = '\0';
     if ((ret = er_fs_ffree(&fp)) != ERR_OK) {
         return ret;
     }
