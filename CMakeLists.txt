@@ -167,5 +167,11 @@ if(ER_BUILD_EXAMPLES)
 	add_subdirectory(examples)
 endif()
 
+configure_file(${ER_ROOT_DIR}/ErbiumConfig.cmake.in
+	${erbium_BINARY_DIR}/ErbiumConfig.cmake @ONLY)
+
+install(FILES ${erbium_BINARY_DIR}/ErbiumConfig.cmake
+	DESTINATION lib${LIB_SUFFIX}/cmake/erbium)
+
 group_by_folder(${ER_ROOT_DIR} "${erbium_SOURCES}")
 group_by_folder(${ER_ROOT_DIR} "${erbium_INCLUDES}")

@@ -1,0 +1,41 @@
+find_library(erbium_LIBRARY erbium
+	PATHS @CMAKE_INSTALL_PREFIX@/lib
+	NO_DEFAULT_PATH
+)
+
+set(erbium_LIBRARIES ${erbium_LIBRARY})
+set(erbium_INCLUDE_DIRS @CMAKE_INSTALL_PREFIX@/include)
+
+find_package(OpenGL REQUIRED)
+list(APPEND erbium_LIBRARIES ${OPENGL_gl_LIBRARY})
+if(APPLE)
+    find_library(COCOA_FRAMEWORK Cocoa)
+    find_library(IOKIT_FRAMEWORK IOKit)
+    find_library(CORE_FOUNDATION_FRAMEWORK CoreFoundation)
+    find_library(CORE_VIDEO_FRAMEWORK CoreVideo)
+    list(APPEND erbium_LIBRARIES
+        ${COCOA_FRAMEWORK}
+        ${IOKIT_FRAMEWORK}
+        ${CORE_FOUNDATION_FRAMEWORK}
+        ${CORE_VIDEO_FRAMEWORK}
+    )
+elseif(UNIX)
+    find_package(X11 REQUIRED)
+    list(APPEND erbium_LIBRARIES
+        ${X11_X11_LIB}
+        ${CMAKE_THREAD_LIBS_INIT}
+#			${RT_LIBRARY}
+        ${X11_Xrandr_LIB}
+        m
+    )
+    if(X11_Xinput_LIB)
+        list(APPEND erbium_LIBRARIES ${X11_Xinput_LIB})
+    else()
+        list(APPEND erbium_LIBRARIES Xi)
+    endif()
+    if(X11_Xxf86vm_LIB)
+        list(APPEND erbium_LIBRARIES ${X11_Xxf86vm_LIB})
+    else()
+        list(APPEND erbium_LIBRARIES Xxf86vm)
+    endif()
+endif()
