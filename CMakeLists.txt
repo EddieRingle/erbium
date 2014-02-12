@@ -135,7 +135,7 @@ link_directories("${ER_TARGET_CONTRIB_OUT_DIR}/lib")
 link_directories("${ER_TARGET_OUT_DIR}/lib")
 
 add_library(erbium STATIC ${erbium_SOURCES} ${erbium_INCLUDES})
-add_dependencies(erbium
+set(erbium_DEPENDENCIES
 	freetype
 	glew
 	glfw
@@ -146,21 +146,15 @@ add_dependencies(erbium
 	vorbis
 	zlib
 )
+
+add_dependencies(erbium ${erbium_DEPENDENCIES})
 set_target_properties(erbium PROPERTIES
 	OUTPUT_NAME erbium_nodeps
 )
 
 merge_static_libs(erbium_combined OUTPUT_NAME erbium
 	erbium
-	freetype
-	glew
-	glfw
-	libpng
-	lua51
-	openal
-	ogg
-	vorbis
-	zlib
+	${erbium_DEPENDENCIES}
 )
 
 if(ER_BUILD_EXAMPLES)
