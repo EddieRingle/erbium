@@ -35,7 +35,7 @@ ERAPI er_fs_fread(er_file *fp, char *buffer, size_t count, size_t *bytes_read)
     if (fp == NULL || *fp == NULL || buffer == NULL) {
         return ERR_INVALID_ARGS;
     }
-    read_bytes = fread(buffer, count, 1, (*fp)->fp);
+    read_bytes = fread(buffer, sizeof(char), count, (*fp)->fp);
     if (bytes_read != NULL) {
         *bytes_read = read_bytes;
     }
