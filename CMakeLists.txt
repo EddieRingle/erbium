@@ -144,6 +144,7 @@ set(erbium_DEPENDENCIES
 	openal
 	ogg
 	vorbis
+	vorbisfile
 	zlib
 )
 
