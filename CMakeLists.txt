@@ -141,12 +141,15 @@ set(erbium_DEPENDENCIES
 	glfw
 	libpng
 	lua51
-	openal
 	ogg
 	vorbis
 	vorbisfile
 	zlib
 )
+
+if(NOT APPLE)
+	list(APPEND erbium_DEPENDENCIES openal)
+endif()
 
 add_dependencies(erbium ${erbium_DEPENDENCIES})
 set_target_properties(erbium PROPERTIES

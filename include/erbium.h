@@ -62,9 +62,14 @@
 /*
  * OpenAL Soft
  */
-#define AL_LIBTYPE_STATIC
-#include <AL/al.h>
-#include <AL/alc.h>
+#if defined(TARGET_OS_MACOSX)
+#   include <OpenAL/al.h>
+#   include <OpenAL/alc.h>
+#else
+#   define AL_LIBTYPE_STATIC
+#   include <AL/al.h>
+#   include <AL/alc.h>
+#endif
 
 /*
  * Ogg
