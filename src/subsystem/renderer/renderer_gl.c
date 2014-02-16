@@ -537,10 +537,4 @@ ERAPI er__renderer_free_texture__gl(er_texture *texture)
 }
 er__renderer_free_texture_f er__renderer_free_texture = &er__renderer_free_texture__gl;
 
-ERAPI er__renderer_blit_texture__gl(er_texture *texture, double x, double y, double w, double h)
-{
-    return ERR_NOT_IMPLEMENTED;
-}
-er__renderer_blit_texture_f er__renderer_blit_texture = &er__renderer_blit_texture__gl;
-
 #endif /* defined(TARGET_OS_DESKTOP) */
