@@ -371,7 +371,7 @@ typedef enum {
 
     /*
      * Path to the application's support directory
-     * - On OS X, this is ~/Application Support/{author}/{name}
+     * - On OS X, this is ~/Library/Application Support/{author}/{name}
      * - On Windows, this is ~/{APPDATA}/{author}/{name}
      * - On Linux, this is ~/.{author}/{name}
      */
