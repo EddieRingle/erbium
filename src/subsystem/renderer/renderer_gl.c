@@ -2,6 +2,21 @@
 
 #if defined(TARGET_OS_DESKTOP)
 
+struct er_shader_input {
+    char *name;
+    int type;
+    int heap_data;
+    union {
+        GLfloat _float;
+        GLfloat _fvec2[2];
+        GLfloat _fvec3[3];
+        GLfloat _fvec4[4];
+        void *_ptr;
+    } data;
+
+    UT_hash_handle hh;
+};
+
 struct er_shader_program {
     GLuint vshader_id;
     GLuint fshader_id;
@@ -58,6 +73,86 @@ ERAPI er__renderer_quit__gl(void)
     return ERR_OK;
 }
 er__renderer_quit_f er__renderer_quit = &er__renderer_quit__gl;
+
+ERAPI er__renderer_init_shader_inputs__gl(er_shader_input *inputs)
+{
+    if (inputs == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    *inputs = NULL;
+    return ERR_OK;
+}
+er__renderer_init_shader_inputs_f er__renderer_init_shader_inputs = &er__renderer_init_shader_inputs__gl;
+
+ERAPI er__renderer_free_shader_inputs__gl(er_shader_input *inputs)
+{
+    struct er_shader_input *input = NULL, *tmp = NULL;
+    if (inputs == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    HASH_ITER(hh, *inputs, input, tmp) {
+        HASH_DEL(*inputs, input);
+        er__free(input->name);
+        er__free(input);
+    }
+    return ERR_OK;
+}
+er__renderer_free_shader_inputs_f er__renderer_free_shader_inputs = &er__renderer_free_shader_inputs__gl;
+
+static void delete_shader_input(er_shader_input *head, const char *name)
+{
+    struct er_shader_input *input = NULL;
+    HASH_FIND_STR(*head, name, input);
+    if (input != NULL) {
+        HASH_DEL(*head, input);
+        if (input->heap_data) {
+            er__free(input->data._ptr);
+        }
+        er__free(input->name);
+        er__free(input);
+    }
+}
+
+ERAPI er__renderer_set_shader_input__gl(er_shader_input *inputs, const char *name, int type, void *data)
+{
+    struct er_shader_input *input = NULL;
+    if (inputs == NULL || name == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    delete_shader_input(inputs, name);
+    if (data == NULL) {
+        return ERR_OK;
+    }
+    input = er__malloc(sizeof(struct er_shader_input));
+    if (input == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
+    input->name = er__strdup(name);
+    if (input->name == NULL) {
+        return ERR_MEMORY_ERROR;
+    }
+    input->type = type;
+    input->heap_data = 0;
+    switch(type) {
+        case ER_ST_FLOAT:
+            input->data._float = *(GLfloat*)data;
+            break;
+        case ER_ST_FLOAT_VEC2:
+            memcpy(input->data._fvec2, data, sizeof input->data._fvec2);
+            break;
+        case ER_ST_FLOAT_VEC3:
+            memcpy(input->data._fvec3, data, sizeof input->data._fvec3);
+            break;
+        case ER_ST_FLOAT_VEC4:
+            memcpy(input->data._fvec4, data, sizeof input->data._fvec4);
+            break;
+        default:
+            return ERR_UNKNOWN;
+    }
+    HASH_ADD_KEYPTR(hh, *inputs, input->name, strlen(input->name), input);
+    return ERR_OK;
+}
+er__renderer_set_shader_input_f er__renderer_set_shader_input = &er__renderer_set_shader_input__gl;
 
 #define SHADER_TYPE_VERTEX 1
 #define SHADER_TYPE_FRAGMENT 2
