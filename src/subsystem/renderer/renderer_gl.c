@@ -11,6 +11,7 @@ struct er_shader_input {
         GLfloat _fvec2[2];
         GLfloat _fvec3[3];
         GLfloat _fvec4[4];
+        GLfloat _fmat4[4][4];
         void *_ptr;
     } data;
 
@@ -145,6 +146,9 @@ ERAPI er__renderer_set_shader_input__gl(er_shader_input *inputs, const char *nam
             break;
         case ER_ST_FLOAT_VEC4:
             memcpy(input->data._fvec4, data, sizeof input->data._fvec4);
+            break;
+        case ER_ST_FLOAT_MAT4:
+            memcpy(input->data._fmat4, data, sizeof input->data._fmat4);
             break;
         default:
             return ERR_UNKNOWN;
