@@ -388,6 +388,66 @@ ERAPI er__renderer_free_buffer__gl(er_vbuffer *buffer)
 }
 er__renderer_free_buffer_f er__renderer_free_buffer = &er__renderer_free_buffer__gl;
 
+ERAPI er__renderer_draw_buffer__gl(er_vbuffer *buffer, er_shader_program *program, er_shader_input *program_input)
+{
+    GLint pos_attrib, texcoord_attrib, color_attrib, normal_attrib;
+    GLint uniform_location;
+    struct er_shader_input *input = NULL, *input_tmp = NULL;
+    if (buffer == NULL || *buffer == NULL || program == NULL || *program == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    if (!(*buffer)->is_bound) {
+        er__renderer_bind_buffer(buffer);
+    }
+    if (!(*program)->is_bound) {
+        er__renderer_bind_program(program);
+    }
+    pos_attrib = glGetAttribLocation((*program)->program_id, "position");
+    glVertexAttribPointer(pos_attrib, 4, GL_FLOAT, GL_FALSE, sizeof(struct er_vertex), 0);
+    glEnableVertexAttribArray(pos_attrib);
+    texcoord_attrib = glGetAttribLocation((*program)->program_id, "texcoord");
+    glVertexAttribPointer(texcoord_attrib, 4, GL_FLOAT, GL_FALSE, sizeof(struct er_vertex), (void *)(sizeof(float) * 4));
+    glEnableVertexAttribArray(texcoord_attrib);
+    color_attrib = glGetAttribLocation((*program)->program_id, "color");
+    glVertexAttribPointer(color_attrib, 4, GL_FLOAT, GL_FALSE, sizeof(struct er_vertex), (void *)(sizeof(float) * 8));
+    glEnableVertexAttribArray(color_attrib);
+    normal_attrib = glGetAttribLocation((*program)->program_id, "normal");
+    glVertexAttribPointer(normal_attrib, 1, GL_FLOAT, GL_FALSE, sizeof(struct er_vertex), (void *)(sizeof(float) * 12));
+    glEnableVertexAttribArray(normal_attrib);
+    if (program_input != NULL) {
+        HASH_ITER(hh, *program_input, input, input_tmp) {
+            if (input != NULL) {
+                uniform_location = glGetUniformLocation((*program)->program_id, input->name);
+                if (uniform_location < 0) {
+                    continue;
+                }
+                switch (input->type) {
+                    case ER_ST_FLOAT:
+                        glUniform1f(uniform_location, input->data._float);
+                        break;
+                    case ER_ST_FLOAT_VEC2:
+                        glUniform2fv(uniform_location, 1, input->data._fvec2);
+                        break;
+                    case ER_ST_FLOAT_VEC3:
+                        glUniform3fv(uniform_location, 1, input->data._fvec3);
+                        break;
+                    case ER_ST_FLOAT_VEC4:
+                        glUniform4fv(uniform_location, 1, input->data._fvec4);
+                        break;
+                    case ER_ST_FLOAT_MAT4:
+                        glUniformMatrix4fv(uniform_location, 1, GL_FALSE, input->data._fmat4);
+                        break;
+                    default:
+                        continue;
+                }
+            }
+        }
+    }
+    glDrawElements(GL_TRIANGLES, (*buffer)->size, GL_UNSIGNED_INT, 0);
+    return ERR_OK;
+}
+er__renderer_draw_buffer_f er__renderer_draw_buffer = &er__renderer_draw_buffer__gl;
+
 ERAPI er__renderer_bind_texture__gl(er_texture *texture)
 {
     if (gl_renderer.last_used_texture != NULL) {

@@ -39,6 +39,8 @@ typedef ERAPI (*er__renderer_bind_texture_f)(er_texture *texture);
 typedef ERAPI (*er__renderer_load_texture_f)(const char *filename, er_texture *out);
 typedef ERAPI (*er__renderer_free_texture_f)(er_texture *texture);
 
+typedef ERAPI (*er__renderer_draw_buffer_f)(er_vbuffer *buffer, er_shader_program *program, er_shader_input *program_input);
+
 extern er__renderer_init_f er__renderer_init;
 extern er__renderer_quit_f er__renderer_quit;
 
@@ -58,5 +60,7 @@ extern er__renderer_free_buffer_f er__renderer_free_buffer;
 extern er__renderer_bind_texture_f er__renderer_bind_texture;
 extern er__renderer_load_texture_f er__renderer_load_texture;
 extern er__renderer_free_texture_f er__renderer_free_texture;
+
+extern er__renderer_draw_buffer_f er__renderer_draw_buffer;
 
 #endif /* __included_er_renderer_h */
