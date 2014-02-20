@@ -90,6 +90,10 @@ macro(MERGE_STATIC_LIBS)
   # Make the generated dummy source file depended on all static input
   # libs. If input lib changes,the source file is touched
   # which causes the desired effect (relink).
+  CONFIGURE_FILE(
+	${THIS_CMAKE_SCRIPT_DIR}/MergeStaticLibs.depends.c.in
+	${SOURCE_FILE}
+  )
   ADD_CUSTOM_COMMAND(
 	OUTPUT  ${SOURCE_FILE}
 	COMMAND ${CMAKE_COMMAND}  -E touch ${SOURCE_FILE}

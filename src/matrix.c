@@ -428,13 +428,14 @@ ERAPI er_matrix_translatev(er_matrix *m, er_vector *v)
 ERAPI er_matrix_rotate(er_matrix *m, double angle, double x, double y, double z)
 {
     ERR ret;
-    union er_matrix rotation_matrix = {0}, result;
+    union er_matrix rotation_matrix, result;
     double c = 0, s = 0;
     if (m == NULL) {
         return ERR_INVALID_ARGS;
     }
     c = cos(TO_RADS(angle));
     s = sin(TO_RADS(angle));
+    memset(&rotation_matrix, 0, sizeof rotation_matrix);
     rotation_matrix.values[0][0] = x*x*(1-c)+c;
     rotation_matrix.values[0][1] = y*x*(1-c)+z*s;
     rotation_matrix.values[0][2] = x*z*(1-c)-y*s;
@@ -472,7 +473,8 @@ ERAPI er_matrix_scale(er_matrix *m, double sx, double sy, double sz)
 ERAPI er_matrix_ortho(er_matrix *m, double left, double right, double bottom, double top, double near, double far)
 {
     ERR ret;
-    union er_matrix ortho_matrix = { 0 }, result;
+    union er_matrix ortho_matrix, result;
+    memset(&ortho_matrix, 0, sizeof ortho_matrix);
     ortho_matrix.values[0][0] =  2.0 / (right - left);
     ortho_matrix.values[1][1] =  2.0 / (top - bottom);
     ortho_matrix.values[2][2] = -2.0 / (far - near);
@@ -493,8 +495,9 @@ ERAPI er_matrix_orthoa(er_matrix *m, double aspect, double near, double far)
 ERAPI er_matrix_perspective(er_matrix *m, double fovy, double aspect, double near, double far)
 {
     ERR ret;
-    union er_matrix perspective_matrix = { 0 }, result;
+    union er_matrix perspective_matrix, result;
     double f = 1.0 / tan(TO_RADS(fovy) / 2.0);
+    memset(&perspective_matrix, 0, sizeof perspective_matrix);
     perspective_matrix.values[0][0] = f / aspect;
     perspective_matrix.values[1][1] = f;
     perspective_matrix.values[2][2] = (far + near) / (near - far);
@@ -515,8 +518,8 @@ ERAPI er_matrix_lookat(er_vector *eye, er_vector *target, er_vector *up, er_matr
     if (eye == NULL || target == NULL || up == NULL || out == NULL) {
         return ERR_INVALID_ARGS;
     }
-    er_vector_muls(target, -1);
     memcpy(&zaxis, eye, sizeof(struct er_vector));
+    er_vector_muls(target, -1);
     er_vector_addv(&zaxis, target);
     er_vector_normalize(&zaxis);
     er_vector_cross(up, &zaxis, &xaxis);

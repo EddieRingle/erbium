@@ -232,7 +232,6 @@ ERAPI er_entity_export_json(er_entity *entity, int export_children, int export_p
 
 static void json_to_entity(er_entity *entity, JsonNode *node)
 {
-    er_entity child = NULL;
     JsonNode *itr = NULL, *array_itr = NULL, *mem = NULL;
     JsonTag array_tag;
     er_entity_reserve(entity);

@@ -96,7 +96,7 @@ ERAPI er_io_clear_action(const char *action_name)
 
 ERAPI er_io_clear_trigger(int trigger)
 {
-    struct er_io_triggermap *io_trigger = NULL, *tmp_trigger = NULL;
+    struct er_io_triggermap *io_trigger = NULL;
 
     INITCHECK();
     HASH_FIND_INT(g_io->trigger_map, &trigger, io_trigger);

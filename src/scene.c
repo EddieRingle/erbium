@@ -30,7 +30,6 @@ ERAPI er_scene_create(er_scene *scene)
 ERAPI er_scene_destroy(er_scene *scene)
 {
     ERR ret;
-    er_entity e;
     INITCHECK();
     if (scene == NULL || *scene == NULL) {
         return ERR_INVALID_ARGS;
