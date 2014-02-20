@@ -248,7 +248,7 @@ ERAPI er__renderer_load_program__gl(const char *vshader_file, const char *fshade
         return ret;
     }
     (*program)->vshader_id = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource((*program)->vshader_id, 1, &shader_source, NULL);
+    glShaderSource((*program)->vshader_id, 1, (GLchar const **)&shader_source, NULL);
     glCompileShader((*program)->vshader_id);
     glGetShaderiv((*program)->vshader_id, GL_COMPILE_STATUS, &status);
     if (status != GL_TRUE) {
@@ -263,7 +263,7 @@ ERAPI er__renderer_load_program__gl(const char *vshader_file, const char *fshade
         return ret;
     }
     (*program)->fshader_id = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource((*program)->fshader_id, 1, &shader_source, NULL);
+    glShaderSource((*program)->fshader_id, 1, (GLchar const **)&shader_source, NULL);
     glCompileShader((*program)->fshader_id);
     glGetShaderiv((*program)->fshader_id, GL_COMPILE_STATUS, &status);
     if (status != GL_TRUE) {
@@ -435,7 +435,7 @@ ERAPI er__renderer_draw_buffer__gl(er_vbuffer *buffer, er_shader_program *progra
                         glUniform4fv(uniform_location, 1, input->data._fvec4);
                         break;
                     case ER_ST_FLOAT_MAT4:
-                        glUniformMatrix4fv(uniform_location, 1, GL_FALSE, input->data._fmat4);
+                        glUniformMatrix4fv(uniform_location, 1, GL_FALSE, (GLfloat *)input->data._fmat4);
                         break;
                     default:
                         continue;
