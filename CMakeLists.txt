@@ -134,6 +134,16 @@ include_directories(SYSTEM "${ER_TARGET_OUT_DIR}/include")
 link_directories("${ER_TARGET_CONTRIB_OUT_DIR}/lib")
 link_directories("${ER_TARGET_OUT_DIR}/lib")
 
+if(NOT MSVC)
+    add_definitions(-std=c11 -Wall -pedantic)
+    if(${CMAKE_BUILD_TYPE} MATCHES "Debug" OR ${CMAKE_BUILD_TYPE} MATCHES "RelWithDebInfo")
+        add_definitions(-O0 -g)
+    else()
+        add_definitions(-Werror)
+        add_definitions(-O2)
+    endif()
+endif()
+
 add_library(erbium STATIC ${erbium_SOURCES} ${erbium_INCLUDES})
 set(erbium_DEPENDENCIES
 	freetype
