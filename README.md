@@ -15,3 +15,8 @@ Erbium uses [CMake](http://cmake.org) to generate system and environment-specifi
     make
 
 Other generators are available. On OS X, for example, you can generate an XCode project by supplying `-GXcode` as an argument to the `cmake` command. Refer to CMake's [documentation for a full list of generators](http://www.cmake.org/cmake/help/v2.8.12/cmake.html#section_Generators).
+
+How to Use
+----------
+
+**TODO** Explain how to extend the engine with subsystems and entities. Would do it now but I'm tired.
