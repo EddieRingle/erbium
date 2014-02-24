@@ -74,7 +74,7 @@ void er__glfw_error_cb(int error, const char *description)
 
 ERAPI er__create_default_context(er_context *ctx)
 {
-    ERR ret = ERR_OK;
+    ERR ret;
     er_context_attrs attrs;
 
     if (ctx == NULL) {
