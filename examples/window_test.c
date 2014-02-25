@@ -14,12 +14,23 @@ er_main()
     er_app_attrs attrs;
     er_context_attrs ctx_attrs;
     er_context ctx;
+    er_path_result path_result;
 
     er_app_attrs_init(&attrs);
     er_app_attrs_set_name(&attrs, "Window Test");
     er_app_attrs_set_author(&attrs, "Erbium");
 
     er_init(&attrs);
+
+    er_app_get_path(ER_PATH_BINARY, &path_result);
+    LOGI("Binary path:\t %s\n", path_result.path);
+    er_app_get_path(ER_PATH_SUPPORT, &path_result);
+    LOGI("Support path:\t %s\n", path_result.path);
+    er_app_get_path(ER_PATH_ASSETS, &path_result);
+    LOGI("Assets path:\t %s\n", path_result.path);
+    er_app_get_path(ER_PATH_TEXTURES, &path_result);
+    LOGI("Textures path:\t %s\n", path_result.path);
+    er_app_cleanup_path_result(&path_result);
 
     er_ctx_attrs_init(&ctx_attrs);
     er_ctx_attrs_set_screen_width(&ctx_attrs, 854);
