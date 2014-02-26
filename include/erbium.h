@@ -493,6 +493,7 @@ ERAPI er_ctx_attrs_set_screen_width(er_context_attrs *attrs, unsigned width);
 ERAPI er_ctx_attrs_set_screen_height(er_context_attrs *attrs, unsigned height);
 ERAPI er_ctx_attrs_set_fullscreen(er_context_attrs *attrs, int fullscreen);
 ERAPI er_ctx_attrs_set_decorated(er_context_attrs *attrs, int decorated);
+ERAPI er_ctx_attrs_set_vsync(er_context_attrs *attrs, int vsync);
 ERAPI er_ctx_attrs_destroy(er_context_attrs *attrs);
 ERAPI er_ctx_open(er_context_attrs *attrs, er_context *ctx);
 ERAPI er_ctx_close(er_context *ctx);

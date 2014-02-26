@@ -15,6 +15,7 @@ ERAPI er_ctx_attrs_init(er_context_attrs *attrs)
     (*attrs)->screen_height = 0;
     (*attrs)->fullscreen = 0;
     (*attrs)->decorated = 1;
+    (*attrs)->vsync = 0;
 
     return ERR_OK;
 }
@@ -81,6 +82,15 @@ ERAPI er_ctx_attrs_set_decorated(er_context_attrs *attrs, int decorated)
     return ERR_OK;
 }
 
+ERAPI er_ctx_attrs_set_vsync(er_context_attrs *attrs, int vsync)
+{
+    if (attrs == NULL) {
+        return ERR_INVALID_ARGS;
+    }
+    (*attrs)->vsync = vsync;
+    return ERR_OK;
+}
+
 ERAPI er_ctx_attrs_destroy(er_context_attrs *attrs)
 {
     if (attrs == NULL) {
@@ -121,6 +131,7 @@ ERAPI er_ctx_open(er_context_attrs *attrs, er_context *ctx)
     (*ctx)->attrs->screen_width = (*attrs)->screen_width;
     (*ctx)->attrs->fullscreen = (*attrs)->fullscreen;
     (*ctx)->attrs->decorated = (*attrs)->decorated;
+    (*ctx)->attrs->vsync = (*attrs)->vsync;
 
     if ((ret = er__ctx_open(ctx)) != ERR_OK) {
         er_ctx_attrs_destroy(&(*ctx)->attrs);

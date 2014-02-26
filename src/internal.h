@@ -34,6 +34,7 @@ struct er_context_attrs {
     unsigned screen_height;
     int fullscreen;
     int decorated;
+    int vsync;
 };
 
 typedef struct er_gfx {
