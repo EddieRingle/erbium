@@ -381,9 +381,6 @@ static ERAPI er__app_get_support_path(er_path_result *result)
     char temp_path[2048];
 #if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
     const char *home_path;
-#   if defined(TARGET_OS_LINUX)
-    char *str;
-#   endif
 #endif
 
     memset(temp_path, 0, sizeof temp_path);
@@ -392,18 +389,7 @@ static ERAPI er__app_get_support_path(er_path_result *result)
     sprintf(temp_path, "%s\\%s\\%s\\", temp_path, g_app->author, g_app->name);
 #elif defined(TARGET_OS_LINUX)
     home_path = getenv("HOME");
-    str = er__strtolower(g_app->author);
-    if (str == NULL) {
-        return ERR_MEMORY_ERROR;
-    }
-    sprintf(temp_path, "%s/.%s/", home_path, str);
-    er__free(str);
-    str = er__strtolower(g_app->name);
-    if (str == NULL) {
-        return ERR_MEMORY_ERROR;
-    }
-    strcat(temp_path, str);
-    er__free(str);
+    sprintf(temp_path, "%s/.local/share/%s/%s", home_path, g_app->author, g_app->name);
 #elif defined(TARGET_OS_MACOSX)
     home_path = getenv("HOME");
     sprintf(temp_path, "%s/Library/Application Support/%s/%s", home_path, g_app->author, g_app->name);
