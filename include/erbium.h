@@ -90,8 +90,13 @@
 
 #include "erbium_version.h"
 
-#define LOGI(...) (fprintf(stdout, __VA_ARGS__))
-#define LOGE(...) (fprintf(stderr, __VA_ARGS__))
+#if defined(TARGET_OS_ANDROID)
+#   define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "threaded_app", __VA_ARGS__))
+#   define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "threaded_app", __VA_ARGS__))
+#else
+#   define LOGI(...) (fprintf(stdout, __VA_ARGS__))
+#   define LOGE(...) (fprintf(stderr, __VA_ARGS__))
+#endif
 
 #if defined(TARGET_OS_ANDROID)
 #   define er_main() void android_main(struct android_app *state)
