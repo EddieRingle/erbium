@@ -180,5 +180,9 @@ configure_file(${ER_ROOT_DIR}/ErbiumConfig.cmake.in
 install(FILES ${erbium_BINARY_DIR}/ErbiumConfig.cmake
 	DESTINATION lib${LIB_SUFFIX}/cmake/erbium)
 
+install(TARGETS erbium_combined
+		ARCHIVE DESTINATION lib)
+install(DIRECTORY include/ DESTINATION include/erbium FILES_MATCHING PATTERN "*.h")
+
 group_by_folder(${ER_ROOT_DIR} "${erbium_SOURCES}")
 group_by_folder(${ER_ROOT_DIR} "${erbium_INCLUDES}")

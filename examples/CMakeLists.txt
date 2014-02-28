@@ -74,3 +74,7 @@ foreach(binary ${BINARIES})
 				"$<TARGET_FILE_DIR:${binary}>/assets")
 	endif()
 endforeach()
+
+install(TARGETS ${BINARIES}
+		BUNDLE DESTINATION bin
+		RUNTIME DESTINATION bin)
