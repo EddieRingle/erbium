@@ -27,7 +27,7 @@ ERAPI er_ctx_open__glfw(er_context *ctx)
         return ERR_UNKNOWN;
     }
     glfwSetFramebufferSizeCallback((*ctx)->window, &er__ctx_glfw_framebuffer_resize_cb);
-    glfwGetFramebufferSize((*ctx)->window, &(*ctx)->attrs->screen_width, &(*ctx)->attrs->screen_height);
+    glfwGetFramebufferSize((*ctx)->window, (int*)&(*ctx)->attrs->screen_width, (int*)&(*ctx)->attrs->screen_height);
     glfwMakeContextCurrent((*ctx)->window);
     glfwSwapInterval(((*ctx)->attrs->vsync)?1:0);
 
