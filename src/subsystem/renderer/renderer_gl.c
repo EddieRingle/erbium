@@ -1,7 +1,5 @@
 #include "renderer.h"
 
-#if defined(TARGET_OS_DESKTOP)
-
 struct er_shader_input {
     char *name;
     int type;
@@ -661,5 +659,3 @@ ERAPI er__renderer_free_texture__gl(er_texture *texture)
     return ERR_OK;
 }
 er__renderer_free_texture_f er__renderer_free_texture = &er__renderer_free_texture__gl;
-
-#endif /* defined(TARGET_OS_DESKTOP) */

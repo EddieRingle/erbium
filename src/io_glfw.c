@@ -1,7 +1,5 @@
 #include "internal.h"
 
-#if defined(TARGET_OS_DESKTOP)
-
 er_io *g_io = NULL;
 
 static void _glfw_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
@@ -73,5 +71,3 @@ ERAPI er_io_poll__glfw(void)
 er__io_init_f er__io_init = &er_io_init__glfw;
 er__io_quit_f er__io_quit = &er_io_quit__glfw;
 er__io_poll_f er__io_poll = &er_io_poll__glfw;
-
-#endif

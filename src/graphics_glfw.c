@@ -1,7 +1,5 @@
 #include "internal.h"
 
-#if defined(TARGET_OS_DESKTOP)
-
 er_gfx *g_gfx = NULL;
 
 ERAPI er_gfx_init__glfw(er_context *ctx)
@@ -39,5 +37,3 @@ ERAPI er_gfx_draw__glfw(void)
 er__gfx_init_f er__gfx_init = &er_gfx_init__glfw;
 er__gfx_quit_f er__gfx_quit = &er_gfx_quit__glfw;
 er__gfx_draw_f er__gfx_draw = &er_gfx_draw__glfw;
-
-#endif

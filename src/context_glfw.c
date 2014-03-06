@@ -1,7 +1,5 @@
 #include "internal.h"
 
-#if defined(TARGET_OS_DESKTOP)
-
 void er__ctx_glfw_framebuffer_resize_cb(GLFWwindow *window, int width, int height)
 {
     if (g_ctx != NULL && width >= 0 && height >= 0) {
@@ -46,5 +44,3 @@ ERAPI er_ctx_close__glfw(er_context *ctx)
 
 er__ctx_open_f er__ctx_open = &er_ctx_open__glfw;
 er__ctx_close_f er__ctx_close = &er_ctx_close__glfw;
-
-#endif
