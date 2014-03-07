@@ -414,6 +414,17 @@ typedef enum {
 
 } er_path_type;
 
+#if defined(TARGET_OS_MACOSX)
+#   define ER_PATH_STR_ASSETS "../Resources/assets"
+#else
+#   define ER_PATH_STR_ASSETS "assets"
+#endif
+#define ER_PATH_STR_TEXTURES "textures"
+#define ER_PATH_STR_SHADERS  "shaders"
+#define ER_PATH_STR_FONTS    "fonts"
+#define ER_PATH_STR_SOUNDS   "sounds"
+#define ER_PATH_STR_MUSIC    "music"
+
 typedef struct er_path_result {
     char *path;
     size_t len;

@@ -432,11 +432,7 @@ static ERAPI er__append_path_with_path(er_path_result *result, ERAPI (*base)(er_
 
 static ERAPI er__app_get_assets_path(er_path_result *result)
 {
-#if defined(TARGET_OS_MACOSX)
-    return er__append_path_with_path(result, &er__app_get_binary_path, "../Resources/assets");
-#else
-    return er__append_path_with_path(result, &er__app_get_binary_path, "assets");
-#endif
+    return er__append_path_with_path(result, &er__app_get_binary_path, ER_PATH_STR_ASSETS);
 }
 
 ERAPI er_app_get_path(er_path_type path, er_path_result *result)
@@ -460,15 +456,15 @@ ERAPI er_app_get_path(er_path_type path, er_path_result *result)
         case ER_PATH_ASSETS:
             return er__app_get_assets_path(result);
         case ER_PATH_TEXTURES:
-            return er__append_path_with_path(result, &er__app_get_assets_path, "textures");
+            return er__append_path_with_path(result, &er__app_get_assets_path, ER_PATH_STR_TEXTURES);
         case ER_PATH_SHADERS:
-            return er__append_path_with_path(result, &er__app_get_assets_path, "shaders");
+            return er__append_path_with_path(result, &er__app_get_assets_path, ER_PATH_STR_SHADERS);
         case ER_PATH_FONTS:
-            return er__append_path_with_path(result, &er__app_get_assets_path, "fonts");
+            return er__append_path_with_path(result, &er__app_get_assets_path, ER_PATH_STR_FONTS);
         case ER_PATH_SOUNDS:
-            return er__append_path_with_path(result, &er__app_get_assets_path, "sounds");
+            return er__append_path_with_path(result, &er__app_get_assets_path, ER_PATH_STR_SOUNDS);
         case ER_PATH_MUSIC:
-            return er__append_path_with_path(result, &er__app_get_assets_path, "music");
+            return er__append_path_with_path(result, &er__app_get_assets_path, ER_PATH_STR_MUSIC);
     }
     return ERR_INVALID_PATH;
 }
