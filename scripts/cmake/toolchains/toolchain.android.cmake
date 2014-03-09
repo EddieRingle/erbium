@@ -14,7 +14,7 @@ set(APPLE false)
 set(UNIX true)
 
 set(ANDROID_NDK_DEFAULT_SEARCH_PATH /opt/android-ndk)
-set(ANDROID_NDK_SUPPORTED_VERSIONS -r9d -r8 -r7 -r6 -r5c -r5b -r5 "")
+set(ANDROID_NDK_SUPPORTED_VERSIONS -r9d "")
 set(ANDROID_NDK_TOOLCHAIN_DEFAULT_SEARCH_PATH /opt/android-toolchain)
 set(TOOL_OS_SUFFIX "")
 
