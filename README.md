@@ -19,4 +19,4 @@ Other generators are available. On OS X, for example, you can generate an XCode 
 How to Use
 ----------
 
-**TODO** Explain how to extend the engine with subsystems and entities. Would do it now but I'm tired.
+**TODO** Explain how to extend the engine with subsystems and entities. Would do it now but I'm ~~tired~~ lazy.
