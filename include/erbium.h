@@ -28,66 +28,6 @@
 #   include <signal.h>
 #endif
 
-/*
- * Freetype
- */
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-/*
- * GLEW
- */
-#define GLEW_STATIC
-#include <GL/glew.h>
-
-/*
- * GLFW
- */
-#include <GLFW/glfw3.h>
-
-/*
- * zlib & libpng
- */
-#include <zlib.h>
-#include <png.h>
-
-/*
- * Lua
- */
-#include <lua5.1/lua.h>
-#include <lua5.1/luaconf.h>
-#include <lua5.1/lualib.h>
-#include <lua5.1/lauxlib.h>
-
-/*
- * OpenAL Soft
- */
-#if defined(TARGET_OS_MACOSX)
-#   include <OpenAL/al.h>
-#   include <OpenAL/alc.h>
-#else
-#   define AL_LIBTYPE_STATIC
-#   include <AL/al.h>
-#   include <AL/alc.h>
-#endif
-
-/*
- * Ogg
- */
-#if defined(TARGET_LITTLE_ENDIAN)
-#   define OGG_ENDIAN 0
-#elif defined(TARGET_BIG_ENDIAN)
-#   define OGG_ENDIAN 1
-#endif
-#include <ogg/ogg.h>
-
-/*
- * Vorbis
- */
-#include <vorbis/codec.h>
-#include <vorbis/vorbisenc.h>
-#include <vorbis/vorbisfile.h>
-
 #include "erbium_version.h"
 
 #if defined(TARGET_OS_ANDROID)
@@ -292,77 +232,71 @@ typedef enum {
 #define ER_JOYSTICK_16            15
 #define ER_JOYSTICK_LAST          ER_JOYSTICK_16
 
-#if defined(TARGET_OS_DESKTOP)
-#   define ER_KEYSTATE_PRESS GLFW_PRESS
-#   define ER_KEYSTATE_RELEASE GLFW_RELEASE
-#   define ER_KEYSTATE_REPEAT GLFW_REPEAT
-#else
-#   define ER_KEYSTATE_PRESS 1
-#   define ER_KEYSTATE_RELEASE 2
-#   define ER_KEYSTATE_REPEAT 3
-#endif
+#define ER_KEYSTATE_RELEASE 0
+#define ER_KEYSTATE_PRESS 1
+#define ER_KEYSTATE_REPEAT 2
 
-#define ER_ST_FLOAT GL_FLOAT
-#define ER_ST_FLOAT_VEC2 GL_FLOAT_VEC2
-#define ER_ST_FLOAT_VEC3 GL_FLOAT_VEC3
-#define ER_ST_FLOAT_VEC4 GL_FLOAT_VEC4
-#define ER_ST_INT GL_INT
-#define ER_ST_INT_VEC2 GL_INT_VEC2
-#define ER_ST_INT_VEC3 GL_INT_VEC3
-#define ER_ST_INT_VEC4 GL_INT_VEC4
-#define ER_ST_UNSIGNED_INT GL_UNSIGNED_INT
-#define ER_ST_UNSIGNED_INT_VEC2 GL_UNSIGNED_INT_VEC2
-#define ER_ST_UNSIGNED_INT_VEC3 GL_UNSIGNED_INT_VEC3
-#define ER_ST_UNSIGNED_INT_VEC4 GL_UNSIGNED_INT_VEC4
-#define ER_ST_BOOL GL_BOOL
-#define ER_ST_BOOL_VEC2 GL_BOOL_VEC2
-#define ER_ST_BOOL_VEC3 GL_BOOL_VEC3
-#define ER_ST_BOOL_VEC4 GL_BOOL_VEC4
-#define ER_ST_FLOAT_MAT2 GL_FLOAT_MAT2
-#define ER_ST_FLOAT_MAT3 GL_FLOAT_MAT3
-#define ER_ST_FLOAT_MAT4 GL_FLOAT_MAT4
-#define ER_ST_FLOAT_MAT2x3 GL_FLOAT_MAT2x3
-#define ER_ST_FLOAT_MAT2x4 GL_FLOAT_MAT2x4
-#define ER_ST_FLOAT_MAT3x2 GL_FLOAT_MAT3x2
-#define ER_ST_FLOAT_MAT3x4 GL_FLOAT_MAT3x4
-#define ER_ST_FLOAT_MAT4x2 GL_FLOAT_MAT4x2
-#define ER_ST_FLOAT_MAT4x3 GL_FLOAT_MAT4x3
-#define ER_ST_SAMPLER_1D GL_SAMPLER_1D
-#define ER_ST_SAMPLER_2D GL_SAMPLER_2D
-#define ER_ST_SAMPLER_3D GL_SAMPLER_3D
-#define ER_ST_SAMPLER_CUBE GL_SAMPLER_CUBE
-#define ER_ST_SAMPLER_1D_SHADOW GL_SAMPLER_1D_SHADOW
-#define ER_ST_SAMPLER_2D_SHADOW GL_SAMPLER_2D_SHADOW
-#define ER_ST_SAMPLER_1D_ARRAY GL_SAMPLER_1D_ARRAY
-#define ER_ST_SAMPLER_2D_ARRAY GL_SAMPLER_2D_ARRAY
-#define ER_ST_SAMPLER_1D_ARRAY_SHADOW GL_SAMPLER_1D_ARRAY_SHADOW
-#define ER_ST_SAMPLER_2D_ARRAY_SHADOW GL_SAMPLER_2D_ARRAY_SHADOW
-#define ER_ST_SAMPLER_2D_MULTISAMPLE GL_SAMPLER_2D_MULTISAMPLE
-#define ER_ST_SAMPLER_2D_MULTISAMPLE_ARRAY GL_SAMPLER_2D_MULTISAMPLE_ARRAY
-#define ER_ST_SAMPLER_CUBE_SHADOW GL_SAMPLER_CUBE_SHADOW
-#define ER_ST_SAMPLER_BUFFER GL_SAMPLER_BUFFER
-#define ER_ST_SAMPLER_2D_RECT GL_SAMPLER_2D_RECT
-#define ER_ST_SAMPLER_2D_RECT_SHADOW GL_SAMPLER_2D_RECT_SHADOW
-#define ER_ST_INT_SAMPLER_1D GL_INT_SAMPLER_1D
-#define ER_ST_INT_SAMPLER_2D GL_INT_SAMPLER_2D
-#define ER_ST_INT_SAMPLER_3D GL_INT_SAMPLER_3D
-#define ER_ST_INT_SAMPLER_CUBE GL_INT_SAMPLER_CUBE
-#define ER_ST_INT_SAMPLER_1D_ARRAY GL_INT_SAMPLER_1D_ARRAY
-#define ER_ST_INT_SAMPLER_2D_ARRAY GL_INT_SAMPLER_2D_ARRAY
-#define ER_ST_INT_SAMPLER_2D_MULTISAMPLE GL_INT_SAMPLER_2D_MULTISAMPLE
-#define ER_ST_INT_SAMPLER_2D_MULTISAMPLE_ARRAY GL_INT_SAMPLER_2D_MULTISAMPLE_ARRAY
-#define ER_ST_INT_SAMPLER_BUFFER GL_INT_SAMPLER_BUFFER
-#define ER_ST_INT_SAMPLER_2D_RECT GL_INT_SAMPLER_2D_RECT
-#define ER_ST_UNSIGNED_INT_SAMPLER_1D GL_UNSIGNED_INT_SAMPLER_1D
-#define ER_ST_UNSIGNED_INT_SAMPLER_2D GL_UNSIGNED_INT_SAMPLER_2D
-#define ER_ST_UNSIGNED_INT_SAMPLER_3D GL_UNSIGNED_INT_SAMPLER_3D
-#define ER_ST_UNSIGNED_INT_SAMPLER_CUBE GL_UNSIGNED_INT_SAMPLER_CUBE
-#define ER_ST_UNSIGNED_INT_SAMPLER_1D_ARRAY GL_UNSIGNED_INT_SAMPLER_1D_ARRAY
-#define ER_ST_UNSIGNED_INT_SAMPLER_2D_ARRAY GL_UNSIGNED_INT_SAMPLER_2D_ARRAY
-#define ER_ST_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE
-#define ER_ST_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY
-#define ER_ST_UNSIGNED_INT_SAMPLER_BUFFER GL_UNSIGNED_INT_SAMPLER_BUFFER
-#define ER_ST_UNSIGNED_INT_SAMPLER_2D_RECT GL_UNSIGNED_INT_SAMPLER_2D_RECT
+#define ER_ST_FLOAT                                     1
+#define ER_ST_FLOAT_VEC2                                2
+#define ER_ST_FLOAT_VEC3                                3
+#define ER_ST_FLOAT_VEC4                                4
+#define ER_ST_INT                                       5
+#define ER_ST_INT_VEC2                                  6
+#define ER_ST_INT_VEC3                                  7
+#define ER_ST_INT_VEC4                                  8
+#define ER_ST_UNSIGNED_INT                              9
+#define ER_ST_UNSIGNED_INT_VEC2                         10
+#define ER_ST_UNSIGNED_INT_VEC3                         11
+#define ER_ST_UNSIGNED_INT_VEC4                         12
+#define ER_ST_BOOL                                      13
+#define ER_ST_BOOL_VEC2                                 14
+#define ER_ST_BOOL_VEC3                                 15
+#define ER_ST_BOOL_VEC4                                 16
+#define ER_ST_FLOAT_MAT2                                17
+#define ER_ST_FLOAT_MAT3                                18
+#define ER_ST_FLOAT_MAT4                                19
+#define ER_ST_FLOAT_MAT2x3                              20
+#define ER_ST_FLOAT_MAT2x4                              21
+#define ER_ST_FLOAT_MAT3x2                              22
+#define ER_ST_FLOAT_MAT3x4                              23
+#define ER_ST_FLOAT_MAT4x2                              24
+#define ER_ST_FLOAT_MAT4x3                              25
+#define ER_ST_SAMPLER_1D                                26
+#define ER_ST_SAMPLER_2D                                27
+#define ER_ST_SAMPLER_3D                                28
+#define ER_ST_SAMPLER_CUBE                              29
+#define ER_ST_SAMPLER_1D_SHADOW                         30
+#define ER_ST_SAMPLER_2D_SHADOW                         31
+#define ER_ST_SAMPLER_1D_ARRAY                          32
+#define ER_ST_SAMPLER_2D_ARRAY                          33
+#define ER_ST_SAMPLER_1D_ARRAY_SHADOW                   34
+#define ER_ST_SAMPLER_2D_ARRAY_SHADOW                   35
+#define ER_ST_SAMPLER_2D_MULTISAMPLE                    36
+#define ER_ST_SAMPLER_2D_MULTISAMPLE_ARRAY              37
+#define ER_ST_SAMPLER_CUBE_SHADOW                       38
+#define ER_ST_SAMPLER_BUFFER                            39
+#define ER_ST_SAMPLER_2D_RECT                           40
+#define ER_ST_SAMPLER_2D_RECT_SHADOW                    41
+#define ER_ST_INT_SAMPLER_1D                            42
+#define ER_ST_INT_SAMPLER_2D                            43
+#define ER_ST_INT_SAMPLER_3D                            44
+#define ER_ST_INT_SAMPLER_CUBE                          45
+#define ER_ST_INT_SAMPLER_1D_ARRAY                      46
+#define ER_ST_INT_SAMPLER_2D_ARRAY                      47
+#define ER_ST_INT_SAMPLER_2D_MULTISAMPLE                48
+#define ER_ST_INT_SAMPLER_2D_MULTISAMPLE_ARRAY          49
+#define ER_ST_INT_SAMPLER_BUFFER                        50
+#define ER_ST_INT_SAMPLER_2D_RECT                       51
+#define ER_ST_UNSIGNED_INT_SAMPLER_1D                   52
+#define ER_ST_UNSIGNED_INT_SAMPLER_2D                   53
+#define ER_ST_UNSIGNED_INT_SAMPLER_3D                   54
+#define ER_ST_UNSIGNED_INT_SAMPLER_CUBE                 55
+#define ER_ST_UNSIGNED_INT_SAMPLER_1D_ARRAY             56
+#define ER_ST_UNSIGNED_INT_SAMPLER_2D_ARRAY             57
+#define ER_ST_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE       58
+#define ER_ST_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY 59
+#define ER_ST_UNSIGNED_INT_SAMPLER_BUFFER               60
+#define ER_ST_UNSIGNED_INT_SAMPLER_2D_RECT              61
 
 #ifndef M_PI
 #   define M_PI 3.14159265358979323846

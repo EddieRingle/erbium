@@ -3,6 +3,66 @@
 
 #include "erbium.h"
 
+/*
+ * Freetype
+ */
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+/*
+ * GLEW
+ */
+#define GLEW_STATIC
+#include <GL/glew.h>
+
+/*
+ * GLFW
+ */
+#include <GLFW/glfw3.h>
+
+/*
+ * zlib & libpng
+ */
+#include <zlib.h>
+#include <png.h>
+
+/*
+ * Lua
+ */
+#include <lua5.1/lua.h>
+#include <lua5.1/luaconf.h>
+#include <lua5.1/lualib.h>
+#include <lua5.1/lauxlib.h>
+
+/*
+ * OpenAL Soft
+ */
+#if defined(TARGET_OS_MACOSX)
+#   include <OpenAL/al.h>
+#   include <OpenAL/alc.h>
+#else
+#   define AL_LIBTYPE_STATIC
+#   include <AL/al.h>
+#   include <AL/alc.h>
+#endif
+
+/*
+ * Ogg
+ */
+#if defined(TARGET_LITTLE_ENDIAN)
+#   define OGG_ENDIAN 0
+#elif defined(TARGET_BIG_ENDIAN)
+#   define OGG_ENDIAN 1
+#endif
+#include <ogg/ogg.h>
+
+/*
+ * Vorbis
+ */
+#include <vorbis/codec.h>
+#include <vorbis/vorbisenc.h>
+#include <vorbis/vorbisfile.h>
+
 #include "ccan/json.h"
 #include "ccan/list.h"
 #include "uthash.h"
