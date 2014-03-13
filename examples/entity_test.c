@@ -1,3 +1,5 @@
+#include <inttypes.h>
+
 #include "erbium.h"
 
 int _cb_exit_app(er_io_keyinfo keyinfo)
