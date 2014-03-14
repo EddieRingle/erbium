@@ -54,7 +54,9 @@ target_architecture(ER_TARGET_ARCH)
 set(ER_TARGET_OUT_DIR "${ER_OUT_DIR}/${ER_TARGET_OS}_${ER_TARGET_ARCH}")
 set(ER_TARGET_CONTRIB_OUT_DIR "${ER_TARGET_OUT_DIR}/contrib")
 
-set(CMAKE_INSTALL_PREFIX ${ER_TARGET_OUT_DIR})
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+	set (CMAKE_INSTALL_PREFIX "${ER_TARGET_OUT_DIR}" CACHE PATH "Default install path" FORCE)
+endif()
 
 #
 # Generate version information from git-describe
