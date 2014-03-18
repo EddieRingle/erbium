@@ -64,8 +64,8 @@ endif()
 
 git_describe(gitdesc)
 
-if("${gitdesc}" EQUAL "GIT-NOTFOUND")
-	message(FATAL_ERROR "Erbium must be built within a live Git root")
+if("${gitdesc}" MATCHES "NOTFOUND")
+	message(FATAL_ERROR "Erbium must be built within a live Git tree with at least one tag")
 	return()
 endif()
 set(er_VERSION_FULL "${gitdesc}")
