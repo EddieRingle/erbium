@@ -18,7 +18,6 @@ elseif(UNIX)
 	list(APPEND er_LIBS
 		${X11_X11_LIB}
 		${CMAKE_THREAD_LIBS_INIT}
-#		${RT_LIBRARY}
 		${X11_Xrandr_LIB}
 		m
 	)
